@@ -10,7 +10,6 @@ INSERT INTO tags (content) VALUES
                                ('Tag9'),
                                ('Tag10');
 
--- Insert 10 sample records into the 'users' table
 INSERT INTO users (first_name, last_name, email, username, password) VALUES
     ('John', 'Doe', 'john.doe@example.com', 'johndoe', 'password1'),
     ('Jane', 'Smith', 'jane.smith@example.com', 'janesmith', 'password2'),
@@ -23,7 +22,6 @@ INSERT INTO users (first_name, last_name, email, username, password) VALUES
     ('Sophia', 'Harris', 'sophia.harris@example.com', 'sophiah', 'password9'),
     ('William', 'Clark', 'william.clark@example.com', 'williamc', 'password10');
 
--- Insert 10 sample records into the 'admins' table
 INSERT INTO admins (user_id, phone_number) VALUES
     (1, '123-456-7890'),
     (2, '987-654-3210'),
@@ -36,7 +34,6 @@ INSERT INTO admins (user_id, phone_number) VALUES
     (9, '123-987-4567'),
     (10, '555-555-5556');
 
--- Insert 10 sample records into the 'posts' table
 INSERT INTO posts (user_id, title, content) VALUES
     (1, 'Sample Post 1', 'This is the content of sample post 1.'),
     (2, 'Sample Post 2', 'This is the content of sample post 2.'),
@@ -49,7 +46,6 @@ INSERT INTO posts (user_id, title, content) VALUES
     (9, 'Sample Post 9', 'This is the content of sample post 9.'),
     (10, 'Sample Post 10', 'This is the content of sample post 10');
 
--- Insert 10 sample records into the 'likes' table
 INSERT INTO likes (post_id, user_id) VALUES
     (1, 2),
     (2, 3),
@@ -62,7 +58,6 @@ INSERT INTO likes (post_id, user_id) VALUES
     (9, 10),
     (10, 1);
 
--- Insert 10 sample records into the 'posts_tags' table
 INSERT INTO posts_tags (post_id, tag_id) VALUES
     (1, 1),
     (1, 2),
@@ -75,7 +70,6 @@ INSERT INTO posts_tags (post_id, tag_id) VALUES
     (5, 9),
     (5, 10);
 
--- Insert 10 sample records into the 'replies' table
 INSERT INTO replies (post_id, user_id, content) VALUES
     (1, 2, 'Reply 1 to post 1'),
     (2, 3, 'Reply 1 to post 2'),

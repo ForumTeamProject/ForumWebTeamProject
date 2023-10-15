@@ -1,31 +1,41 @@
 package com.example.forumsystemwebproject.models;
 
+import jakarta.persistence.*;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-
-
-public class UserDto {
-
-    @NotNull(message = "Username can't be empty")
+@Entity
+@Table(name = "users")
+public class RegisteredUser {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private int id;
+    @Column(name = "username")
     private String username;
-    @NotNull(message = "Username can't be empty")
-    //Password must contain one digit from 1 to 9, one lowercase letter, one uppercase letter, one special character, no space, and it must be 8-16 characters long.
-    @Pattern(regexp = "/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\\W)(?!.* ).{8,16}$/\n")
+    @Column(name = "password")
     private String password;
-    @NotNull(message = "First name can't be empty")
-    @Size(min = 4, max = 32, message = "Fist name should be between 2 and 30 symbols")
+    @Column(name = "first_name")
     private String firstName;
-    @NotNull(message = "Last name can't be empty")
-    @Size(min = 4, max = 32, message = "Last name should be between 2 and 30 symbols")
+    @Column(name = "last_name")
     private String lastName;
-
-    @NotNull
+    @Column(name = "email")
     private String email;
 
-    //TODO to add a regex validation for the email
-    public UserDto() {
+    public RegisteredUser() {
+    }
+
+    public RegisteredUser(int id, String username, String password, String email) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -68,4 +78,13 @@ public class UserDto {
         this.email = email;
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 }

@@ -4,17 +4,16 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "admins")
-public class Admin extends User{
-//    admin_id     int auto_increment primary key,
-//    user_id      int not null references users (user_id),
-//    phone_number varchar(15) unique
+public class Admin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "admin_id")
     private int adminId;
-    @Column(name = "user_id")
-    private int userId;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private RegisteredUser user;
     @Column(name = "phone_number")
     private String phoneNumber;
 
@@ -30,12 +29,12 @@ public class Admin extends User{
         this.adminId = adminId;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getUser() {
+        return user.getId();
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(RegisteredUser user) {
+        this.user = user;
     }
 
     public String getPhoneNumber() {
@@ -44,5 +43,15 @@ public class Admin extends User{
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }
