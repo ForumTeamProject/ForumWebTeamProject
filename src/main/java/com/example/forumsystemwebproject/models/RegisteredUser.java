@@ -9,7 +9,7 @@ public class RegisteredUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private int id;
-    @Column(name = "username")
+    @Column(name = "username", unique = true, updatable = false)
     private String username;
     @Column(name = "password")
     private String password;

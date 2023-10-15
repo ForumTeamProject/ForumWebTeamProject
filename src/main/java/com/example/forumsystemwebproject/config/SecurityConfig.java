@@ -1,43 +1,58 @@
-//package com.example.forumsystemwebproject.config;
-//
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.web.DefaultSecurityFilterChain;
-//
-//
-//@Configuration
-//@EnableWebSecurity
-//public class SecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
-//
-//    private final UserDetailsService userDetailsService;
-//
-//    public SecurityConfig(UserDetailsService userDetailsService) {
-//        this.userDetailsService = userDetailsService;
-//    }
-//
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-//
-//    @Override
-//    public void configure(HttpSecurity http) throws Exception {
-//        http.authorizeHttpRequests(authz -> authz
-//                .requestMatchers("/authentication/**").permitAll()
-//                .requestMatchers("/h2/**").permitAll()
-//                .anyRequest().authenticated())
-//                .and().formLogin(formLogin ->
-//                        formLogin
-//                                .loginPage("/login")
-//                                .permitAll()
-//                ).logout(formLogout ->
-//                        formLogout.logoutUrl("/logout")
-//                                .permitAll().permitAll());
-//    }
-//}
+package com.example.forumsystemwebproject.config;
+
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(final AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public SecurityFilterChain configure(final HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers("/css/**").permitAll()
+                        .requestMatchers("/js/**").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(formLogin ->
+                        formLogin.defaultSuccessUrl("/home",true)
+                                .loginPage("/login")
+                                .permitAll()
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                        .invalidSessionUrl("/logout?expired")
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(false))
+                .logout(logout ->
+                        logout.deleteCookies("JSESSIONID")
+                                .invalidateHttpSession(true))
+                .build();
+    }
+
+}
