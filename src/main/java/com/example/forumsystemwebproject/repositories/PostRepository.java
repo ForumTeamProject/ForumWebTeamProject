@@ -1,13 +1,13 @@
 package com.example.forumsystemwebproject.repositories;
 
-import com.example.forumsystemwebproject.helpers.FilterOptions;
+import com.example.forumsystemwebproject.helpers.PostFilterOptions;
 import com.example.forumsystemwebproject.models.Post;
 
 import java.util.List;
 
 public interface PostRepository {
 
-    List<Post> get(FilterOptions filterOptions);
+    List<Post> get(PostFilterOptions postFilterOptions);
 
     Post getById(int id);
 
@@ -15,5 +15,5 @@ public interface PostRepository {
 
     void update(Post post);
 
-    void delete(int id);
+    void delete(Post post);
 }

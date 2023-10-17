@@ -1,13 +1,12 @@
 package com.example.forumsystemwebproject.models.UserModels;
 
 
-import com.example.forumsystemwebproject.models.UserModels.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class UserToRegisterDto implements User {
+public class UserDto {
 
     @NotNull(message = "Username can't be empty!")
     @Size(min = 5, max = 20, message = "Username must be between 5 and 20 characters long!")
@@ -28,30 +27,25 @@ public class UserToRegisterDto implements User {
     @Email
     private String email;
 
-    public UserToRegisterDto() {
+    public UserDto() {
     }
 
-    @Override
     public String getUsername() {
         return username;
     }
 
-    @Override
     public void setUsername(String username) {
         this.username = username;
     }
 
-    @Override
     public String getPassword() {
         return password;
     }
 
-    @Override
     public void setPassword(String password) {
         this.password = password;
     }
 
-    @Override
     public String getFirstName() {
         return firstName;
     }
@@ -60,24 +54,19 @@ public class UserToRegisterDto implements User {
         this.firstName = firstName;
     }
 
-    @Override
     public String getLastName() {
         return lastName;
     }
 
-    @Override
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    @Override
     public String getEmail() {
         return email;
     }
 
-    @Override
     public void setEmail(String email) {
         this.email = email;
     }
-
 }

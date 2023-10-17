@@ -1,21 +1,23 @@
 package com.example.forumsystemwebproject.services;
 
-import com.example.forumsystemwebproject.models.UserModels.User;
+import com.example.forumsystemwebproject.helpers.PostFilterOptions;
+import com.example.forumsystemwebproject.helpers.UserFilterOptions;
+import com.example.forumsystemwebproject.models.Post;
+import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
+import com.example.forumsystemwebproject.models.UserModels.UserDto;
 
 import java.util.List;
 
 public interface UserService {
-    User get(int id);
 
-    List<User> getAll();
+    List<RegisteredUser> get(UserFilterOptions userFilterOptions);
+    RegisteredUser getById(int id);
 
-    User get(String username);
+    List<RegisteredUser> getAll();
 
-    User findByEmail(String email);
+    void create(RegisteredUser user);
 
-    void create(User user);
-
-    void update(User user);
+    void update(RegisteredUser userToUpdate, RegisteredUser authenticatedUser);
 
     void delete(int id);
 }

@@ -1,6 +1,6 @@
 package com.example.forumsystemwebproject.services;
 
-import com.example.forumsystemwebproject.helpers.FilterOptions;
+import com.example.forumsystemwebproject.helpers.PostFilterOptions;
 import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
 
@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface PostService {
 
-    List<Post> get(FilterOptions filterOptions);
+    List<Post> get(PostFilterOptions postFilterOptions);
 
     Post getById(int id);
 
@@ -16,5 +16,5 @@ public interface PostService {
 
     void update(Post post, RegisteredUser user);
 
-    void delete(int id, RegisteredUser user);
+    void delete(Post post, RegisteredUser user);
 }

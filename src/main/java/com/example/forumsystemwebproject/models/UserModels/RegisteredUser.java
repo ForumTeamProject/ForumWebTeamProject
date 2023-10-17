@@ -1,11 +1,14 @@
 package com.example.forumsystemwebproject.models.UserModels;
 
+import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.Role;
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
-public class RegisteredUser implements User {
+public class RegisteredUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -24,6 +27,10 @@ public class RegisteredUser implements User {
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
+    //why user_id?
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    Set<Post> posts;
 
     public RegisteredUser() {
     }
@@ -35,74 +42,69 @@ public class RegisteredUser implements User {
         this.email = email;
     }
 
-    @Override
+
     public int getId() {
         return id;
     }
 
-    @Override
     public void setId(int id) {
         this.id = id;
     }
 
-    @Override
     public String getUsername() {
         return username;
     }
 
-    @Override
     public void setUsername(String username) {
         this.username = username;
     }
 
-    @Override
     public String getPassword() {
         return password;
     }
 
-    @Override
     public void setPassword(String password) {
         this.password = password;
     }
 
-    @Override
     public String getFirstName() {
         return firstName;
     }
 
-    @Override
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    @Override
     public String getLastName() {
         return lastName;
     }
 
-    @Override
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    @Override
     public String getEmail() {
         return email;
     }
 
-    @Override
     public void setEmail(String email) {
         this.email = email;
     }
 
-    @Override
     public Role getRole() {
         return role;
     }
 
-    @Override
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Set<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
     }
 
     @Override
