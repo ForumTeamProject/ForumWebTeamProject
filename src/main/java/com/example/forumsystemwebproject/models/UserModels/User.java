@@ -1,25 +1,33 @@
 package com.example.forumsystemwebproject.models.UserModels;
 
+import com.example.forumsystemwebproject.models.Role;
+
 public interface User {
-    public String getUsername();
+    int getId();
 
-    public void setUsername(String username);
+    void setId(int id);
+    String getUsername();
 
-    public String getPassword();
+    void setUsername(String username);
 
-    public void setPassword(String password);
+    String getPassword();
 
-    public String getFirstName();
+    void setPassword(String password);
 
-    public void setFirstName(String firstName);
+    String getFirstName();
 
-    public String getLastName();
+    void setFirstName(String firstName);
 
-    public void setLastName(String lastName);
+    String getLastName();
 
-    public String getEmail();
+    void setLastName(String lastName);
 
-    public void setEmail(String email);
+    String getEmail();
+
+    void setEmail(String email);
+
+    Role getRole();
+    void setRole(Role role);
 
 }
 
