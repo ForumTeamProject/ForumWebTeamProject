@@ -3,25 +3,21 @@ package com.example.forumsystemwebproject.models;
 import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "likes")
-public class Like {
+public class PhoneNumber {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "like_id")
+    @Column(name = "number_id")
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
-
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id")
     private RegisteredUser user;
 
-    public Like() {
+    @Column(name = "number")
+    private String number;
 
+    public PhoneNumber() {
     }
 
     public int getId() {
@@ -32,14 +28,6 @@ public class Like {
         this.id = id;
     }
 
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
-    }
-
     public RegisteredUser getUser() {
         return user;
     }
@@ -48,13 +36,11 @@ public class Like {
         this.user = user;
     }
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
+    public String getNumber() {
+        return number;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+    public void setNumber(String number) {
+        this.number = number;
     }
 }

@@ -1,45 +1,128 @@
+create table tags
+
+(
+    tag_id  int auto_increment
+        primary key,
+    content varchar(25) not null,
+    constraint content
+        unique (content)
+);
+
+create table roles
+(
+    role_id int auto_increment
+        primary key,
+    name    varchar(25) not null unique
+);
+
 create table users
 (
-    user_id    int auto_increment primary key,
+    user_id    int auto_increment
+        primary key,
     first_name varchar(32) not null,
     last_name  varchar(32) not null,
-    email      varchar(50) not null unique,
-    username   varchar(50) not null unique,
-    password   varchar(50) not null
+    email      varchar(50) not null,
+    username   varchar(50) not null,
+    password   varchar(50) not null,
+    role_id    int         not null,
+
+    constraint email
+        unique (email),
+    constraint username
+        unique (username),
+    constraint users_roles_fk
+        foreign key (role_id) references roles (role_id)
 );
+
+create table phone_numbers
+(
+    number_id int auto_increment
+        primary key,
+    user_id   int         not null,
+    number    varchar(25) null,
+    constraint phone_numbers_users_fk
+        foreign key (user_id) references users (user_id)
+
+);
+
+-- create table admins
+-- (
+--    admin_id     int auto_increment
+--        primary key,
+--    user_id      int         not null,
+--    phone_number varchar(15) null,
+--    constraint phone_number
+--        unique (phone_number),
+--    constraint admins_ibfk_1
+--        foreign key (user_id) references users (user_id)
+-- );
+
+-- create index user_id
+--     on admins (user_id);
+
 create table posts
 (
-    post_id int auto_increment primary key,
-    user_id int         not null references users (user_id),
+    post_id int auto_increment
+        primary key,
+    user_id int         not null,
     title   varchar(64) not null,
-    content text        not null
+    content text        not null,
+    constraint posts_users_fk
+        foreign key (user_id) references users (user_id)
 );
-create table replies
-(
-    reply_id int auto_increment primary key,
-    post_id  int  not null references posts (post_id),
-    user_id  int  not null references users (user_id),
-    content  text not null
-);
+
 create table likes
 (
-    like_id int auto_increment primary key,
-    post_id int not null references posts (post_id),
-    user_id int not null references users (user_id)
+    like_id int auto_increment
+        primary key,
+    post_id int not null,
+    user_id int not null,
+    constraint likes_posts_fk
+        foreign key (post_id) references posts (post_id),
+    constraint likes_users_fk
+        foreign key (user_id) references users (user_id)
 );
-create table admins
-(
-    admin_id     int auto_increment primary key,
-    user_id      int not null references users (user_id),
-    phone_number varchar(15) unique
-);
-create table tags
-(
-    tag_id  int auto_increment primary key,
-    content varchar(25) not null unique
-);
+
+create index post_id
+    on likes (post_id);
+
+create index user_id
+    on likes (user_id);
+
+create index user_id
+    on posts (user_id);
+
 create table posts_tags
 (
-    post_id int not null references posts (post_id),
-    tag_id  int not null references tags (tag_id)
+    post_id int not null,
+    tag_id  int not null,
+    constraint posts_tags_fk
+        foreign key (post_id) references posts (post_id),
+    constraint tags_posts_fk
+        foreign key (tag_id) references tags (tag_id)
 );
+
+create index post_id
+    on posts_tags (post_id);
+
+create index tag_id
+    on posts_tags (tag_id);
+
+create table replies
+(
+    reply_id int auto_increment
+        primary key,
+    post_id  int  not null,
+    user_id  int  not null,
+    content  text not null,
+    constraint replies_posts_fk
+        foreign key (post_id) references posts (post_id),
+    constraint replies_users_fk
+        foreign key (user_id) references users (user_id)
+);
+
+create index post_id
+    on replies (post_id);
+
+create index user_id
+    on replies (user_id);

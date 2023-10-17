@@ -1,7 +1,9 @@
 package com.example.forumsystemwebproject.repositories;
 
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
-import com.example.forumsystemwebproject.models.UserModels.User;
+
+import com.example.forumsystemwebproject.helpers.UserFilterOptions;
+import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -21,66 +23,62 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<RegisteredUser> getAll() {
         try (Session session = sessionFactory.openSession()) {
-            Query<User> query = session.createQuery("from RegisteredUser", User.class);
+            Query<RegisteredUser> query = session.createQuery("from RegisteredUser", RegisteredUser.class);
             //TODO filtering
             return query.list();
         }
     }
 
     @Override
-    public User get(int id) {
+    public List<RegisteredUser> get(UserFilterOptions userFilterOptions) {
+        return null;
+    }
+
+    @Override
+    public RegisteredUser getById(int id) {
         try (Session session = sessionFactory.openSession()) {
-            User result = session.get(User.class, id);
+            RegisteredUser result = session.get(RegisteredUser.class, id);
             if (result == null) {
-                throw new EntityNotFoundException("Beer", id);
+                throw new EntityNotFoundException("User", id);
             }
             return result;
         }
     }
 
+//TODO not sure if these two methods have to exist here. The task is to search by username, email and firstName which will be query params i.e. they will be handled in filter options.
+//    @Override
+//    public RegisteredUser getByUsername(String username) {
+//        try (Session session = sessionFactory.openSession()) {
+//            Query<RegisteredUser> query = session.createQuery("from RegisteredUser where username = :username", RegisteredUser.class);
+//            query.setParameter("username", username);
+//
+//            List<RegisteredUser> result = query.list();
+//            if (result.isEmpty()) {
+//                throw new EntityNotFoundException("User", "username", username);
+//            }
+//            return result.get(0);
+//        }
+//    }
+
+
+//    @Override
+//    public RegisteredUser getByEmail(String email) {
+//        try (Session session = sessionFactory.openSession()) {
+//            Query<RegisteredUser> query = session.createQuery("from RegisteredUser where email = :email", RegisteredUser.class);
+//            query.setParameter("email", email);
+//
+//            List<RegisteredUser> result = query.list();
+//            if (result.isEmpty()) {
+//                throw new EntityNotFoundException("User", "email", email);
+//            }
+//            return result.get(0);
+//        }
+//    }
 
     @Override
-    public User get(String username) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<User> query = session.createQuery("from RegisteredUser where username = :username", User.class);
-            query.setParameter("username", username);
-
-            List<User> result = query.list();
-            if (result.isEmpty()) {
-                throw new EntityNotFoundException("User", "username", username);
-            }
-            return result.get(0);
-        }
-    }
-
-
-    @Override
-    public User findByEmail(String email) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<User> query = session.createQuery("from RegisteredUser where email = :email", User.class);
-            query.setParameter("email", email);
-
-            List<User> result = query.list();
-            if (result.isEmpty()) {
-                throw new EntityNotFoundException("User", "email", email);
-            }
-            return result.get(0);
-        }
-    }
-
-    @Override
-    public void create(User user) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.merge(user);
-            session.getTransaction().commit();
-        }
-    }
-
-    @Override
-    public void update(User user) {
+    public void create(RegisteredUser user) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.merge(user);
@@ -89,13 +87,27 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void delete(int id) {
-
+    public void update(RegisteredUser user) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            User beerToRemove = get(id);
-            session.remove(beerToRemove);
+            session.merge(user);
             session.getTransaction().commit();
         }
     }
+
+    @Override
+    public void delete(RegisteredUser user) {
+        //TODO not sure whether this needs to exist.
+    }
+
+
+//    @Override
+//    public void delete(int id) {
+//        RegisteredUser userToRemove = getById(id);
+//        try (Session session = sessionFactory.openSession()) {
+//            session.beginTransaction();
+//            session.remove(userToRemove);
+//            session.getTransaction().commit();
+//        }
+//    }
 }

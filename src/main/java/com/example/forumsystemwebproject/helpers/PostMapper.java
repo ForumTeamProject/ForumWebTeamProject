@@ -32,5 +32,4 @@ public class PostMapper {
         post.setContent(dto.getContent());
         return post;
     }
-    //TODO we need to set the user of the post in the post service class
 }

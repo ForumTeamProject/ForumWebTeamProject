@@ -10,29 +10,21 @@ INSERT INTO tags (content) VALUES
                                ('Tag9'),
                                ('Tag10');
 
-INSERT INTO users (first_name, last_name, email, username, password) VALUES
-    ('John', 'Doe', 'john.doe@example.com', 'johndoe', 'password1'),
-    ('Jane', 'Smith', 'jane.smith@example.com', 'janesmith', 'password2'),
-    ('Alice', 'Johnson', 'alice.johnson@example.com', 'alicej', 'password3'),
-    ('Bob', 'Brown', 'bob.brown@example.com', 'bobbrown', 'password4'),
-    ('Ella', 'White', 'ella.white@example.com', 'ellaw', 'password5'),
-    ('Charlie', 'Lee', 'charlie.lee@example.com', 'charliel', 'password6'),
-    ('Grace', 'Wilson', 'grace.wilson@example.com', 'gracew', 'password7'),
-    ('David', 'Martin', 'david.martin@example.com', 'davidm', 'password8'),
-    ('Sophia', 'Harris', 'sophia.harris@example.com', 'sophiah', 'password9'),
-    ('William', 'Clark', 'william.clark@example.com', 'williamc', 'password10');
+INSERT INTO users (first_name, last_name, email, username, password, role_id) VALUES
+    ('John', 'Doe', 'john.doe@example.com', 'johndoe', 'password1', 1),
+    ('Jane', 'Smith', 'jane.smith@example.com', 'janesmith', 'password2', 2),
+    ('Alice', 'Johnson', 'alice.johnson@example.com', 'alicej', 'password3', 1),
+    ('Bob', 'Brown', 'bob.brown@example.com', 'bobbrown', 'password4', 1),
+    ('Ella', 'White', 'ella.white@example.com', 'ellaw', 'password5', 1),
+    ('Charlie', 'Lee', 'charlie.lee@example.com', 'charliel', 'password6', 2),
+    ('Grace', 'Wilson', 'grace.wilson@example.com', 'gracew', 'password7', 1),
+    ('David', 'Martin', 'david.martin@example.com', 'davidm', 'password8', 1),
+    ('Sophia', 'Harris', 'sophia.harris@example.com', 'sophiah', 'password9',1),
+    ('William', 'Clark', 'william.clark@example.com', 'williamc', 'password10',2);
 
-INSERT INTO admins (user_id, phone_number) VALUES
-    (1, '123-456-7890'),
-    (2, '987-654-3210'),
-    (3, '555-555-5555'),
-    (4, '111-222-3333'),
-    (5, '777-888-9999'),
-    (6, '999-888-7777'),
-    (7, '444-333-2222'),
-    (8, '666-777-8888'),
-    (9, '123-987-4567'),
-    (10, '555-555-5556');
+INSERT INTO roles (name) VALUES
+                             ('user'),
+                             ('admin');
 
 INSERT INTO posts (user_id, title, content) VALUES
     (1, 'Sample Post 1', 'This is the content of sample post 1.'),
@@ -81,3 +73,8 @@ INSERT INTO replies (post_id, user_id, content) VALUES
     (8, 9, 'Reply 1 to post 8'),
     (9, 10, 'Reply 1 to post 9'),
     (10, 1, 'Reply 1 to post 10');
+
+INSERT INTO phone_numbers (number_id, user_id, number)  VALUES
+    (1, 2 , 0988779978),
+    (2, 6, 0858499534),
+    (3, 10, 097987878);

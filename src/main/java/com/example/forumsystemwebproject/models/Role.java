@@ -1,21 +1,24 @@
 package com.example.forumsystemwebproject.models;
 
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "roles")
 public class Role {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
     private int id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
-    public Role(){
+    public Role() {
 
     }
+
     public Role(int id, String name) {
         this.id = id;
         this.name = name;

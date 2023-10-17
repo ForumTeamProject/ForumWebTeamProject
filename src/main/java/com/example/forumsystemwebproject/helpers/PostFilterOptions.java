@@ -2,7 +2,7 @@ package com.example.forumsystemwebproject.helpers;
 
 import java.util.Optional;
 
-public class FilterOptions {
+public class PostFilterOptions {
 
     private Optional<String> user;
 
@@ -11,7 +11,7 @@ public class FilterOptions {
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
 
-    public FilterOptions(
+    public PostFilterOptions(
         String user,
         String title,
         String sortBy,

@@ -1,7 +1,10 @@
 package com.example.forumsystemwebproject.models;
 
+
 import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
 import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 @Table(name="posts")
@@ -21,6 +24,14 @@ public class Post {
 
     @Column(name = "content")
     private String content;
+
+    @OneToMany
+    @JoinColumn(name = "post_id")
+    private Set<Comment> replies;
+
+    @OneToMany
+    @JoinColumn(name = "post_id")
+    private Set<Like> likes;
 
     public Post() {
         }
@@ -55,6 +66,22 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Set<Comment> getReplies() {
+        return replies;
+    }
+
+    public void setReplies(Set<Comment> replies) {
+        this.replies = replies;
+    }
+
+    public Set<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<Like> likes) {
+        this.likes = likes;
     }
 
     @Override

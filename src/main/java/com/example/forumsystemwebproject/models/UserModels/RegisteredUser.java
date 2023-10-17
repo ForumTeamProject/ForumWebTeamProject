@@ -1,11 +1,15 @@
 package com.example.forumsystemwebproject.models.UserModels;
 
+import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.Role;
 import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 public class RegisteredUser {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -20,10 +24,13 @@ public class RegisteredUser {
     private String lastName;
     @Column(name = "email")
     private String email;
-
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    Set<Post> posts;
 
     public RegisteredUser() {
     }
@@ -34,7 +41,6 @@ public class RegisteredUser {
         this.password = password;
         this.email = email;
     }
-
 
     public int getId() {
         return id;
@@ -90,6 +96,14 @@ public class RegisteredUser {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Set<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
     }
 
     @Override
