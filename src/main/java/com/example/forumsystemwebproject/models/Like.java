@@ -1,8 +1,7 @@
 package com.example.forumsystemwebproject.models;
 
+import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
 import jakarta.persistence.*;
-
-import java.util.List;
 
 @Entity
 @Table(name = "likes")

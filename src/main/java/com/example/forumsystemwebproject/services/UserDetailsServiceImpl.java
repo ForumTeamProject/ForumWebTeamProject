@@ -1,6 +1,6 @@
 package com.example.forumsystemwebproject.services;
 
-import com.example.forumsystemwebproject.models.Admin;
+import com.example.forumsystemwebproject.models.UserModels.Admin;
 import com.example.forumsystemwebproject.repositories.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -35,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 //                () -> new UsernameNotFoundException("User not found"));
 //        return new org.springframework.security.core.userdetails.User(username, user.getPassword(), getAuthorities(user.getRoles()));
 //
-    return null; //tuk ne znam kakvo napravih ;D 
+    return null; //tuk ne znam kakvo napravih ;D
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(org.springframework.security.core.userdetails.User user) {

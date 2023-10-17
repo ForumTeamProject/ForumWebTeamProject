@@ -2,7 +2,7 @@ package com.example.forumsystemwebproject.services;
 
 import com.example.forumsystemwebproject.helpers.FilterOptions;
 import com.example.forumsystemwebproject.models.Post;
-import com.example.forumsystemwebproject.models.RegisteredUser;
+import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

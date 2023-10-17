@@ -1,5 +1,6 @@
-package com.example.forumsystemwebproject.models;
+package com.example.forumsystemwebproject.models.UserModels;
 
+import com.example.forumsystemwebproject.models.Role;
 import jakarta.persistence.*;
 
 @Entity

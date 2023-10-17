@@ -1,11 +1,10 @@
-package com.example.forumsystemwebproject.repositories;
+package com.example.forumsystemwebproject.services;
 
 import com.example.forumsystemwebproject.models.UserModels.User;
 
 import java.util.List;
 
-public interface UserRepository {
-    //potential filtering
+public interface UserService {
     User get(int id);
 
     List<User> getAll();

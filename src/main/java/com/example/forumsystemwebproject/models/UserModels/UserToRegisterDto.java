@@ -1,6 +1,7 @@
-package com.example.forumsystemwebproject.models;
+package com.example.forumsystemwebproject.models.UserModels;
 
 
+import com.example.forumsystemwebproject.models.UserModels.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
