@@ -1,7 +1,7 @@
 package com.example.forumsystemwebproject.services;
 
 import com.example.forumsystemwebproject.models.Admin;
-import org.apache.catalina.User;
+import com.example.forumsystemwebproject.repositories.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -28,11 +28,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         this.userRepository = userRepository;
         this.sessionFactory = sessionFactory;
     }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username).orElseThrow(
-                () -> new UsernameNotFoundException("User not found"));
-        return new org.springframework.security.core.userdetails.User(username, user.getPassword(), getAuthorities(user.getRoles()));
+//        User user = userRepository.get(username).orElseThrow(
+//                () -> new UsernameNotFoundException("User not found"));
+//        return new org.springframework.security.core.userdetails.User(username, user.getPassword(), getAuthorities(user.getRoles()));
+//
+    return null; //tuk ne znam kakvo napravih ;D 
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(org.springframework.security.core.userdetails.User user) {
