@@ -2,6 +2,7 @@ package com.example.forumsystemwebproject.models.UserModels;
 
 import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -24,12 +25,13 @@ public class RegisteredUser {
     private String lastName;
     @Column(name = "email")
     private String email;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     Set<Post> posts;
 
     public RegisteredUser() {

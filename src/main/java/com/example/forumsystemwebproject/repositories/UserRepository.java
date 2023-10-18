@@ -1,8 +1,6 @@
 package com.example.forumsystemwebproject.repositories;
 
-import com.example.forumsystemwebproject.helpers.PostFilterOptions;
 import com.example.forumsystemwebproject.helpers.UserFilterOptions;
-import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
 
 import java.util.List;
@@ -15,9 +13,13 @@ public interface UserRepository {
 
     List<RegisteredUser> getAll();
 
+    RegisteredUser getByUsername(String username);
+
+    RegisteredUser getByEmail(String email);
+
     void create(RegisteredUser user);
 
     void update(RegisteredUser user);
 
-    void delete(RegisteredUser user);
+    void delete(int id);
 }
