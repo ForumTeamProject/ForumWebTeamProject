@@ -9,6 +9,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class RegisteredUser {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -23,13 +24,13 @@ public class RegisteredUser {
     private String lastName;
     @Column(name = "email")
     private String email;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
-    //why user_id?
-    @OneToMany
+
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     Set<Post> posts;
 
     public RegisteredUser() {
@@ -41,7 +42,6 @@ public class RegisteredUser {
         this.password = password;
         this.email = email;
     }
-
 
     public int getId() {
         return id;

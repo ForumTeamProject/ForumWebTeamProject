@@ -32,6 +32,7 @@ public class UserMapper {
         user.setEmail(dto.getEmail());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
+        user.getRole().setName("user");
         return user;
     }
 

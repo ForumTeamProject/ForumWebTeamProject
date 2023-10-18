@@ -47,10 +47,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void delete(Post post, RegisteredUser user) {
-        if (user.getRole().toString().equalsIgnoreCase("admin") || post.getUser() == user) {
+        if (user.getRole().toString().equalsIgnoreCase("admin") || post.getUser().getUsername().equalsIgnoreCase(user.getUsername())) {
             postRepository.delete(post);
         } else {
-            throw new UnauthorizedOperationException("You do not have permission to edit this post!");
+            throw new UnauthorizedOperationException("You do not have permission to delete this post!");
         }
     }
 }

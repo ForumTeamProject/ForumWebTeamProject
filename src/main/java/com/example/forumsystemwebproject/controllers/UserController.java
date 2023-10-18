@@ -1,5 +1,6 @@
 package com.example.forumsystemwebproject.controllers;
 
+import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
@@ -9,6 +10,7 @@ import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
 import com.example.forumsystemwebproject.models.UserModels.UserDto;
 import com.example.forumsystemwebproject.services.UserService;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -63,8 +65,17 @@ public class UserController {
         }
     }
 
-    //TODO Create User method could be created in a RegisterController as /users endpoint does not correspond to registering new user
-    //TODO Delete user should be discussed as i am not sure whether it is possible in this context.
+    @PostMapping("/register")
+    public void create(@Valid @RequestBody UserDto dto) {
+        try {
+            RegisteredUser newUser = mapper.fromDto(dto);
+            userService.create(newUser);
+        } catch (DuplicateEntityException e ) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
+    }
+
+
     @PutMapping("/{id}")
     public void update(@RequestHeader HttpHeaders headers, @Valid @RequestBody UserDto dto, @PathVariable int id) {
         try {
@@ -77,6 +88,22 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+    //TODO probably add something like users/{id}/block and on this endpoint an admin can block a user
+
+    @DeleteMapping("/{id}")
+    public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id)  {
+        try {
+            RegisteredUser user = authenticationHelper.tryGetUser(headers);
+            userService.delete(user, id);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,  e.getMessage());
+        } catch (EntityNotFoundException e ) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+
+
+    }
+
 }
 
 

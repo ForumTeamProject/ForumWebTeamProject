@@ -2,6 +2,7 @@ package com.example.forumsystemwebproject.models;
 
 
 import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -25,12 +26,14 @@ public class Post {
     @Column(name = "content")
     private String content;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id")
+    @JsonIgnore
     private Set<Comment> replies;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id")
+    @JsonIgnore
     private Set<Like> likes;
 
     public Post() {

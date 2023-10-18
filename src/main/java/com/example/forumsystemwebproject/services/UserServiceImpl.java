@@ -1,10 +1,10 @@
 package com.example.forumsystemwebproject.services;
 
+import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
+import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
-import com.example.forumsystemwebproject.helpers.PostFilterOptions;
 import com.example.forumsystemwebproject.helpers.UserFilterOptions;
 import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
-import com.example.forumsystemwebproject.models.UserModels.UserDto;
 import com.example.forumsystemwebproject.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,19 +35,20 @@ public class UserServiceImpl implements UserService{
         return repository.getAll();
     }
 
-    //TODO check user repository for more info -->
-//    @Override
-//    public RegisteredUser getByUsername(String username) {
-//        return repository.getByUsername(username);
-//    }
-//
-//    @Override
-//    public RegisteredUser getByEmail(String email) {
-//        return repository.getByEmail(email);
-//    }
+    @Override
+    public RegisteredUser getByUsername(String username) {
+        return repository.getByUsername(username);
+    }
+
+    @Override
+    public RegisteredUser getByEmail(String email) {
+        return repository.getByEmail(email);
+    }
     @Override
     public void create(RegisteredUser user) {
-    //TODO we have to ask whether the create user should be here.
+        checkUsernameUniqueness(user);
+        checkEmailUniqueness(user);
+        repository.create(user);
     }
 
     @Override
@@ -59,9 +60,36 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void delete(int id) {
-
+    public void delete(RegisteredUser user, int id) {
+        if (user.getId() != id) {
+            throw new UnauthorizedOperationException("You do not have permission to delete this user!");
+        }
+        repository.delete(id);
     }
 
+    private void checkUsernameUniqueness(RegisteredUser user) {
+        boolean duplicateExists = true;
+        try {
+            repository.getByUsername(user.getUsername());
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
 
+        if (duplicateExists) {
+            throw new DuplicateEntityException("User", "username", user.getUsername());
+        }
+    }
+
+    private void checkEmailUniqueness(RegisteredUser user) {
+        boolean duplicateExists = true;
+        try {
+            repository.getByEmail(user.getEmail());
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
+
+        if (duplicateExists) {
+            throw new DuplicateEntityException("User", "email", user.getEmail());
+        }
+    }
 }
