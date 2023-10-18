@@ -56,6 +56,8 @@ public class UserServiceImpl implements UserService{
             if (userToUpdate.getId() != authenticatedUser.getId()) {
                 throw new UnauthorizedOperationException("You do not have permission to change this user's details!");
             }
+            checkUsernameUniqueness(userToUpdate);
+            checkEmailUniqueness(userToUpdate);
             repository.update(userToUpdate);
     }
 

@@ -25,14 +25,6 @@ public class RegisteredUser {
     private String lastName;
     @Column(name = "email")
     private String email;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
-    private Role role;
-
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    @JsonIgnore
-    Set<Post> posts;
 
     public RegisteredUser() {
     }
@@ -90,22 +82,6 @@ public class RegisteredUser {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public Set<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(Set<Post> posts) {
-        this.posts = posts;
     }
 
     @Override
