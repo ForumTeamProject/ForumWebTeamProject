@@ -10,17 +10,17 @@ INSERT INTO tags (content) VALUES
                                ('Tag9'),
                                ('Tag10');
 
-INSERT INTO users (first_name, last_name, email, username, password, role_id) VALUES
-    ('John', 'Doe', 'john.doe@example.com', 'johndoe', 'password1', 1),
-    ('Jane', 'Smith', 'jane.smith@example.com', 'janesmith', 'password2', 2),
-    ('Alice', 'Johnson', 'alice.johnson@example.com', 'alicej', 'password3', 1),
-    ('Bob', 'Brown', 'bob.brown@example.com', 'bobbrown', 'password4', 1),
-    ('Ella', 'White', 'ella.white@example.com', 'ellaw', 'password5', 1),
-    ('Charlie', 'Lee', 'charlie.lee@example.com', 'charliel', 'password6', 2),
-    ('Grace', 'Wilson', 'grace.wilson@example.com', 'gracew', 'password7', 1),
-    ('David', 'Martin', 'david.martin@example.com', 'davidm', 'password8', 1),
-    ('Sophia', 'Harris', 'sophia.harris@example.com', 'sophiah', 'password9',1),
-    ('William', 'Clark', 'william.clark@example.com', 'williamc', 'password10',2);
+INSERT INTO users (first_name, last_name, email, username, password) VALUES
+    ('John', 'Doe', 'john.doe@example.com', 'johndoe', 'password1'),
+    ('Jane', 'Smith', 'jane.smith@example.com', 'janesmith', 'password2'),
+    ('Alice', 'Johnson', 'alice.johnson@example.com', 'alicej', 'password3'),
+    ('Bob', 'Brown', 'bob.brown@example.com', 'bobbrown', 'password4'),
+    ('Ella', 'White', 'ella.white@example.com', 'ellaw', 'password5'),
+    ('Charlie', 'Lee', 'charlie.lee@example.com', 'charliel', 'password6'),
+    ('Grace', 'Wilson', 'grace.wilson@example.com', 'gracew', 'password7'),
+    ('David', 'Martin', 'david.martin@example.com', 'davidm', 'password8'),
+    ('Sophia', 'Harris', 'sophia.harris@example.com', 'sophiah', 'password9'),
+    ('William', 'Clark', 'william.clark@example.com', 'williamc', 'password10');
 
 INSERT INTO roles (name) VALUES
                              ('user'),
@@ -78,3 +78,20 @@ INSERT INTO phone_numbers (number_id, user_id, number)  VALUES
     (1, 2 , 0988779978),
     (2, 6, 0858499534),
     (3, 10, 097987878);
+
+INSERT INTO roles_users (role_id, user_id) VALUES
+(1, 1),   -- User 1 with role "user"
+(1, 2),   -- User 2 with role "user"
+(1, 3),   -- User 3 with role "user"
+(1, 4),   -- User 4 with role "user"
+(1, 5),   -- User 5 with role "user"
+(1, 6),   -- User 6 with role "user"
+(1, 7),   -- User 7 with role "user"
+(1, 8),   -- User 8 with role "user"
+(2, 9),   -- User 9 with role "admin"
+(2, 10);  -- User 10 with role "admin"
+
+
+
+
+

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-@PropertySource("classpath:application.properties")
 public class UserRepositoryImpl implements UserRepository {
 
     private final SessionFactory sessionFactory;

@@ -26,16 +26,6 @@ public class Post {
     @Column(name = "content")
     private String content;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "post_id")
-    @JsonIgnore
-    private Set<Comment> replies;
-
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "post_id")
-    @JsonIgnore
-    private Set<Like> likes;
-
     public Post() {
         }
 
@@ -69,22 +59,6 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Set<Comment> getReplies() {
-        return replies;
-    }
-
-    public void setReplies(Set<Comment> replies) {
-        this.replies = replies;
-    }
-
-    public Set<Like> getLikes() {
-        return likes;
-    }
-
-    public void setLikes(Set<Like> likes) {
-        this.likes = likes;
     }
 
     @Override

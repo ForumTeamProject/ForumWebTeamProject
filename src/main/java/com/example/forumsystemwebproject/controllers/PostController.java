@@ -12,6 +12,7 @@ import com.example.forumsystemwebproject.services.PostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,7 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/posts")
+@RequestMapping("/api")
 public class PostController {
 
     private final PostService service;
@@ -35,7 +36,7 @@ public class PostController {
         this.authenticationHelper = authenticationHelper;
     }
 
-    @GetMapping
+    @GetMapping("/posts")
     public List<Post> get(
         @RequestParam(required = false) String user,
         @RequestParam(required = false) String title,
@@ -43,15 +44,33 @@ public class PostController {
         @RequestParam(required = false) String sortOrder,
         @RequestHeader HttpHeaders headers) {
         try {
-            PostFilterOptions postFilterOptions = new PostFilterOptions(user, title, sortBy, sortOrder);
+            PostFilterOptions filterOptions = new PostFilterOptions(user,title, sortBy, sortOrder);
             authenticationHelper.tryGetUser(headers);
-            return service.get(postFilterOptions);
+            return service.get(filterOptions);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}/posts")
+    public List<Post> getByUserId(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String sortOrder,
+            @PathVariable int id,
+            @RequestHeader HttpHeaders headers) {
+        try {
+            PostFilterOptions filterOptions = new PostFilterOptions(null, title, sortBy, sortOrder);
+            authenticationHelper.tryGetUser(headers);
+            return service.getByUserId(filterOptions, id);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping("/posts/{id}")
     public Post getById(@PathVariable int id) {
         try {
             return service.getById(id);
@@ -60,7 +79,7 @@ public class PostController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/posts")
     public void create(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostDto dto) {
         try {
         RegisteredUser user = authenticationHelper.tryGetUser(headers);
@@ -71,7 +90,7 @@ public class PostController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/posts/{id}")
     public void update(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostDto dto, @PathVariable int id) {
         try {
             Post postToUpdate = mapper.fromDto(id, dto);
@@ -82,7 +101,7 @@ public class PostController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/posts/{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             RegisteredUser user = authenticationHelper.tryGetUser(headers);

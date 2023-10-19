@@ -1,11 +1,6 @@
 package com.example.forumsystemwebproject.models.UserModels;
 
-import com.example.forumsystemwebproject.models.Post;
-import com.example.forumsystemwebproject.models.Role;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
