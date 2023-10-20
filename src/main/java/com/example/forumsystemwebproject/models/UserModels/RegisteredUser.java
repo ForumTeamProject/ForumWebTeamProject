@@ -1,11 +1,16 @@
 package com.example.forumsystemwebproject.models.UserModels;
 
+import com.example.forumsystemwebproject.models.Post;
+import com.example.forumsystemwebproject.models.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 public class RegisteredUser {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -20,6 +25,14 @@ public class RegisteredUser {
     private String lastName;
     @Column(name = "email")
     private String email;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    Set<Post> posts;
 
     public RegisteredUser() {
     }
@@ -30,6 +43,7 @@ public class RegisteredUser {
         this.password = password;
         this.email = email;
     }
+
 
     public int getId() {
         return id;
@@ -79,13 +93,36 @@ public class RegisteredUser {
         this.email = email;
     }
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Set<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RegisteredUser that)) return false;
+        return getId() == that.getId() &&
+                Objects.equals(getUsername(), that.getUsername()) &&
+                Objects.equals(getFirstName(), that.getFirstName()) &&
+                Objects.equals(getEmail(), that.getEmail()) &&
+                Objects.equals(getRole(), that.getRole()) &&
+                Objects.equals(getPosts(), that.getPosts());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUsername(), getFirstName(), getEmail(), getRole(), getPosts());
     }
 }
