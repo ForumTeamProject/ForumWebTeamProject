@@ -24,14 +24,12 @@ create table users
     email      varchar(50) not null,
     username   varchar(50) not null,
     password   varchar(50) not null,
-    role_id    int         not null,
+
 
     constraint email
         unique (email),
     constraint username
-        unique (username),
-    constraint users_roles_fk
-        foreign key (role_id) references roles (role_id)
+        unique (username)
 );
 
 create table phone_numbers
@@ -126,3 +124,15 @@ create index post_id
 
 create index user_id
     on replies (user_id);
+
+create table roles_users
+(
+    role_id int not null,
+    constraint roles_users_fk1
+        foreign key (role_id) references roles (role_id),
+
+    user_id int not null,
+    constraint roles_users_fk2
+        foreign key (user_id) references users (user_id)
+);
+

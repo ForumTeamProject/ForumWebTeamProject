@@ -21,8 +21,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> get(PostFilterOptions postFilterOptions) {
-        return postRepository.get(postFilterOptions);
+    public List<Post> get(PostFilterOptions filterOptions) {
+        return postRepository.get(filterOptions);
+    }
+
+    @Override
+    public List<Post> getByUserId(PostFilterOptions filterOptions, int id) {
+        return postRepository.getByUserId(filterOptions, id);
     }
 
     @Override
@@ -38,19 +43,19 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void update(Post post, RegisteredUser user) {
-        if (user.getRole().toString().equals("admin") || post.getUser() == user) {
-            postRepository.update(post);
-        } else {
-            throw new UnauthorizedOperationException("You do not have permission to edit this post!");
-        }
+//        if (user.getRole().toString().equals("admin") || post.getUser() == user) {
+//            postRepository.update(post);
+//        } else {
+//            throw new UnauthorizedOperationException("You do not have permission to edit this post!");
+//        }
     }
 
     @Override
     public void delete(Post post, RegisteredUser user) {
-        if (user.getRole().toString().equalsIgnoreCase("admin") || post.getUser().getUsername().equalsIgnoreCase(user.getUsername())) {
-            postRepository.delete(post);
-        } else {
-            throw new UnauthorizedOperationException("You do not have permission to delete this post!");
-        }
+//        if (user.getRole().toString().equalsIgnoreCase("admin") || post.getUser().getUsername().equalsIgnoreCase(user.getUsername())) {
+//            postRepository.delete(post);
+//        } else {
+//            throw new UnauthorizedOperationException("You do not have permission to delete this post!");
+//        }
     }
 }

@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface PostService {
 
-    List<Post> get(PostFilterOptions postFilterOptions);
+    List<Post> get(PostFilterOptions filterOptions);
+
+    List<Post> getByUserId(PostFilterOptions filterOptions, int id);
 
     Post getById(int id);
 

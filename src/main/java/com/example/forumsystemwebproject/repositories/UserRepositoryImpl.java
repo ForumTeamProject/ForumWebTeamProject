@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
-@PropertySource("classpath:application.properties")
 public class UserRepositoryImpl implements UserRepository {
 
     private final SessionFactory sessionFactory;

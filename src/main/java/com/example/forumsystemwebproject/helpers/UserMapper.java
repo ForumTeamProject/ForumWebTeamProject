@@ -21,7 +21,7 @@ public class UserMapper {
         RegisteredUser user = fromDto(dto);
         user.setId(id);
         RegisteredUser repositoryUser = service.getById(id);
-        user.setRole(repositoryUser.getRole());
+//        user.setRole(repositoryUser.getRole());
         return user;
     }
 
@@ -32,7 +32,7 @@ public class UserMapper {
         user.setEmail(dto.getEmail());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
-        user.getRole().setName("user");
+//        user.getRole().setName("user");
         return user;
     }
 

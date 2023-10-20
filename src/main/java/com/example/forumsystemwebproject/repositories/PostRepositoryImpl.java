@@ -3,6 +3,7 @@ package com.example.forumsystemwebproject.repositories;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.helpers.PostFilterOptions;
 import com.example.forumsystemwebproject.models.Post;
+import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -16,22 +17,25 @@ public class PostRepositoryImpl implements PostRepository {
 
     private final SessionFactory sessionFactory;
 
+    private final UserRepository userRepository;
+
     @Autowired
-    public PostRepositoryImpl(SessionFactory sessionFactory) {
+    public PostRepositoryImpl(SessionFactory sessionFactory, UserRepository userRepository) {
         this.sessionFactory = sessionFactory;
+        this.userRepository = userRepository;
     }
     @Override
-    public List<Post> get(PostFilterOptions postFilterOptions) {
+    public List<Post> get(PostFilterOptions filterOptions) {
         try (Session session = sessionFactory.openSession()) {
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
 
-            postFilterOptions.getTitle().ifPresent(value -> {
+            filterOptions.getTitle().ifPresent(value -> {
                 filters.add("title like :title");
                 params.put("title", String.format("%%%s%%", value));
             });
 
-            postFilterOptions.getUser().ifPresent(value -> {
+            filterOptions.getUser().ifPresent(value -> {
                 filters.add("username like :username");
                 params.put("username", value);
             });
@@ -42,12 +46,40 @@ public class PostRepositoryImpl implements PostRepository {
                         .append(" where ")
                         .append(String.join(" and ", filters));
             }
-            queryString.append(generateOrderBy(postFilterOptions));
+            queryString.append(generateOrderBy(filterOptions));
 
             Query<Post> query =session.createQuery(queryString.toString(), Post.class);
             query.setProperties(params);
             return query.list();
         }
+    }
+
+    @Override
+    public List<Post> getByUserId(PostFilterOptions filterOptions, int id) {
+        try (Session session = sessionFactory.openSession()) {
+            RegisteredUser user = userRepository.getById(id);
+            List<String> filters = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
+
+            filterOptions.getTitle().ifPresent(value -> {
+                filters.add("title like :title");
+                params.put("title", String.format("%%%s%%", value));
+            });
+
+            StringBuilder queryString = new StringBuilder("from Post where user = :user");
+            if (!filters.isEmpty()) {
+                queryString
+                        .append(" and ")
+                        .append(String.join(" and ", filters));
+            }
+            queryString.append(generateOrderBy(filterOptions));
+
+            Query<Post> query = session.createQuery(queryString.toString(), Post.class);
+            query.setParameter("user", user);
+            query.setProperties(params);
+            return query.list();
+        }
+
     }
 
     @Override
@@ -64,9 +96,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public void create(Post post) {
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
             session.persist(post);
-            session.getTransaction().commit();
         }
     }
 
