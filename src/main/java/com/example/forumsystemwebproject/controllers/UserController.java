@@ -40,11 +40,12 @@ public class UserController {
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastname,
             @RequestParam(required = false) String sortBy,
             @RequestParam(required = false) String sortOrder,
             @RequestHeader HttpHeaders headers) {
         try {
-            UserFilterOptions userFilterOptions = new UserFilterOptions(username, email, firstName, sortBy, sortOrder);
+            UserFilterOptions userFilterOptions = new UserFilterOptions(username, email, firstName, lastname, sortBy, sortOrder);
             authenticationHelper.tryGetUser(headers);
             return userService.get(userFilterOptions);
         } catch (UnauthorizedOperationException e) {

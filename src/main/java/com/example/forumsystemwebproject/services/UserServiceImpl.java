@@ -3,7 +3,7 @@ package com.example.forumsystemwebproject.services;
 import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
-import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
+import com.example.forumsystemwebproject.helpers.filters.CommentFilterOptions;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
 import com.example.forumsystemwebproject.services.contracts.UserService;
@@ -22,18 +22,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> get(UserFilterOptions userFilterOptions) {
-        return null;
-    }
-
-    @Override
     public User getById(int id) {
         return repository.getById(id);
     }
 
     @Override
-    public List<User> getAll() {
-        return repository.getAll();
+    public List<User> getAll(CommentFilterOptions filterOptions) {
+        return repository.getAll(filterOptions);
     }
 
     @Override
@@ -45,6 +40,7 @@ public class UserServiceImpl implements UserService {
     public User getByEmail(String email) {
         return repository.getByEmail(email);
     }
+
     @Override
     public void create(User user) {
         checkUsernameUniqueness(user);
@@ -54,12 +50,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(User userToUpdate, User authenticatedUser) {
-            if (userToUpdate.getId() != authenticatedUser.getId()) {
-                throw new UnauthorizedOperationException("You do not have permission to change this user's details!");
-            }
-            checkUsernameUniqueness(userToUpdate);
-            checkEmailUniqueness(userToUpdate);
-            repository.update(userToUpdate);
+        if (userToUpdate.getId() != authenticatedUser.getId()) {
+            throw new UnauthorizedOperationException("You do not have permission to change this user's details!");
+        }
+        checkUsernameUniqueness(userToUpdate);
+        checkEmailUniqueness(userToUpdate);
+        repository.update(userToUpdate);
     }
 
     @Override

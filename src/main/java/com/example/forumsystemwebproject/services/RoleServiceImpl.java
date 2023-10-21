@@ -67,9 +67,8 @@ public class RoleServiceImpl implements RoleService {
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
-
-        if (duplicateExists) {
-            throw new DuplicateEntityException("Role", "name", role.getName());
+        if(duplicateExists){
+            throw new DuplicateEntityException("Role", role.getId());
         }
     }
 }

@@ -2,6 +2,8 @@ package com.example.forumsystemwebproject.models;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "tags")
 public class Tag {
@@ -35,12 +37,15 @@ public class Tag {
     }
 
     @Override
-    public int hashCode() {
-        return super.hashCode();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Tag tag)) return false;
+        return getId() == tag.getId() &&
+                Objects.equals(getContent(), tag.getContent());
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+    public int hashCode() {
+        return Objects.hash(getId(), getContent());
     }
 }

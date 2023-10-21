@@ -2,6 +2,7 @@ package com.example.forumsystemwebproject.repositories;
 
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 
+import com.example.forumsystemwebproject.helpers.filters.CommentFilterOptions;
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
 
 
@@ -12,7 +13,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -24,18 +28,44 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAll(CommentFilterOptions filterOptions) {
         try (Session session = sessionFactory.openSession()) {
-            Query<User> query = session.createQuery("from User", User.class);
-            //TODO filtering
-            return query.list();
-        }
+           List<String> filters = new ArrayList<>();
+           Map<String, Object> params = new HashMap<>();
+
+           filterOptions.getUser().ifPresent(value -> {
+               filters.add("username like :username");
+               params.put("username", value);
+           });
+
+           filterOptions.getContent().ifPresent(value -> {
+               filters.add("email like :email");
+               params.put("email", value);
+           });
+
+            filterOptions.getContent().ifPresent(value -> {
+                filters.add("firstName like :firstName");
+                params.put("firstName", value);
+            });
+            filterOptions.getContent().ifPresent(value -> {
+                filters.add("lastName like :lastName");
+                params.put("lastName", value);
+            });
+
+           StringBuilder queryString = new StringBuilder("from Comment");
+           if (!filters.isEmpty()) {
+               queryString
+                       .append(" where ")
+                       .append(String.join(" and ", filters));
+           }
+           queryString.append(generateOrderBy(filterOptions));
+
+           Query<User> query = session.createQuery(queryString.toString(), User.class);
+           query.setProperties(params);
+           return query.list();
+       }
     }
 
-    @Override
-    public List<User> get(UserFilterOptions userFilterOptions) {
-        return null;
-    }
 
     @Override
     public User getById(int id) {
@@ -101,5 +131,33 @@ public class UserRepositoryImpl implements UserRepository {
             session.remove(userToRemove);
             session.getTransaction().commit();
         }
+    }
+    private String generateOrderBy(CommentFilterOptions filterOptions) {
+        if (filterOptions.getSortBy().isEmpty()) {
+            return "";
+        }
+
+        String orderBy = "";
+
+        switch (filterOptions.getSortBy().get()) {
+            case "username":
+                orderBy = "username";
+                break;
+            case "first_name":
+                orderBy = "first_name";
+            case "last_name":
+                orderBy = "last_name";
+            case "email":
+                orderBy = "email";
+                break;
+        }
+
+        orderBy = String.format(" order by %s", orderBy);
+
+        if (filterOptions.getSortOrder().isPresent() && filterOptions.getSortOrder().get().equalsIgnoreCase("desc")) {
+            orderBy = String.format("%s desc", orderBy);
+        }
+
+        return orderBy;
     }
 }

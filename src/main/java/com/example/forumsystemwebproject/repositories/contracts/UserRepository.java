@@ -1,5 +1,6 @@
 package com.example.forumsystemwebproject.repositories.contracts;
 
+import com.example.forumsystemwebproject.helpers.filters.CommentFilterOptions;
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
 import com.example.forumsystemwebproject.models.User;
 
@@ -7,11 +8,9 @@ import java.util.List;
 
 public interface UserRepository {
 
-    List<User> get(UserFilterOptions userFilterOptions);
-    //potential filtering
     User getById(int id);
 
-    List<User> getAll();
+    List<User> getAll(CommentFilterOptions filterOptions);
 
     User getByUsername(String username);
 
