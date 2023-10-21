@@ -1,8 +1,8 @@
-package com.example.forumsystemwebproject.helpers;
+package com.example.forumsystemwebproject.helpers.mappers;
 
 import com.example.forumsystemwebproject.models.Role;
-import com.example.forumsystemwebproject.models.RoleDto;
-import com.example.forumsystemwebproject.services.RoleService;
+import com.example.forumsystemwebproject.models.DTOs.RoleDto;
+import com.example.forumsystemwebproject.services.contracts.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

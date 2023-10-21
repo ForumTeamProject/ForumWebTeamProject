@@ -1,6 +1,5 @@
 package com.example.forumsystemwebproject.models;
 
-import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
 import jakarta.persistence.*;
 
 @Entity
@@ -18,7 +17,7 @@ public class Like {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private RegisteredUser user;
+    private User user;
 
     public Like() {
 
@@ -40,11 +39,11 @@ public class Like {
         this.post = post;
     }
 
-    public RegisteredUser getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(RegisteredUser user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

@@ -1,4 +1,4 @@
-package com.example.forumsystemwebproject.models.UserModels;
+package com.example.forumsystemwebproject.models;
 
 import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.Role;
@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class RegisteredUser {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -25,19 +25,19 @@ public class RegisteredUser {
     private String lastName;
     @Column(name = "email")
     private String email;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
-    private Role role;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
     @JsonIgnore
-    Set<Post> posts;
-
-    public RegisteredUser() {
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "roles_users",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
+    public User() {
     }
 
-    public RegisteredUser(int id, String username, String password, String email) {
+    public User(int id, String username, String password, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -93,36 +93,26 @@ public class RegisteredUser {
         this.email = email;
     }
 
-    public Role getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public Set<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(Set<Post> posts) {
-        this.posts = posts;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof RegisteredUser that)) return false;
+        if (!(o instanceof com.example.forumsystemwebproject.models.User that)) return false;
         return getId() == that.getId() &&
                 Objects.equals(getUsername(), that.getUsername()) &&
                 Objects.equals(getFirstName(), that.getFirstName()) &&
-                Objects.equals(getEmail(), that.getEmail()) &&
-                Objects.equals(getRole(), that.getRole()) &&
-                Objects.equals(getPosts(), that.getPosts());
+                Objects.equals(getEmail(), that.getEmail());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getUsername(), getFirstName(), getEmail(), getRole(), getPosts());
+        return Objects.hash(getId(), getUsername(), getFirstName(), getEmail());
     }
 }

@@ -1,6 +1,5 @@
 package com.example.forumsystemwebproject.models;
 
-import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
 import jakarta.persistence.*;
 
 @Entity
@@ -18,7 +17,7 @@ public class Comment {
 
     @OneToOne
     @JoinColumn(name = "user_id")
-    private RegisteredUser user;
+    private User user;
 
     @Column(name = "content")
     private String content;
@@ -43,11 +42,11 @@ public class Comment {
         this.post = post;
     }
 
-    public RegisteredUser getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(RegisteredUser user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

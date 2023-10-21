@@ -1,9 +1,8 @@
-package com.example.forumsystemwebproject.helpers;
+package com.example.forumsystemwebproject.helpers.mappers;
 
 import com.example.forumsystemwebproject.models.Comment;
-import com.example.forumsystemwebproject.models.CommentDto;
-import com.example.forumsystemwebproject.services.CommentService;
-import jakarta.persistence.Column;
+import com.example.forumsystemwebproject.models.DTOs.CommentDto;
+import com.example.forumsystemwebproject.services.contracts.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

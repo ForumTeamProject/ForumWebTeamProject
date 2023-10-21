@@ -1,11 +1,7 @@
 package com.example.forumsystemwebproject.models;
 
 
-import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
-import java.util.Set;
 
 @Entity
 @Table(name="posts")
@@ -18,7 +14,7 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private RegisteredUser user;
+    private User user;
 
     @Column(name = "title")
     private String title;
@@ -37,11 +33,11 @@ public class Post {
         this.id = id;
     }
 
-    public RegisteredUser getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(RegisteredUser user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

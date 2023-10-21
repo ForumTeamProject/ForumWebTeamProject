@@ -1,10 +1,12 @@
 package com.example.forumsystemwebproject.services;
 
+import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.models.Role;
-import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
-import com.example.forumsystemwebproject.repositories.RoleRepository;
+import com.example.forumsystemwebproject.models.User;
+import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
+import com.example.forumsystemwebproject.services.contracts.RoleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,22 +35,26 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void create(Role role) {
+    public void create(Role role, User authenticatedUser) {
+        if (!(authenticatedUser.getRoles().contains(roleRepository.getByName("admin")))) {
+            throw new UnauthorizedOperationException("You do not have permission to change roles");
+        }
         checkRoleUniqueness(role);
         roleRepository.create(role);
     }
 
     @Override
-    public void update(Role role, RegisteredUser authenticatedUser) {
-        if (!(authenticatedUser.getRole().equals("admin"))) {
+    public void update(Role role, User authenticatedUser) {
+        if (!(authenticatedUser.getRoles().contains(roleRepository.getByName("admin")))) {
             throw new UnauthorizedOperationException("You do not have permission to change roles");
         }
+        checkRoleUniqueness(role);
         roleRepository.update(role);
     }
 
     @Override
-    public void delete(int id, RegisteredUser authenticatedUser) {
-        if (!(authenticatedUser.getRole().equals("admin"))) {
+    public void delete(int id, User authenticatedUser) {
+        if (!(authenticatedUser.getRoles().contains(roleRepository.getByName("admin")))) {
             throw new UnauthorizedOperationException("You do not have permission to change roles");
         }
         roleRepository.delete(id);
@@ -60,6 +66,10 @@ public class RoleServiceImpl implements RoleService {
             roleRepository.getByName(role.getName());
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
+        }
+
+        if (duplicateExists) {
+            throw new DuplicateEntityException("Role", "name", role.getName());
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.example.forumsystemwebproject.models;
 
-import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
 import jakarta.persistence.*;
 
 public class PhoneNumber {
@@ -12,7 +11,7 @@ public class PhoneNumber {
 
     @OneToOne
     @JoinColumn(name = "user_id")
-    private RegisteredUser user;
+    private User user;
 
     @Column(name = "number")
     private String number;
@@ -28,11 +27,11 @@ public class PhoneNumber {
         this.id = id;
     }
 
-    public RegisteredUser getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(RegisteredUser user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

@@ -1,4 +1,4 @@
-package com.example.forumsystemwebproject.models;
+package com.example.forumsystemwebproject.models.DTOs;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;

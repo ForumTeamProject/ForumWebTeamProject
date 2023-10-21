@@ -3,12 +3,12 @@ package com.example.forumsystemwebproject.controllers;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
-import com.example.forumsystemwebproject.helpers.CommentFilterOptions;
-import com.example.forumsystemwebproject.helpers.CommentMapper;
+import com.example.forumsystemwebproject.helpers.filters.CommentFilterOptions;
+import com.example.forumsystemwebproject.helpers.mappers.CommentMapper;
 import com.example.forumsystemwebproject.models.Comment;
-import com.example.forumsystemwebproject.models.CommentDto;
-import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
-import com.example.forumsystemwebproject.services.CommentService;
+import com.example.forumsystemwebproject.models.DTOs.CommentDto;
+import com.example.forumsystemwebproject.models.User;
+import com.example.forumsystemwebproject.services.contracts.CommentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -35,30 +35,21 @@ public class CommentController {
         this.authenticationHelper = authenticationHelper;
     }
 
-    @GetMapping("/comments")
-    public List<Comment> get(
-            @RequestParam(required = false) String user,
-            @RequestParam(required = false) String content,
-            @RequestParam(required = false) String sortBy,
-            @RequestParam(required = false) String sortOrder,
-            @RequestHeader HttpHeaders headers) {
-        try {
-            authenticationHelper.tryGetUser(headers);
-            CommentFilterOptions filterOptions = new CommentFilterOptions(user, content, sortBy, sortOrder);
-            return service.get(filterOptions);
-        } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        }
-    }
-
-
-//    @GetMapping("/posts/{id}/comments")
-//    public List<Comment> getByPostId(
-//
-//    )
-    //TODO to be implemented
-
-
+//    @GetMapping("/comments")
+//    public List<Comment> get(
+//            @RequestParam(required = false) String user,
+//            @RequestParam(required = false) String content,
+//            @RequestParam(required = false) String sortBy,
+//            @RequestParam(required = false) String sortOrder,
+//            @RequestHeader HttpHeaders headers) {
+//        try {
+//            authenticationHelper.tryGetUser(headers);
+//            CommentFilterOptions filterOptions = new CommentFilterOptions(user, content, sortBy, sortOrder);
+//            return service.get(filterOptions);
+//        }  catch (UnauthorizedOperationException e) {
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+//        }
+//    }
 
     @GetMapping("/users/{id}/comments")
     public List<Comment> getByUserId(
@@ -79,6 +70,22 @@ public class CommentController {
         }
     }
 
+        @GetMapping("/posts/{id}/comments")
+    public List<Comment> getByPostId(
+            @RequestHeader HttpHeaders headers,
+            @PathVariable int id
+    ) {
+        try {
+            authenticationHelper.tryGetUser(headers);
+            return service.getByPostId(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+
     @GetMapping("/comments/{id}")
     public Comment getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
@@ -94,7 +101,7 @@ public class CommentController {
     @PostMapping("posts/{id}/comments")
     public void create(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody CommentDto dto) {
         try{
-            RegisteredUser user = authenticationHelper.tryGetUser(headers);
+            User user = authenticationHelper.tryGetUser(headers);
             Comment commentToCreate = mapper.fromDto(dto);
             commentToCreate.setUser(user);
             service.create(commentToCreate, id);
@@ -108,7 +115,7 @@ public class CommentController {
     @PutMapping("/comments/{id}")
     public void update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody CommentDto dto) {
         try {
-            RegisteredUser authenticatedUser = authenticationHelper.tryGetUser(headers);
+            User authenticatedUser = authenticationHelper.tryGetUser(headers);
             Comment commentToUpdate = mapper.fromDto(id, dto);
             service.update(commentToUpdate, authenticatedUser);
         } catch (UnauthorizedOperationException e) {
@@ -119,7 +126,7 @@ public class CommentController {
     @DeleteMapping("/comments/{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
-            RegisteredUser authenticatedUser = authenticationHelper.tryGetUser(headers);
+            User authenticatedUser = authenticationHelper.tryGetUser(headers);
             service.delete(id, authenticatedUser);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -127,6 +134,4 @@ public class CommentController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
-
-
 }

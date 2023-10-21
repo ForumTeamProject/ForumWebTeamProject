@@ -1,4 +1,4 @@
-package com.example.forumsystemwebproject.models.UserModels;
+package com.example.forumsystemwebproject.models.DTOs;
 
 
 import jakarta.validation.constraints.Email;

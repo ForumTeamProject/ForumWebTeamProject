@@ -1,6 +1,6 @@
 //package com.example.forumsystemwebproject.helpers;
 //
-//import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
+//import com.example.forumsystemwebproject.models.RegisteredUser;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,8 +34,8 @@ package com.example.forumsystemwebproject.helpers;
 
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
-import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
-import com.example.forumsystemwebproject.services.UserService;
+import com.example.forumsystemwebproject.models.User;
+import com.example.forumsystemwebproject.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -52,7 +52,7 @@ public class AuthenticationHelper {
         this.userService = userService;
     }
 
-    public RegisteredUser tryGetUser(HttpHeaders headers) {
+    public User tryGetUser(HttpHeaders headers) {
         if (!headers.containsKey(AUTHORIZATION_HEADER_NAME)) {
             throw new UnauthorizedOperationException(INVALID_AUTHENTICATION_ERROR);
         }
@@ -61,7 +61,7 @@ public class AuthenticationHelper {
             String userInfo = headers.getFirst(AUTHORIZATION_HEADER_NAME);
             String username = getUsername(userInfo);
             String password = getPassword(userInfo);
-            RegisteredUser user = userService.getByUsername(username);
+            User user = userService.getByUsername(username);
 
             if (!user.getPassword().equals(password)) {
                 throw new UnauthorizedOperationException(INVALID_AUTHENTICATION_ERROR);

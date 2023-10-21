@@ -1,6 +1,6 @@
-package com.example.forumsystemwebproject.repositories;
+package com.example.forumsystemwebproject.repositories.contracts;
 
-import com.example.forumsystemwebproject.helpers.PostFilterOptions;
+import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
 import com.example.forumsystemwebproject.models.Post;
 
 import java.util.List;

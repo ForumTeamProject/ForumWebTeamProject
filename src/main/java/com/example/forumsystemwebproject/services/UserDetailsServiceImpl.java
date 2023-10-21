@@ -1,7 +1,7 @@
 //package com.example.forumsystemwebproject.services;
 //
 //import com.example.forumsystemwebproject.models.UserModels.Admin;
-//import com.example.forumsystemwebproject.repositories.UserRepository;
+//import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
 //import org.hibernate.Session;
 //import org.hibernate.SessionFactory;
 //import org.hibernate.query.Query;

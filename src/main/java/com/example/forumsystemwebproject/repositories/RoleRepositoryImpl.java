@@ -2,7 +2,7 @@ package com.example.forumsystemwebproject.repositories;
 
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.models.Role;
-import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
+import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 @PropertySource("classpath:application.properties")
-public class RoleRepositoryImpl implements RoleRepository{
+public class RoleRepositoryImpl implements RoleRepository {
 
     private final SessionFactory sessionFactory;
 

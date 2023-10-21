@@ -3,16 +3,17 @@ package com.example.forumsystemwebproject.services;
 import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
-import com.example.forumsystemwebproject.helpers.UserFilterOptions;
-import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
-import com.example.forumsystemwebproject.repositories.UserRepository;
+import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
+import com.example.forumsystemwebproject.models.User;
+import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
+import com.example.forumsystemwebproject.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     private final UserRepository repository;
 
     @Autowired
@@ -21,38 +22,38 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<RegisteredUser> get(UserFilterOptions userFilterOptions) {
+    public List<User> get(UserFilterOptions userFilterOptions) {
         return null;
     }
 
     @Override
-    public RegisteredUser getById(int id) {
+    public User getById(int id) {
         return repository.getById(id);
     }
 
     @Override
-    public List<RegisteredUser> getAll() {
+    public List<User> getAll() {
         return repository.getAll();
     }
 
     @Override
-    public RegisteredUser getByUsername(String username) {
+    public User getByUsername(String username) {
         return repository.getByUsername(username);
     }
 
     @Override
-    public RegisteredUser getByEmail(String email) {
+    public User getByEmail(String email) {
         return repository.getByEmail(email);
     }
     @Override
-    public void create(RegisteredUser user) {
+    public void create(User user) {
         checkUsernameUniqueness(user);
         checkEmailUniqueness(user);
         repository.create(user);
     }
 
     @Override
-    public void update(RegisteredUser userToUpdate,RegisteredUser authenticatedUser) {
+    public void update(User userToUpdate, User authenticatedUser) {
             if (userToUpdate.getId() != authenticatedUser.getId()) {
                 throw new UnauthorizedOperationException("You do not have permission to change this user's details!");
             }
@@ -62,14 +63,14 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void delete(RegisteredUser user, int id) {
+    public void delete(User user, int id) {
         if (user.getId() != id) {
             throw new UnauthorizedOperationException("You do not have permission to delete this user!");
         }
         repository.delete(id);
     }
 
-    private void checkUsernameUniqueness(RegisteredUser user) {
+    private void checkUsernameUniqueness(User user) {
         boolean duplicateExists = true;
         try {
             repository.getByUsername(user.getUsername());
@@ -82,7 +83,7 @@ public class UserServiceImpl implements UserService{
         }
     }
 
-    private void checkEmailUniqueness(RegisteredUser user) {
+    private void checkEmailUniqueness(User user) {
         boolean duplicateExists = true;
         try {
             repository.getByEmail(user.getEmail());

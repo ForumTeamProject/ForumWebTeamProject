@@ -1,4 +1,4 @@
-package com.example.forumsystemwebproject.repositories;
+package com.example.forumsystemwebproject.repositories.contracts;
 
 import com.example.forumsystemwebproject.models.Role;
 

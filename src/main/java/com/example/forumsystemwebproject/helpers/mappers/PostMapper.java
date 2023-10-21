@@ -1,12 +1,10 @@
-package com.example.forumsystemwebproject.helpers;
+package com.example.forumsystemwebproject.helpers.mappers;
 
 import com.example.forumsystemwebproject.models.Post;
-import com.example.forumsystemwebproject.models.PostDto;
-import com.example.forumsystemwebproject.services.PostService;
-import jakarta.persistence.Column;
+import com.example.forumsystemwebproject.models.DTOs.PostDto;
+import com.example.forumsystemwebproject.services.contracts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Component
 public class PostMapper {

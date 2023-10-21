@@ -1,9 +1,11 @@
 package com.example.forumsystemwebproject.repositories;
 
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
-import com.example.forumsystemwebproject.helpers.PostFilterOptions;
+import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
 import com.example.forumsystemwebproject.models.Post;
-import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
+import com.example.forumsystemwebproject.models.User;
+import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
+import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -57,7 +59,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public List<Post> getByUserId(PostFilterOptions filterOptions, int id) {
         try (Session session = sessionFactory.openSession()) {
-            RegisteredUser user = userRepository.getById(id);
+            User user = userRepository.getById(id);
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
 

@@ -1,9 +1,9 @@
-package com.example.forumsystemwebproject.helpers;
+package com.example.forumsystemwebproject.helpers.mappers;
 
 
-import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
-import com.example.forumsystemwebproject.models.UserModels.UserDto;
-import com.example.forumsystemwebproject.services.UserService;
+import com.example.forumsystemwebproject.models.User;
+import com.example.forumsystemwebproject.models.DTOs.UserDto;
+import com.example.forumsystemwebproject.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,16 +17,16 @@ public class UserMapper {
         this.service = service;
     }
 
-    public RegisteredUser fromDto(int id, UserDto dto) {
-        RegisteredUser user = fromDto(dto);
+    public User fromDto(int id, UserDto dto) {
+        User user = fromDto(dto);
         user.setId(id);
-        RegisteredUser repositoryUser = service.getById(id);
+        User repositoryUser = service.getById(id);
 //        user.setRole(repositoryUser.getRole());
         return user;
     }
 
-    public RegisteredUser fromDto(UserDto dto) {
-        RegisteredUser user = new RegisteredUser();
+    public User fromDto(UserDto dto) {
+        User user = new User();
         user.setUsername(dto.getUsername());
         user.setPassword(dto.getPassword());
         user.setEmail(dto.getEmail());

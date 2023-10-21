@@ -1,4 +1,4 @@
-package com.example.forumsystemwebproject.helpers;
+package com.example.forumsystemwebproject.helpers.filters;
 
 import java.util.Optional;
 

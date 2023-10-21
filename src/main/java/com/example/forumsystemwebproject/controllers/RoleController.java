@@ -4,11 +4,11 @@ import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
-import com.example.forumsystemwebproject.helpers.RoleMapper;
+import com.example.forumsystemwebproject.helpers.mappers.RoleMapper;
 import com.example.forumsystemwebproject.models.Role;
-import com.example.forumsystemwebproject.models.RoleDto;
-import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
-import com.example.forumsystemwebproject.services.RoleService;
+import com.example.forumsystemwebproject.models.DTOs.RoleDto;
+import com.example.forumsystemwebproject.models.User;
+import com.example.forumsystemwebproject.services.contracts.RoleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -22,7 +22,6 @@ import java.util.List;
 @RequestMapping("/api/roles")
 public class RoleController {
     private final RoleService roleService;
-
     private final RoleMapper roleMapper;
     private final AuthenticationHelper authenticationHelper;
 
@@ -41,17 +40,19 @@ public class RoleController {
     @GetMapping("/{id}")
     public Role getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
+            authenticationHelper.tryGetUser(headers);
             return roleService.getById(id);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
-    @PostMapping("/register")
-    public void create(@Valid @RequestBody RoleDto roleDto) {
+    @PostMapping
+    public void create(@RequestHeader HttpHeaders headers, @Valid @RequestBody RoleDto roleDto) {
         try {
+            User user = authenticationHelper.tryGetUser(headers);
             Role newRole = roleMapper.fromDto(roleDto);
-            roleService.create(newRole);
+            roleService.create(newRole, user);
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
@@ -60,7 +61,7 @@ public class RoleController {
     @PutMapping("/{id}")
     public void update(@RequestHeader HttpHeaders headers, @Valid @RequestBody RoleDto roleDto, @PathVariable int id) {
         try {
-            RegisteredUser authenticatedUser = authenticationHelper.tryGetUser(headers);
+            User authenticatedUser = authenticationHelper.tryGetUser(headers);
             Role roleToUpdate = roleMapper.fromDto(id, roleDto);
             roleService.update(roleToUpdate, authenticatedUser);
         } catch (UnauthorizedOperationException e) {
@@ -73,7 +74,7 @@ public class RoleController {
     @DeleteMapping("/{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
-            RegisteredUser user = authenticationHelper.tryGetUser(headers);
+            User user = authenticationHelper.tryGetUser(headers);
             roleService.delete(id, user);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());

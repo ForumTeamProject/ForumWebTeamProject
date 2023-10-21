@@ -4,13 +4,12 @@ import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
-import com.example.forumsystemwebproject.helpers.UserFilterOptions;
-import com.example.forumsystemwebproject.helpers.UserMapper;
-import com.example.forumsystemwebproject.models.UserModels.RegisteredUser;
-import com.example.forumsystemwebproject.models.UserModels.UserDto;
-import com.example.forumsystemwebproject.services.UserService;
+import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
+import com.example.forumsystemwebproject.helpers.mappers.UserMapper;
+import com.example.forumsystemwebproject.models.User;
+import com.example.forumsystemwebproject.models.DTOs.UserDto;
+import com.example.forumsystemwebproject.services.contracts.UserService;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -37,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping
-    public List<RegisteredUser> get(
+    public List<User> get(
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String firstName,
@@ -54,7 +53,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public RegisteredUser getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+    public User getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             authenticationHelper.tryGetUser(headers);
             return userService.getById(id);
@@ -68,7 +67,7 @@ public class UserController {
     @PostMapping("/register")
     public void create(@Valid @RequestBody UserDto dto) {
         try {
-            RegisteredUser newUser = mapper.fromDto(dto);
+            User newUser = mapper.fromDto(dto);
             userService.create(newUser);
         } catch (DuplicateEntityException e ) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
@@ -79,8 +78,8 @@ public class UserController {
     @PutMapping("/{id}")
     public void update(@RequestHeader HttpHeaders headers, @Valid @RequestBody UserDto dto, @PathVariable int id) {
         try {
-            RegisteredUser authenticatedUser = authenticationHelper.tryGetUser(headers);
-            RegisteredUser userToUpdate = mapper.fromDto(id, dto);
+            User authenticatedUser = authenticationHelper.tryGetUser(headers);
+            User userToUpdate = mapper.fromDto(id, dto);
             userService.update(userToUpdate, authenticatedUser);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -93,7 +92,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id)  {
         try {
-            RegisteredUser user = authenticationHelper.tryGetUser(headers);
+            User user = authenticationHelper.tryGetUser(headers);
             userService.delete(user, id);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,  e.getMessage());
