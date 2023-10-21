@@ -47,7 +47,7 @@ public class UserController {
         try {
             UserFilterOptions userFilterOptions = new UserFilterOptions(username, email, firstName, lastname, sortBy, sortOrder);
             authenticationHelper.tryGetUser(headers);
-            return userService.get(userFilterOptions);
+            return userService.getAll(userFilterOptions);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
