@@ -22,6 +22,9 @@ INSERT INTO users (first_name, last_name, email, username, password) VALUES
     ('Sophia', 'Harris', 'sophia.harris@example.com', 'sophiah', 'password9'),
     ('William', 'Clark', 'william.clark@example.com', 'williamc', 'password10');
 
+INSERT INTO users (first_name, last_name, email, username, password) VALUES
+    ('blocked', 'blocked', 'blocked.user@forum.com', 'blocked', 'blockedUserHasNoPass');
+
 INSERT INTO roles (name) VALUES
                              ('user'),
                              ('admin');

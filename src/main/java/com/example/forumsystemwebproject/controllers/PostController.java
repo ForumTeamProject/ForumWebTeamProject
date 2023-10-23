@@ -5,8 +5,8 @@ import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationExcepti
 import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
 import com.example.forumsystemwebproject.helpers.mappers.PostMapper;
-import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.DTOs.PostDto;
+import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.services.contracts.PostService;
 import jakarta.validation.Valid;
@@ -79,7 +79,7 @@ public class PostController {
     }
 
     @PostMapping("/posts")
-    public void create(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostDto dto) {
+    public void create(@RequestHeader HttpHeaders headers, @Valid@RequestBody PostDto dto) {
         try {
         User user = authenticationHelper.tryGetUser(headers);
         Post postToCreate = mapper.fromDto(dto);
@@ -104,8 +104,7 @@ public class PostController {
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            Post postToDelete = getById(id);
-            service.delete(postToDelete, user);
+            service.delete(id, user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {

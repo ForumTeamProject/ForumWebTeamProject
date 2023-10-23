@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CommentRepository {
 
-//    List<Comment> get(CommentFilterOptions filterOptions);
+    List<Comment> get(CommentFilterOptions filterOptions);
 
     List<Comment> getByUserId(CommentFilterOptions filterOptions, int id);
 

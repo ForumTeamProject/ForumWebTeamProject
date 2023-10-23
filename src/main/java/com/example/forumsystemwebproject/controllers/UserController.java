@@ -47,7 +47,7 @@ public class UserController {
         try {
             UserFilterOptions userFilterOptions = new UserFilterOptions(username, email, firstName, lastname, sortBy, sortOrder);
             authenticationHelper.tryGetUser(headers);
-            return userService.getAll(userFilterOptions);
+            return userService.get(userFilterOptions);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
@@ -70,7 +70,7 @@ public class UserController {
         try {
             User newUser = mapper.fromDto(dto);
             userService.create(newUser);
-        } catch (DuplicateEntityException e ) {
+        } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }

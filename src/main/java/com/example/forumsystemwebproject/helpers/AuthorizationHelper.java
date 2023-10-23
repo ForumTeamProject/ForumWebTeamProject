@@ -20,10 +20,10 @@ public class AuthorizationHelper {
         this.roleRepository = roleRepository;
     }
 
-    public static void authenticateUser(User userToAuthenticate, List<Role> roles) {
+    public static void authorizeUser(User userToAuthorize, List<Role> roles) {
         for (Role role : roles) {
-            if (!(userToAuthenticate.getRoles().contains(role))) {
-                throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_MSG,"User", "username", userToAuthenticate.getUsername() ));
+            if (!(userToAuthorize.getRoles().contains(role))) {
+                throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_MSG,"User", "username", userToAuthorize.getUsername()));
             }
         }
     }

@@ -48,7 +48,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void update(Post post, User user) {
-        if (user.getRoles().contains(roleRepository.getByName("admin")) || post.getUser() == user) {
+        if (checkPermission(post, user)) {
             postRepository.update(post);
         } else {
             throw new UnauthorizedOperationException("You do not have permission to edit this post!");
@@ -56,11 +56,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void delete(Post post, User user) {
-        if (user.getRoles().contains(roleRepository.getByName("admin")) || post.getUser().getId() == user.getId()) {
-            postRepository.delete(post);
+    public void delete(int id, User user) {
+        Post postToDelete = getById(id);
+        if (checkPermission(postToDelete, user)) {
+            postRepository.delete(postToDelete);
         } else {
             throw new UnauthorizedOperationException("You do not have permission to delete this post!");
         }
+    }
+
+    private boolean checkPermission(Post post, User user) {
+        return user.getRoles().contains(roleRepository.getByName("admin")) || post.getUser() == user;
     }
 }

@@ -14,7 +14,7 @@ public class UserDto {
     @NotNull(message = "Password can't be empty!")
     @Size(min = 5, message = "Password must be more than 5 characters long!")
     //Password must contain one digit from 1 to 9, one lowercase letter, one uppercase letter, one special character, no space, and it must be 8-16 characters long.
-    @Pattern(regexp = "/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\\W)(?!.* ).{8,16}$/\n")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\\W)(?!.* ).{8,16}$")
     private String password;
     @NotNull(message = "First name can't be empty!")
     @Size(min = 4, max = 32, message = "First name must be between 4 and 32 characters long!")

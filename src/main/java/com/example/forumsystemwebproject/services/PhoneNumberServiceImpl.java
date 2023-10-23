@@ -48,8 +48,6 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
             repository.create(number);
     }
 
-
-
     @Override
     public void update(PhoneNumber number, User authenticatedUser) {
         if (number.getUser().getId() != authenticatedUser.getId()) {

@@ -31,10 +31,10 @@ public class CommentServiceImpl implements CommentService {
         this.roleRepository = roleRepository;
     }
 
-//    @Override
-//    public List<Comment> get(CommentFilterOptions filterOptions) {
-//        return repository.get(filterOptions);
-//    }
+    @Override
+    public List<Comment> get(CommentFilterOptions filterOptions) {
+        return repository.get(filterOptions);
+    }
 
     @Override
     public List<Comment> getByUserId(CommentFilterOptions filterOptions, int id) {
@@ -70,11 +70,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void delete(int id, User user) {
-//        Comment commentToDelete = getById(id);
-//        if (user.getId() != commentToDelete.getUser().getId() || !roleRepository.getRoles(user).contains("admin")) {
-//            throw new UnauthorizedOperationException("You do not have permission to delete this comment!");
-//        } else {
-//            repository.delete(commentToDelete);
-//        }
+        Comment commentToDelete = getById(id);
+        if (user.getId() != commentToDelete.getUser().getId()) {
+            throw new UnauthorizedOperationException("You do not have permission to delete this comment!");
+        } else {
+            repository.delete(commentToDelete);
+        }
     }
 }

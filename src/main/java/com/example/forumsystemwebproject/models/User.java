@@ -1,7 +1,5 @@
 package com.example.forumsystemwebproject.models;
 
-import com.example.forumsystemwebproject.models.Post;
-import com.example.forumsystemwebproject.models.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -36,14 +34,6 @@ public class User {
     private Set<Role> roles;
     public User() {
     }
-
-    public User(int id, String username, String password, String email) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-    }
-
 
     public int getId() {
         return id;
@@ -108,6 +98,7 @@ public class User {
         return getId() == that.getId() &&
                 Objects.equals(getUsername(), that.getUsername()) &&
                 Objects.equals(getFirstName(), that.getFirstName()) &&
+                Objects.equals(getLastName(), that.getLastName()) &&
                 Objects.equals(getEmail(), that.getEmail());
     }
 

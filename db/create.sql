@@ -43,21 +43,6 @@ create table phone_numbers
 
 );
 
--- create table admins
--- (
---    admin_id     int auto_increment
---        primary key,
---    user_id      int         not null,
---    phone_number varchar(15) null,
---    constraint phone_number
---        unique (phone_number),
---    constraint admins_ibfk_1
---        foreign key (user_id) references users (user_id)
--- );
-
--- create index user_id
---     on admins (user_id);
-
 create table posts
 (
     post_id int auto_increment

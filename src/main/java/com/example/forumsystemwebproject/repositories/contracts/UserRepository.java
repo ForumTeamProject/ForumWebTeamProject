@@ -10,7 +10,7 @@ public interface UserRepository {
 
     User getById(int id);
 
-    List<User> getAll(CommentFilterOptions filterOptions);
+    List<User> get(UserFilterOptions filterOptions);
 
     User getByUsername(String username);
 

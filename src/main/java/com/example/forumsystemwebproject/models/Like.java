@@ -20,7 +20,6 @@ public class Like {
     private User user;
 
     public Like() {
-
     }
 
     public int getId() {
