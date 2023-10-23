@@ -28,31 +28,31 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getAll(CommentFilterOptions filterOptions) {
+    public List<User> getAll(UserFilterOptions filterOptions) {
         try (Session session = sessionFactory.openSession()) {
            List<String> filters = new ArrayList<>();
            Map<String, Object> params = new HashMap<>();
 
-           filterOptions.getUser().ifPresent(value -> {
+           filterOptions.getUsername().ifPresent(value -> {
                filters.add("username like :username");
                params.put("username", value);
            });
 
-           filterOptions.getContent().ifPresent(value -> {
+           filterOptions.getEmail().ifPresent(value -> {
                filters.add("email like :email");
                params.put("email", value);
            });
 
-            filterOptions.getContent().ifPresent(value -> {
+            filterOptions.getFirstName().ifPresent(value -> {
                 filters.add("firstName like :firstName");
                 params.put("firstName", value);
             });
-            filterOptions.getContent().ifPresent(value -> {
+            filterOptions.getLastName().ifPresent(value -> {
                 filters.add("lastName like :lastName");
                 params.put("lastName", value);
             });
 
-           StringBuilder queryString = new StringBuilder("from Comment");
+           StringBuilder queryString = new StringBuilder("from User");
            if (!filters.isEmpty()) {
                queryString
                        .append(" where ")
@@ -132,7 +132,7 @@ public class UserRepositoryImpl implements UserRepository {
             session.getTransaction().commit();
         }
     }
-    private String generateOrderBy(CommentFilterOptions filterOptions) {
+    private String generateOrderBy(UserFilterOptions filterOptions) {
         if (filterOptions.getSortBy().isEmpty()) {
             return "";
         }

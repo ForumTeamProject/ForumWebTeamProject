@@ -4,6 +4,7 @@ import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.filters.CommentFilterOptions;
+import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
 import com.example.forumsystemwebproject.services.contracts.UserService;
@@ -27,7 +28,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll(CommentFilterOptions filterOptions) {
+    public List<User> getAll(UserFilterOptions filterOptions) {
         return repository.getAll(filterOptions);
     }
 
