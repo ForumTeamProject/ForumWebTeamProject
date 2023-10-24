@@ -10,6 +10,8 @@ import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import com.example.forumsystemwebproject.services.contracts.LikeService;
 import com.example.forumsystemwebproject.services.contracts.PostService;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,16 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getByUserId(PostFilterOptions filterOptions, int id) {
         return postRepository.getByUserId(filterOptions, id);
+    }
+
+    @Override
+    public List<Post> getMostCommented() {
+        return postRepository.getMostCommented();
+    }
+
+    @Override
+    public List<Post> getMostRecentlyCreatedPosts() {
+        return postRepository.getMostRecentlyCreatedPosts();
     }
 
     @Override

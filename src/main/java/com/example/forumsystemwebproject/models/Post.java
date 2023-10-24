@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -26,6 +27,9 @@ public class Post {
     @Column(name = "content")
     private String content;
 
+    @Column(name = "creation_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationDate;
     @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id")
@@ -40,7 +44,6 @@ public class Post {
     private Set<Tag> tags;
 
     public Post() {
-
         }
 
     public int getId() {
@@ -89,6 +92,14 @@ public class Post {
 
     public void setLikes(Set<Like> likes) {
         this.likes = likes;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Override

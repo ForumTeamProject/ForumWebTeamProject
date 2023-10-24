@@ -96,6 +96,34 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public List<Post> getMostCommented() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Post> query = session.createQuery("""
+                    SELECT p.id, p.title, COUNT(c.id) AS comment_count
+                    FROM Post p
+                    LEFT JOIN Comment c on p.id = c.post.id
+                    GROUP BY p.id, p.title
+                    ORDER BY comment_count DESC
+                    LIMIT 10""", Post.class);
+
+            return query.list();
+        }
+    }
+
+    @Override
+    public List<Post> getMostRecentlyCreatedPosts() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Post> query = session.createQuery("""
+            FROM Post p
+            ORDER BY p.creationDate DESC
+            LIMIT 10
+            """, Post.class);
+
+            return query.list();
+        }
+    }
+
+    @Override
     public void create(Post post) {
         try (Session session = sessionFactory.openSession()) {
             session.persist(post);

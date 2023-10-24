@@ -12,6 +12,9 @@ public interface PostService {
 
     List<Post> getByUserId(PostFilterOptions filterOptions, int id);
 
+    List<Post> getMostCommented();
+
+    List<Post> getMostRecentlyCreatedPosts();
     Post getById(int id);
 
     void likePost(int id, User user);

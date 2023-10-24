@@ -11,6 +11,10 @@ public interface PostRepository {
 
     List<Post> getByUserId(PostFilterOptions filterOptions, int id);
 
+    List<Post> getMostCommented();
+
+    List<Post> getMostRecentlyCreatedPosts();
+
     Post getById(int id);
 
     void create(Post post);

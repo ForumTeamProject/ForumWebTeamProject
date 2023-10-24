@@ -8,10 +8,7 @@ import com.example.forumsystemwebproject.models.*;
 import com.example.forumsystemwebproject.models.DTOs.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Helpers {
 
@@ -47,10 +44,15 @@ public class Helpers {
 
     public static Post createMockPost()  {
         var mockPost = new Post();
+        Set<Like> likes = new HashSet<>();
+        Set<Tag> tags = new HashSet<>();
         mockPost.setContent("This is a mock content for post creation.");
         mockPost.setTitle("Mock title for mock post.");
         mockPost.setId(1);
         mockPost.setUser(createMockUser());
+        mockPost.setCreationDate(new Date());
+        mockPost.setLikes(likes);
+        mockPost.setTags(tags);
         return mockPost;
     }
 

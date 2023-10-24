@@ -256,7 +256,7 @@ public class PostServiceTests {
     }
 
     @Test
-    public void likePost_Should_Throw_WhenPostDoesNotExist() throws Exception {
+    public void likePost_Should_Throw_WhenPostDoesNotExist() {
         //Arrange
         User mockUser = Helpers.createMockUser();
         Mockito.when(mockRepository.getById(Mockito.anyInt())).thenThrow(EntityNotFoundException.class);
@@ -266,7 +266,7 @@ public class PostServiceTests {
     }
 
     @Test
-    public void likePost_Should_CallLikeServiceToDelete_WhenLikeExist() throws Exception {
+    public void likePost_Should_CallLikeServiceToDelete_WhenLikeExist() {
         //Arrange
         Post mockPost = Helpers.createMockPost();
         User mockUser = Helpers.createMockUser();
@@ -284,7 +284,7 @@ public class PostServiceTests {
     }
 
     @Test
-    public void likePost_Should_CallLikeServiceToCreate_WhenLikeDoesNotExist() throws Exception {
+    public void likePost_Should_CallLikeServiceToCreate_WhenLikeDoesNotExist() {
         //Arrange
         Post mockPost = Helpers.createMockPost();
         User mockUser = Helpers.createMockUser();
@@ -297,5 +297,29 @@ public class PostServiceTests {
 
         //Assert
         Mockito.verify(mockLikeService, Mockito.times(1)).create(mockPost, mockUser);
+    }
+
+    @Test
+    public void getMostCommented_Should_CallRepository() {
+        //Arrange
+        Mockito.when(mockRepository.getMostCommented()).thenReturn(null);
+
+        //Act
+        service.getMostCommented();
+
+        //Assert
+        Mockito.verify(mockRepository, Mockito.times(1)).getMostCommented();
+    }
+
+    @Test
+    public void getMostRecentlyCreatedPosts_Should_CallRepository() {
+        //Arrange
+        Mockito.when(mockRepository.getMostRecentlyCreatedPosts()).thenReturn(null);
+
+        //Act
+        service.getMostRecentlyCreatedPosts();
+
+        //Assert
+        Mockito.verify(mockRepository,Mockito.times(1)).getMostRecentlyCreatedPosts();
     }
 }
