@@ -88,6 +88,9 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
+//    @PatchMapping("/api/users/{id}")
+//    public void
     //TODO probably add something like users/{id}/block and on this endpoint an admin can block a user
 
     @DeleteMapping("/{id}")

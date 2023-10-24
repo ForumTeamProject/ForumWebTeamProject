@@ -281,4 +281,37 @@ public class PostControllerTests {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/posts/{id}", 1))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
-}
+
+    @Test
+    public void likePost_Should_ReturnStatusUnauthorized_WhenUserNotAuthenticated() throws Exception {
+        //Arrange
+        Mockito.when(mockAuthenticationHelper.tryGetUser(Mockito.any(HttpHeaders.class))).thenThrow(UnauthorizedOperationException.class);
+
+        //Act & Assert
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/posts/{id}", 1))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+    }
+
+    @Test
+    public void likePost_Should_ReturnStatusNotFound_WhenPostNotFound() throws Exception {
+        //Arrange
+        User mockUser = Helpers.createMockUser();
+        Mockito.when(mockAuthenticationHelper.tryGetUser(Mockito.any(HttpHeaders.class))).thenReturn(mockUser);
+
+        Mockito.doThrow(EntityNotFoundException.class).when(mockService).likePost(Mockito.anyInt(), Mockito.any(User.class));
+        //Act & Assert
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/posts/{id}", 1))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void likePost_Should_ReturnStatusOk_WhenCorrectRequest() throws Exception {
+        //Arrange
+        User mockUser = Helpers.createMockUser();
+        Mockito.when(mockAuthenticationHelper.tryGetUser(Mockito.any(HttpHeaders.class))).thenReturn(mockUser);
+
+        //Act & Assert
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/posts/{id}", 1))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+ }

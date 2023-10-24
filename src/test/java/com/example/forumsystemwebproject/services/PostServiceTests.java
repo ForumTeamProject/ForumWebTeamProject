@@ -4,11 +4,14 @@ import com.example.forumsystemwebproject.Helpers;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
+import com.example.forumsystemwebproject.models.Like;
 import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.User;
+import com.example.forumsystemwebproject.repositories.contracts.LikeRepository;
 import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
+import com.example.forumsystemwebproject.services.contracts.LikeService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +30,9 @@ public class PostServiceTests {
 
     @Mock
     RoleRepository mockRoleRepository;
+
+    @Mock
+    LikeService mockLikeService;
 
     @InjectMocks
     PostServiceImpl service;
@@ -247,5 +253,49 @@ public class PostServiceTests {
 
         //Act & Assert
         Assertions.assertThrows(UnauthorizedOperationException.class, () -> service.delete(Mockito.anyInt(), mockUser));
+    }
+
+    @Test
+    public void likePost_Should_Throw_WhenPostDoesNotExist() throws Exception {
+        //Arrange
+        User mockUser = Helpers.createMockUser();
+        Mockito.when(mockRepository.getById(Mockito.anyInt())).thenThrow(EntityNotFoundException.class);
+
+        //Act & Assert
+        Assertions.assertThrows(EntityNotFoundException.class, () -> service.likePost(2, mockUser));
+    }
+
+    @Test
+    public void likePost_Should_CallLikeServiceToDelete_WhenLikeExist() throws Exception {
+        //Arrange
+        Post mockPost = Helpers.createMockPost();
+        User mockUser = Helpers.createMockUser();
+        Like mockLike = Helpers.createMockLike();
+        Mockito.when(mockRepository.getById(Mockito.anyInt())).thenReturn(mockPost);
+
+        Mockito.when(mockLikeService.get(mockPost, mockUser)).thenReturn(mockLike);
+
+        //Act
+        service.likePost(2, mockUser);
+
+        //Assert
+        Mockito.verify(mockLikeService, Mockito.times(1)).delete(mockLike);
+
+    }
+
+    @Test
+    public void likePost_Should_CallLikeServiceToCreate_WhenLikeDoesNotExist() throws Exception {
+        //Arrange
+        Post mockPost = Helpers.createMockPost();
+        User mockUser = Helpers.createMockUser();
+        Mockito.when(mockRepository.getById(Mockito.anyInt())).thenReturn(mockPost);
+
+        Mockito.when(mockLikeService.get(mockPost, mockUser)).thenThrow(EntityNotFoundException.class);
+
+        //Act
+        service.likePost(2,mockUser);
+
+        //Assert
+        Mockito.verify(mockLikeService, Mockito.times(1)).create(mockPost, mockUser);
     }
 }

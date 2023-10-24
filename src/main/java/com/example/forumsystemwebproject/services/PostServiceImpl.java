@@ -1,11 +1,14 @@
 package com.example.forumsystemwebproject.services;
 
+import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
+import com.example.forumsystemwebproject.models.Like;
 import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
+import com.example.forumsystemwebproject.services.contracts.LikeService;
 import com.example.forumsystemwebproject.services.contracts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +22,13 @@ public class PostServiceImpl implements PostService {
 
     private final RoleRepository roleRepository;
 
+    private final LikeService likeService;
+
     @Autowired
-    public PostServiceImpl(PostRepository postRepository, RoleRepository roleRepository) {
+    public PostServiceImpl(PostRepository postRepository, RoleRepository roleRepository, LikeService likeService) {
         this.postRepository = postRepository;
         this.roleRepository = roleRepository;
+        this.likeService = likeService;
     }
 
     @Override
@@ -41,6 +47,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public void likePost(int id, User user) {
+        Post post = postRepository.getById(id);
+        try{
+            Like like = likeService.get(post, user);
+            likeService.delete(like);
+        } catch (EntityNotFoundException e) {
+            likeService.create(post, user);
+        }
+    }
+
+    @Override
     public void create(Post post, User user) {
             post.setUser(user);
             postRepository.create(post);
@@ -54,6 +71,8 @@ public class PostServiceImpl implements PostService {
             throw new UnauthorizedOperationException("You do not have permission to edit this post!");
         }
     }
+
+
 
     @Override
     public void delete(int id, User user) {
