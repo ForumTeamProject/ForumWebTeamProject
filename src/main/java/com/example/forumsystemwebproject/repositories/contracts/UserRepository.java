@@ -1,5 +1,6 @@
 package com.example.forumsystemwebproject.repositories.contracts;
 
+import com.example.forumsystemwebproject.helpers.filters.CommentFilterOptions;
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
 import com.example.forumsystemwebproject.models.User;
 

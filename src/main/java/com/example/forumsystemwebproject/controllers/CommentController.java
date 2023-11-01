@@ -35,21 +35,21 @@ public class CommentController {
         this.authenticationHelper = authenticationHelper;
     }
 
-//    @GetMapping("/comments")
-//    public List<Comment> get(
-//            @RequestParam(required = false) String user,
-//            @RequestParam(required = false) String content,
-//            @RequestParam(required = false) String sortBy,
-//            @RequestParam(required = false) String sortOrder,
-//            @RequestHeader HttpHeaders headers) {
-//        try {
-//            authenticationHelper.tryGetUser(headers);
-//            CommentFilterOptions filterOptions = new CommentFilterOptions(user, content, sortBy, sortOrder);
-//            return service.get(filterOptions);
-//        }  catch (UnauthorizedOperationException e) {
-//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-//        }
-//    }
+    @GetMapping("/comments")
+    public List<Comment> get(
+            @RequestParam(required = false) String user,
+            @RequestParam(required = false) String content,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String sortOrder,
+            @RequestHeader HttpHeaders headers) {
+        try {
+            authenticationHelper.tryGetUser(headers);
+            CommentFilterOptions filterOptions = new CommentFilterOptions(user, content, sortBy, sortOrder);
+            return service.get(filterOptions);
+        }  catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
 
     @GetMapping("/users/{id}/comments")
     public List<Comment> getByUserId(
@@ -120,6 +120,8 @@ public class CommentController {
             service.update(commentToUpdate, authenticatedUser);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 

@@ -39,4 +39,23 @@ public class Role {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Role otherRole = (Role) obj;
+        return this.name != null && this.name.equals(otherRole.getName());
+    }
 }

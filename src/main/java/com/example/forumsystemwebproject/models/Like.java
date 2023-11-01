@@ -1,5 +1,6 @@
 package com.example.forumsystemwebproject.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,6 +12,7 @@ public class Like {
     @Column(name = "like_id")
     private int id;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
@@ -20,7 +22,6 @@ public class Like {
     private User user;
 
     public Like() {
-
     }
 
     public int getId() {

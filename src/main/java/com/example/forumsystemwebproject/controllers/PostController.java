@@ -7,6 +7,7 @@ import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
 import com.example.forumsystemwebproject.helpers.mappers.PostMapper;
 import com.example.forumsystemwebproject.helpers.mappers.TagMapper;
 import com.example.forumsystemwebproject.models.DTOs.PostDto;
+import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.DTOs.TagDto;
 import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.Tag;
@@ -109,13 +110,24 @@ public class PostController {
         }
     }
 
+    @PatchMapping("/posts/{id}")
+    public void likePost(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            postService.likePost(id, user);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
 
     @DeleteMapping("/posts/{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            Post postToDelete = getById(id);
-            postService.delete(postToDelete, user);
+            postService.delete(id, user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -169,5 +181,4 @@ public class PostController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
 }

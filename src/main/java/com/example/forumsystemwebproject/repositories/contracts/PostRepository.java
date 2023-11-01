@@ -12,6 +12,10 @@ public interface PostRepository {
 
     List<Post> getByUserId(PostFilterOptions filterOptions, int id);
 
+    List<Post> getMostCommented();
+
+    List<Post> getMostRecentlyCreatedPosts();
+
     void addTagToPost(Post post, Tag tag);
 
     void addTagsToPost(Post post, List<Tag> tags);

@@ -1,18 +1,19 @@
-create table tags
+create table roles
+(
+    role_id int auto_increment
+        primary key,
+    name    varchar(25) not null,
+    constraint name
+        unique (name)
+);
 
+create table tags
 (
     tag_id  int auto_increment
         primary key,
     content varchar(25) not null,
     constraint content
         unique (content)
-);
-
-create table roles
-(
-    role_id int auto_increment
-        primary key,
-    name    varchar(25) not null unique
 );
 
 create table users
@@ -24,8 +25,6 @@ create table users
     email      varchar(50) not null,
     username   varchar(50) not null,
     password   varchar(50) not null,
-
-
     constraint email
         unique (email),
     constraint username
@@ -40,31 +39,16 @@ create table phone_numbers
     number    varchar(25) null,
     constraint phone_numbers_users_fk
         foreign key (user_id) references users (user_id)
-
 );
-
--- create table admins
--- (
---    admin_id     int auto_increment
---        primary key,
---    user_id      int         not null,
---    phone_number varchar(15) null,
---    constraint phone_number
---        unique (phone_number),
---    constraint admins_ibfk_1
---        foreign key (user_id) references users (user_id)
--- );
-
--- create index user_id
---     on admins (user_id);
 
 create table posts
 (
-    post_id int auto_increment
+    post_id       int auto_increment
         primary key,
-    user_id int         not null,
-    title   varchar(64) not null,
-    content text        not null,
+    user_id       int         not null,
+    title         varchar(64) not null,
+    content       text        not null,
+    creation_date timestamp   not null,
     constraint posts_users_fk
         foreign key (user_id) references users (user_id)
 );
@@ -128,10 +112,9 @@ create index user_id
 create table roles_users
 (
     role_id int not null,
+    user_id int not null,
     constraint roles_users_fk1
         foreign key (role_id) references roles (role_id),
-
-    user_id int not null,
     constraint roles_users_fk2
         foreign key (user_id) references users (user_id)
 );

@@ -24,7 +24,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getAll(UserFilterOptions filterOptions) {
+    public List<User> get(UserFilterOptions filterOptions) {
         try (Session session = sessionFactory.openSession()) {
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();

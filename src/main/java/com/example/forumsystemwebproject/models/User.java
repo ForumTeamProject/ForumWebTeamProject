@@ -36,14 +36,6 @@ public class User {
     public User() {
     }
 
-    public User(int id, String username, String password, String email) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-    }
-
-
     public int getId() {
         return id;
     }
@@ -107,6 +99,7 @@ public class User {
         return getId() == that.getId() &&
                 Objects.equals(getUsername(), that.getUsername()) &&
                 Objects.equals(getFirstName(), that.getFirstName()) &&
+                Objects.equals(getLastName(), that.getLastName()) &&
                 Objects.equals(getEmail(), that.getEmail());
     }
 

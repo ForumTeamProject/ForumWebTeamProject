@@ -6,6 +6,7 @@ import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationExcepti
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
 import com.example.forumsystemwebproject.models.PhoneNumber;
 import com.example.forumsystemwebproject.models.User;
+import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
 import com.example.forumsystemwebproject.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
 
     @Autowired
-    public UserServiceImpl(UserRepository repository) {
+    public UserServiceImpl(UserRepository repository, RoleRepository roleRepository) {
         this.repository = repository;
     }
 
@@ -28,8 +29,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll(UserFilterOptions filterOptions) {
-        return repository.getAll(filterOptions);
+    public List<User> get(UserFilterOptions filterOptions) {
+        return repository.get(filterOptions);
     }
 
     @Override

@@ -2,12 +2,16 @@ package com.example.forumsystemwebproject.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Set;
 
+import java.util.Date;
+import java.util.Set;
+
 @Entity
-@Table(name = "posts")
+@Table(name="posts")
 public class Post {
 
     @Id
@@ -38,8 +42,24 @@ public class Post {
     )
     private Set<Tag> tags;
 
+    @Column(name = "creation_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationDate;
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "post_id")
+    private Set<Like> likes;
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "posts_tags",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags;
+
     public Post() {
-    }
+        }
 
     public Set<Tag> getTags() {
         return tags;
@@ -79,6 +99,22 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Set<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<Like> likes) {
+        this.likes = likes;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Override

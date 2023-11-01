@@ -55,7 +55,7 @@ public class UserController {
         try {
             UserFilterOptions userFilterOptions = new UserFilterOptions(username, email, firstName, lastname, sortBy, sortOrder);
             authenticationHelper.tryGetUser(headers);
-            return userService.getAll(userFilterOptions);
+            return userService.get(userFilterOptions);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
@@ -96,6 +96,9 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
+//    @PatchMapping("/api/users/{id}")
+//    public void
     //TODO probably add something like users/{id}/block and on this endpoint an admin can block a user
 
     @DeleteMapping("/{id}")
