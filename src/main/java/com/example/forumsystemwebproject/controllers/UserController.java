@@ -5,9 +5,13 @@ import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
+import com.example.forumsystemwebproject.helpers.mappers.PhoneNumberMapper;
 import com.example.forumsystemwebproject.helpers.mappers.UserMapper;
+import com.example.forumsystemwebproject.models.DTOs.PhoneNumberDto;
+import com.example.forumsystemwebproject.models.PhoneNumber;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.models.DTOs.UserDto;
+import com.example.forumsystemwebproject.services.contracts.PhoneNumberService;
 import com.example.forumsystemwebproject.services.contracts.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +32,17 @@ public class UserController {
 
     private final AuthenticationHelper authenticationHelper;
 
+    private final PhoneNumberService phoneNumberService;
+
+    private final PhoneNumberMapper phoneNumberMapper;
+
     @Autowired
-    public UserController(UserService userService, UserMapper mapper, AuthenticationHelper authenticationHelper) {
+    public UserController(UserService userService, UserMapper mapper, AuthenticationHelper authenticationHelper, PhoneNumberService phoneNumberService, PhoneNumberMapper phoneNumberMapper) {
         this.userService = userService;
         this.mapper = mapper;
         this.authenticationHelper = authenticationHelper;
+        this.phoneNumberService = phoneNumberService;
+        this.phoneNumberMapper = phoneNumberMapper;
     }
 
     @GetMapping
@@ -103,6 +113,7 @@ public class UserController {
 
 
     }
+
 
 }
 

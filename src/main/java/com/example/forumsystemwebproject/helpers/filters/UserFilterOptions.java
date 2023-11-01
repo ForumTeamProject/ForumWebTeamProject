@@ -1,5 +1,7 @@
 package com.example.forumsystemwebproject.helpers.filters;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Optional;
 
 public class UserFilterOptions {

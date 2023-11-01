@@ -1,6 +1,7 @@
 package com.example.forumsystemwebproject.services;
 
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
+import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.Tag;
@@ -12,12 +13,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static com.example.forumsystemwebproject.helpers.AuthorizationHelper.authenticateUser;
+import static com.example.forumsystemwebproject.helpers.AuthorizationHelper.authorizeUser;
 
 @Service
 public class TagServiceImpl implements TagService {
 
+    private static final String UNAUTHORIZED_ACCESS_MSG = "You do not have permission to edit this post!";
     private final List<Role> authorizationRoles = AuthorizationHelper.makeRoleListFromArgs("admin", "user");
     private final TagRepository tagRepository;
 
@@ -25,6 +26,8 @@ public class TagServiceImpl implements TagService {
         this.tagRepository = tagRepository;
     }
 
+    @Override
+    public List<Tag> getAll(){  return tagRepository.getAll();}
     @Override
     public Tag getById(int id) {
         return tagRepository.getById(id);
@@ -37,15 +40,22 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void create(Tag tag, User user) {
-        authenticateUser(user, authorizationRoles);
-        //boolean duplicateExists = checkDuplicateExists(tag);
-        tagRepository.create(tag);
+        authorizeUser(user, authorizationRoles);
+        boolean duplicateExists = checkDuplicateExists(tag);
+
+        if ((!duplicateExists)) {
+            tagRepository.create(tag);
+        } else {
+            throw new UnauthorizedOperationException(UNAUTHORIZED_ACCESS_MSG);
+        }
     }
 
     @Override
     public void delete(int id, User user) {
-        authenticateUser(user, authorizationRoles);
-        tagRepository.delete(id);
+      if (AuthorizationHelper.isAdmin(user)){
+          tagRepository.delete(id);
+      }
+      throw new UnauthorizedOperationException(UNAUTHORIZED_ACCESS_MSG);
     }
 
     public boolean checkDuplicateExists(Tag tag) {

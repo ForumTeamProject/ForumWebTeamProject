@@ -2,6 +2,8 @@ package com.example.forumsystemwebproject.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -16,8 +18,11 @@ public class Tag {
     @Column(name = "content")
     private String content;
 
-    public Tag() {
+    @ManyToMany(mappedBy = "tags")
+    private List<Post> posts;
 
+    public Tag() {
+    this.posts = new ArrayList<>();
     }
 
     public int getId() {

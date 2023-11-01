@@ -1,10 +1,13 @@
 package com.example.forumsystemwebproject.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
-@Table(name="posts")
+@Table(name = "posts")
 public class Post {
 
     @Id
@@ -22,8 +25,29 @@ public class Post {
     @Column(name = "content")
     private String content;
 
+    @JsonIgnore
+    //@ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(
+            name = "posts_tags",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags;
+
     public Post() {
-        }
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
 
     public int getId() {
         return id;

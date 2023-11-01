@@ -6,7 +6,10 @@ import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.TagRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class TagRepositoryImpl implements TagRepository {
@@ -16,6 +19,12 @@ public class TagRepositoryImpl implements TagRepository {
         this.sessionFactory = sessionFactory;
     }
 
+    public List<Tag> getAll(){
+        try(Session session = sessionFactory.openSession()){
+            Query<Tag> query = session.createQuery("from Tag", Tag.class);
+            return query.list();
+        }
+    }
     @Override
     public Tag getById(int id) {
         try (Session session = sessionFactory.openSession()) {
@@ -32,11 +41,25 @@ public class TagRepositoryImpl implements TagRepository {
         try (Session session = sessionFactory.openSession()) {
             Tag result = session.get(Tag.class, content);
             if (result == null) {
-                throw new EntityNotFoundException("User", "content", content);
+                throw new EntityNotFoundException("Tag", "content", content);
             }
             return result;
         }
     }
+    @Override
+    public Tag getByContentOrCreate(String content) {
+        try (Session session = sessionFactory.openSession()) {
+            Tag result = session.get(Tag.class, content);
+            if (result == null) {
+                Tag tag = new Tag();
+                tag.setContent(content);
+                create(tag);
+                result = getByContent(content);
+            }
+            return result;
+        }
+    }
+
 
     @Override
     public void create(Tag tag) {

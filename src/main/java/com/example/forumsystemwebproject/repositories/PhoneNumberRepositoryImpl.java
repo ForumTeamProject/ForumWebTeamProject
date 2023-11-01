@@ -29,7 +29,7 @@ public class PhoneNumberRepositoryImpl implements PhoneNumberRepository {
     @Override
     public List<PhoneNumber> get() {
         try (Session session = sessionFactory.openSession()) {
-            Query<PhoneNumber> query = session.createQuery("from PhoneNumber", PhoneNumber.class);
+            Query<PhoneNumber> query = session.createQuery("from com.example.forumsystemwebproject.models.PhoneNumber", PhoneNumber.class);
             return query.list();
          }
     }

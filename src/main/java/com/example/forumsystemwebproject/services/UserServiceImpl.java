@@ -3,8 +3,8 @@ package com.example.forumsystemwebproject.services;
 import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
-import com.example.forumsystemwebproject.helpers.filters.CommentFilterOptions;
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
+import com.example.forumsystemwebproject.models.PhoneNumber;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
 import com.example.forumsystemwebproject.services.contracts.UserService;
@@ -67,6 +67,10 @@ public class UserServiceImpl implements UserService {
         repository.delete(id);
     }
 
+    public void addPhoneNumber(User user, PhoneNumber number){
+
+    }
+
     private void checkUsernameUniqueness(User user) {
         boolean duplicateExists = true;
         try {
@@ -92,4 +96,5 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateEntityException("User", "email", user.getEmail());
         }
     }
+
 }

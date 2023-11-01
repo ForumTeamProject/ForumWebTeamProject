@@ -3,8 +3,10 @@ package com.example.forumsystemwebproject.repositories;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
 import com.example.forumsystemwebproject.models.Post;
+import com.example.forumsystemwebproject.models.Tag;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
+import com.example.forumsystemwebproject.repositories.contracts.PostTagRepository;
 import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,7 +14,10 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class PostRepositoryImpl implements PostRepository {
@@ -20,12 +25,15 @@ public class PostRepositoryImpl implements PostRepository {
     private final SessionFactory sessionFactory;
 
     private final UserRepository userRepository;
+    private final PostTagRepository postTagRepository;
 
     @Autowired
-    public PostRepositoryImpl(SessionFactory sessionFactory, UserRepository userRepository) {
+    public PostRepositoryImpl(SessionFactory sessionFactory, UserRepository userRepository, PostTagRepository postTagRepository) {
         this.sessionFactory = sessionFactory;
         this.userRepository = userRepository;
+        this.postTagRepository = postTagRepository;
     }
+
     @Override
     public List<Post> get(PostFilterOptions filterOptions) {
         try (Session session = sessionFactory.openSession()) {
@@ -50,7 +58,7 @@ public class PostRepositoryImpl implements PostRepository {
             }
             queryString.append(generateOrderBy(filterOptions));
 
-            Query<Post> query =session.createQuery(queryString.toString(), Post.class);
+            Query<Post> query = session.createQuery(queryString.toString(), Post.class);
             query.setProperties(params);
             return query.list();
         }
@@ -118,6 +126,20 @@ public class PostRepositoryImpl implements PostRepository {
             session.remove(post);
             session.getTransaction().commit();
         }
+    }
+    @Override
+    public void addTagToPost(Post post, Tag tag) {
+        postTagRepository.addTagToPost(post, tag);
+    }
+
+    @Override
+    public void addTagsToPost(Post post, List<Tag> tags) {
+        postTagRepository.createPostTagsAssociation(post, tags);
+    }
+
+    @Override
+    public void deletePostTagAssociation(Post post, Tag tag) {
+        postTagRepository.deletePostTagAssociation(post, tag);
     }
 
     private String generateOrderBy(PostFilterOptions postFilterOptions) {

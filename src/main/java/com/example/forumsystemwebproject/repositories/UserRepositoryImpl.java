@@ -1,8 +1,6 @@
 package com.example.forumsystemwebproject.repositories;
 
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
-
-import com.example.forumsystemwebproject.helpers.filters.CommentFilterOptions;
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
 
 
@@ -65,7 +63,6 @@ public class UserRepositoryImpl implements UserRepository {
            return query.list();
        }
     }
-
 
     @Override
     public User getById(int id) {
