@@ -2,11 +2,7 @@ package com.example.forumsystemwebproject.repositories;
 
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.models.PhoneNumber;
-import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.PhoneNumberRepository;
-import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
-import com.example.forumsystemwebproject.services.PhoneNumberServiceImpl;
-import com.example.forumsystemwebproject.services.contracts.UserService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -31,7 +27,7 @@ public class PhoneNumberRepositoryImpl implements PhoneNumberRepository {
         try (Session session = sessionFactory.openSession()) {
             Query<PhoneNumber> query = session.createQuery("from com.example.forumsystemwebproject.models.PhoneNumber", PhoneNumber.class);
             return query.list();
-         }
+        }
     }
 
     @Override

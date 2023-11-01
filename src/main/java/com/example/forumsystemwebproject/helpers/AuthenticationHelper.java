@@ -34,14 +34,11 @@ package com.example.forumsystemwebproject.helpers;
 
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
-import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 
 @Component

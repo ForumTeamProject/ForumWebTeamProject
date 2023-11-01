@@ -17,16 +17,17 @@ public class RoleRepositoryImpl implements RoleRepository {
 
     private final SessionFactory sessionFactory;
 
-    public RoleRepositoryImpl(SessionFactory sessionFactory){
+    public RoleRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
-    public List<Role> getAll(){
+    public List<Role> getAll() {
         try (Session session = sessionFactory.openSession()) {
             Query<Role> query = session.createQuery("from Role", Role.class);
             return query.list();
         }
     }
+
     @Override
     public Role getById(int id) {
         try (Session session = sessionFactory.openSession()) {
@@ -35,7 +36,8 @@ public class RoleRepositoryImpl implements RoleRepository {
                 throw new EntityNotFoundException("Role", id);
             }
             return result;
-        }    }
+        }
+    }
 
     @Override
     public Role getByName(String name) {
@@ -49,6 +51,7 @@ public class RoleRepositoryImpl implements RoleRepository {
             return result.get(0);
         }
     }
+
     @Override
     public void create(Role role) {
         try (Session session = sessionFactory.openSession()) {

@@ -12,10 +12,10 @@ public class PostFilterOptions {
     private Optional<String> sortOrder;
 
     public PostFilterOptions(
-        String user,
-        String title,
-        String sortBy,
-        String sortOrder
+            String user,
+            String title,
+            String sortBy,
+            String sortOrder
     ) {
         this.user = Optional.ofNullable(user);
         this.title = Optional.ofNullable(title);

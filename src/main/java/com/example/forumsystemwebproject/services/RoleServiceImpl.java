@@ -21,9 +21,10 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<Role> getAll(){
+    public List<Role> getAll() {
         return roleRepository.getAll();
     }
+
     @Override
     public Role getById(int id) {
         return this.roleRepository.getById(id);
@@ -67,7 +68,7 @@ public class RoleServiceImpl implements RoleService {
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
-        if(duplicateExists){
+        if (duplicateExists) {
             throw new DuplicateEntityException("Role", role.getId());
         }
     }

@@ -61,16 +61,16 @@ public class CommentController {
     ) {
         try {
             authenticationHelper.tryGetUser(headers);
-            CommentFilterOptions filterOptions = new CommentFilterOptions(null,content,sortBy,sortOrder);
+            CommentFilterOptions filterOptions = new CommentFilterOptions(null, content, sortBy, sortOrder);
             return service.getByUserId(filterOptions, id);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (EntityNotFoundException e ){
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
-        @GetMapping("/posts/{id}/comments")
+    @GetMapping("/posts/{id}/comments")
     public List<Comment> getByPostId(
             @RequestHeader HttpHeaders headers,
             @PathVariable int id
@@ -93,21 +93,21 @@ public class CommentController {
             return service.getById(id);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (UnauthorizedOperationException e ) {
+        } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @PostMapping("posts/{id}/comments")
     public void create(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody CommentDto dto) {
-        try{
+        try {
             User user = authenticationHelper.tryGetUser(headers);
             Comment commentToCreate = mapper.fromDto(dto);
             commentToCreate.setUser(user);
             service.create(commentToCreate, id);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (EntityNotFoundException e ) {
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

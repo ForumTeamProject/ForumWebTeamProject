@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PhoneNumberMapper {
 
-   private PhoneNumberService service;
+    private PhoneNumberService service;
 
     @Autowired
     public PhoneNumberMapper(PhoneNumberService service) {

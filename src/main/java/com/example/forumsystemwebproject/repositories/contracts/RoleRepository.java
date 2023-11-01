@@ -15,5 +15,6 @@ public interface RoleRepository {
     void update(Role role);
 
     void delete(int id);
+
     List<Role> getAll();
 }

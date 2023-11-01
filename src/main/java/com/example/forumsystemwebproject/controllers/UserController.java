@@ -7,10 +7,8 @@ import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
 import com.example.forumsystemwebproject.helpers.mappers.PhoneNumberMapper;
 import com.example.forumsystemwebproject.helpers.mappers.UserMapper;
-import com.example.forumsystemwebproject.models.DTOs.PhoneNumberDto;
-import com.example.forumsystemwebproject.models.PhoneNumber;
-import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.models.DTOs.UserDto;
+import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.services.contracts.PhoneNumberService;
 import com.example.forumsystemwebproject.services.contracts.UserService;
 import jakarta.validation.Valid;
@@ -80,7 +78,7 @@ public class UserController {
         try {
             User newUser = mapper.fromDto(dto);
             userService.create(newUser);
-        } catch (DuplicateEntityException e ) {
+        } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
@@ -101,13 +99,13 @@ public class UserController {
     //TODO probably add something like users/{id}/block and on this endpoint an admin can block a user
 
     @DeleteMapping("/{id}")
-    public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id)  {
+    public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             userService.delete(user, id);
         } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,  e.getMessage());
-        } catch (EntityNotFoundException e ) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
 

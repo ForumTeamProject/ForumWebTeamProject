@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class AuthorizationHelper implements Authorization {
+public class AuthorizationHelper {
     private static final String UNAUTHORIZED_MSG = "%s with %s %s is unauthorized to do this operation!";
     private static RoleRepository roleRepository;
     private static Role admin = roleRepository.getByName("admin");
@@ -21,6 +21,25 @@ public class AuthorizationHelper implements Authorization {
         this.roleRepository = roleRepository;
     }
 
+    public static void authorizeUser(User userToAuthorize, List<Role> roles) {
+        for (Role role : roles) {
+            if (!(userToAuthorize.getRoles().contains(role))) {
+                throw new UnauthorizedOperationException(String.format(AuthorizationHelper.UNAUTHORIZED_MSG, "User", "username", userToAuthorize.getUsername()));
+            }
+        }
+    }
+
+    public static List<Role> makeRoleListFromArgs(String... roles) {
+        List<Role> roleList = new ArrayList<>();
+        for (String role : roles) {
+            roleList.add(AuthorizationHelper.roleRepository.getByName(role));
+        }
+        return roleList;
+    }
+
+    public static boolean isAdmin(User user) {
+        return user.getRoles().contains(AuthorizationHelper.admin);
+    }
 }
 
 

@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
         repository.delete(id);
     }
 
-    public void addPhoneNumber(User user, PhoneNumber number){
+    public void addPhoneNumber(User user, PhoneNumber number) {
 
     }
 

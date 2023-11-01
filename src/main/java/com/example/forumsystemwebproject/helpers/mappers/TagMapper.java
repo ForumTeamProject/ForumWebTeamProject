@@ -12,12 +12,14 @@ public class TagMapper {
     public TagMapper(TagService tagService) {
         this.tagService = tagService;
     }
-    public Tag fromDto(TagDto tagDto){
+
+    public Tag fromDto(TagDto tagDto) {
         Tag tag = new Tag();
         tag.setContent(tagDto.getContent());
         return tag;
     }
-    public Tag fromDto(int id, TagDto tagDto){
+
+    public Tag fromDto(int id, TagDto tagDto) {
         Tag tag = fromDto(tagDto);
         Tag tagFromService = tagService.getById(id);
         tagFromService.setContent(tagDto.getContent());

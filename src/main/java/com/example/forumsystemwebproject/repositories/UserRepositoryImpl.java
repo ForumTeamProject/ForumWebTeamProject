@@ -2,8 +2,6 @@ package com.example.forumsystemwebproject.repositories;
 
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
-
-
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
 import org.hibernate.Session;
@@ -28,18 +26,18 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<User> getAll(UserFilterOptions filterOptions) {
         try (Session session = sessionFactory.openSession()) {
-           List<String> filters = new ArrayList<>();
-           Map<String, Object> params = new HashMap<>();
+            List<String> filters = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
 
-           filterOptions.getUsername().ifPresent(value -> {
-               filters.add("username like :username");
-               params.put("username", value);
-           });
+            filterOptions.getUsername().ifPresent(value -> {
+                filters.add("username like :username");
+                params.put("username", value);
+            });
 
-           filterOptions.getEmail().ifPresent(value -> {
-               filters.add("email like :email");
-               params.put("email", value);
-           });
+            filterOptions.getEmail().ifPresent(value -> {
+                filters.add("email like :email");
+                params.put("email", value);
+            });
 
             filterOptions.getFirstName().ifPresent(value -> {
                 filters.add("firstName like :firstName");
@@ -50,18 +48,18 @@ public class UserRepositoryImpl implements UserRepository {
                 params.put("lastName", value);
             });
 
-           StringBuilder queryString = new StringBuilder("from User");
-           if (!filters.isEmpty()) {
-               queryString
-                       .append(" where ")
-                       .append(String.join(" and ", filters));
-           }
-           queryString.append(generateOrderBy(filterOptions));
+            StringBuilder queryString = new StringBuilder("from User");
+            if (!filters.isEmpty()) {
+                queryString
+                        .append(" where ")
+                        .append(String.join(" and ", filters));
+            }
+            queryString.append(generateOrderBy(filterOptions));
 
-           Query<User> query = session.createQuery(queryString.toString(), User.class);
-           query.setProperties(params);
-           return query.list();
-       }
+            Query<User> query = session.createQuery(queryString.toString(), User.class);
+            query.setProperties(params);
+            return query.list();
+        }
     }
 
     @Override
@@ -74,6 +72,7 @@ public class UserRepositoryImpl implements UserRepository {
             return result;
         }
     }
+
     @Override
     public User getByUsername(String username) {
         try (Session session = sessionFactory.openSession()) {
@@ -129,6 +128,7 @@ public class UserRepositoryImpl implements UserRepository {
             session.getTransaction().commit();
         }
     }
+
     private String generateOrderBy(UserFilterOptions filterOptions) {
         if (filterOptions.getSortBy().isEmpty()) {
             return "";

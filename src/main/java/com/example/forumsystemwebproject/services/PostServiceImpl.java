@@ -79,16 +79,18 @@ public class PostServiceImpl implements PostService {
             throw new UnauthorizedOperationException("You do not have permission to delete this post!");
         }
     }
-    public void addTagToPost(User userWhoAdds, Post post, Tag tag){
+
+    public void addTagToPost(User userWhoAdds, Post post, Tag tag) {
         AuthorizationHelper.authorizeUser(userWhoAdds, authorizationRolesForDelete);
 
         if (post.getUser().getId() == userWhoAdds.getId() || AuthorizationHelper.isAdmin(userWhoAdds)) {
-           postRepository.addTagToPost(post, tag);
+            postRepository.addTagToPost(post, tag);
         } else {
             throw new UnauthorizedOperationException("You do not have permission to add this tag!");
         }
     }
-    public void addTagsToPost(User userWhoAdds, Post post, List<Tag> tags){
+
+    public void addTagsToPost(User userWhoAdds, Post post, List<Tag> tags) {
         AuthorizationHelper.authorizeUser(userWhoAdds, authorizationRolesForDelete);
 
         if (post.getUser().getId() == userWhoAdds.getId() || AuthorizationHelper.isAdmin(userWhoAdds)) {
@@ -97,7 +99,8 @@ public class PostServiceImpl implements PostService {
             throw new UnauthorizedOperationException("You do not have permission to add these tags!");
         }
     }
-    public void deleteTagFromPost(User userWhoDeletes,Post postFromWhichToDelete,Tag tag){
+
+    public void deleteTagFromPost(User userWhoDeletes, Post postFromWhichToDelete, Tag tag) {
         AuthorizationHelper.authorizeUser(userWhoDeletes, authorizationRolesForDelete);
 
         if (postFromWhichToDelete.getUser().getId() == userWhoDeletes.getId() || AuthorizationHelper.isAdmin(userWhoDeletes)) {

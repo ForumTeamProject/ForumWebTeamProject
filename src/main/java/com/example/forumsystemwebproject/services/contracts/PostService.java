@@ -14,8 +14,11 @@ public interface PostService {
     List<Post> getByUserId(PostFilterOptions filterOptions, int id);
 
     void addTagToPost(User userWhoAdds, Post post, Tag tag);
+
     void addTagsToPost(User userWhoAdds, Post post, List<Tag> tags);
-    void deleteTagFromPost(User userWhoDeletes,Post postFromWhichToDelete, Tag tag);
+
+    void deleteTagFromPost(User userWhoDeletes, Post postFromWhichToDelete, Tag tag);
+
     Post getById(int id);
 
     void create(Post post, User user);

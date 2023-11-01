@@ -1,6 +1,5 @@
 package com.example.forumsystemwebproject.helpers.filters;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 public class CommentFilterOptions {

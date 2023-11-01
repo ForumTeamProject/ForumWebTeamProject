@@ -6,9 +6,9 @@ import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
 import com.example.forumsystemwebproject.helpers.mappers.PostMapper;
 import com.example.forumsystemwebproject.helpers.mappers.TagMapper;
+import com.example.forumsystemwebproject.models.DTOs.PostDto;
 import com.example.forumsystemwebproject.models.DTOs.TagDto;
 import com.example.forumsystemwebproject.models.Post;
-import com.example.forumsystemwebproject.models.DTOs.PostDto;
 import com.example.forumsystemwebproject.models.Tag;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.services.contracts.PostService;
@@ -46,13 +46,13 @@ public class PostController {
 
     @GetMapping("/posts")
     public List<Post> get(
-        @RequestParam(required = false) String user,
-        @RequestParam(required = false) String title,
-        @RequestParam(required = false) String sortBy,
-        @RequestParam(required = false) String sortOrder,
-        @RequestHeader HttpHeaders headers) {
+            @RequestParam(required = false) String user,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String sortOrder,
+            @RequestHeader HttpHeaders headers) {
         try {
-            PostFilterOptions filterOptions = new PostFilterOptions(user,title, sortBy, sortOrder);
+            PostFilterOptions filterOptions = new PostFilterOptions(user, title, sortBy, sortOrder);
             authenticationHelper.tryGetUser(headers);
             return postService.get(filterOptions);
         } catch (UnauthorizedOperationException e) {
@@ -90,9 +90,9 @@ public class PostController {
     @PostMapping("/posts")
     public void create(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostDto dto) {
         try {
-        User user = authenticationHelper.tryGetUser(headers);
-        Post postToCreate = mapper.fromDto(dto);
-        postService.create(postToCreate, user);
+            User user = authenticationHelper.tryGetUser(headers);
+            Post postToCreate = mapper.fromDto(dto);
+            postService.create(postToCreate, user);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
@@ -125,7 +125,7 @@ public class PostController {
 
     // POST_TAG STUFF*********
     @PatchMapping("posts/{id}/tags")
-    public void addTagToPost(@RequestHeader HttpHeaders headers, @PathVariable int id,  @Valid @RequestBody TagDto tagDto){
+    public void addTagToPost(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody TagDto tagDto) {
         try {
             User authenticatedUser = authenticationHelper.tryGetUser(headers);
             Post postToAddTag = postService.getById(id);
@@ -137,13 +137,14 @@ public class PostController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
     @PostMapping("posts/{id}/tags")
-    public void addTagsToPost(@RequestHeader HttpHeaders headers, @PathVariable int id,  @Valid @RequestBody List<TagDto> tagsDtos){
+    public void addTagsToPost(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody List<TagDto> tagsDtos) {
         try {
             User authenticatedUser = authenticationHelper.tryGetUser(headers);
             Post postToAddTag = postService.getById(id);
             List<Tag> tags = new ArrayList<>();
-            for (TagDto dto: tagsDtos) {
+            for (TagDto dto : tagsDtos) {
                 tags.add(tagMapper.fromDto(dto));
             }
             postService.addTagsToPost(authenticatedUser, postToAddTag, tags);

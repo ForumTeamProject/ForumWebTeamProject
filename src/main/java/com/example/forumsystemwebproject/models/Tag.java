@@ -22,7 +22,7 @@ public class Tag {
     private List<Post> posts;
 
     public Tag() {
-    this.posts = new ArrayList<>();
+        this.posts = new ArrayList<>();
     }
 
     public int getId() {

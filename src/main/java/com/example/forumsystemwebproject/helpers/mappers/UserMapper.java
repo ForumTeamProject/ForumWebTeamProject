@@ -1,8 +1,8 @@
 package com.example.forumsystemwebproject.helpers.mappers;
 
 
-import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.models.DTOs.UserDto;
+import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

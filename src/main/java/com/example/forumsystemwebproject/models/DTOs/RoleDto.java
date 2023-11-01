@@ -1,6 +1,5 @@
 package com.example.forumsystemwebproject.models.DTOs;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -9,9 +8,10 @@ public class RoleDto {
     @Size(min = 32, max = 8192, message = "Content must be between 32 to 8192 characters long!")
     private String name;
 
-    public RoleDto(){
+    public RoleDto() {
 
     }
+
     public String getName() {
         return name;
     }

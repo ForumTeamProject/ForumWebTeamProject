@@ -15,7 +15,7 @@ public class PostTag {
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
-    public PostTag(){
+    public PostTag() {
 
     }
 

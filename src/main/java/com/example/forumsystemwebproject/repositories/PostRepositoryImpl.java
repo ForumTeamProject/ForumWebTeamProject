@@ -127,6 +127,7 @@ public class PostRepositoryImpl implements PostRepository {
             session.getTransaction().commit();
         }
     }
+
     @Override
     public void addTagToPost(Post post, Tag tag) {
         postTagRepository.addTagToPost(post, tag);

@@ -59,8 +59,8 @@ public class PhoneNumberController {
     }
 
     @PostMapping("/phone-numbers")
-    public void create(@RequestHeader HttpHeaders headers,@Valid @RequestBody PhoneNumberDto dto) {
-        try{
+    public void create(@RequestHeader HttpHeaders headers, @Valid @RequestBody PhoneNumberDto dto) {
+        try {
             User authenticatedUser = authenticationHelper.tryGetUser(headers);
             PhoneNumber numberToCreate = mapper.fromDto(dto);
             service.create(numberToCreate, authenticatedUser);
@@ -73,7 +73,7 @@ public class PhoneNumberController {
 
     @PutMapping("/phone-numbers/{id}")
     public void update(@RequestHeader HttpHeaders headers, @Valid @RequestBody PhoneNumberDto dto, @PathVariable int id) {
-        try{
+        try {
             User authenticatedUser = authenticationHelper.tryGetUser(headers);
             PhoneNumber numberToUpdate = mapper.fromDto(id, dto);
             service.update(numberToUpdate, authenticatedUser);

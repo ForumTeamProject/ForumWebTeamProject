@@ -2,7 +2,6 @@ package com.example.forumsystemwebproject.repositories;
 
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.models.Tag;
-import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.TagRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -19,12 +18,13 @@ public class TagRepositoryImpl implements TagRepository {
         this.sessionFactory = sessionFactory;
     }
 
-    public List<Tag> getAll(){
-        try(Session session = sessionFactory.openSession()){
+    public List<Tag> getAll() {
+        try (Session session = sessionFactory.openSession()) {
             Query<Tag> query = session.createQuery("from Tag", Tag.class);
             return query.list();
         }
     }
+
     @Override
     public Tag getById(int id) {
         try (Session session = sessionFactory.openSession()) {
@@ -46,6 +46,7 @@ public class TagRepositoryImpl implements TagRepository {
             return result;
         }
     }
+
     @Override
     public Tag getByContentOrCreate(String content) {
         try (Session session = sessionFactory.openSession()) {

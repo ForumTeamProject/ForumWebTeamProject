@@ -61,7 +61,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 //           return query.list();
 //       }
 //    } //TODO this may be not needed because if you type ?username=johndoe in the request  this is referred  to the username of the post, not the comment.
-        //TODO The comment has a user and you cannot enter the user in the request, so we can use getByUserId instead
+    //TODO The comment has a user and you cannot enter the user in the request, so we can use getByUserId instead
 
     @Override
     public List<Comment> getByUserId(CommentFilterOptions filterOptions, int id) {
@@ -103,11 +103,11 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public Comment getById(int id) {
         try (Session session = sessionFactory.openSession()) {
-           Comment comment = session.get(Comment.class, id);
-           if (comment == null) {
-               throw new EntityNotFoundException("Comment", id);
-           }
-           return comment;
+            Comment comment = session.get(Comment.class, id);
+            if (comment == null) {
+                throw new EntityNotFoundException("Comment", id);
+            }
+            return comment;
         }
     }
 

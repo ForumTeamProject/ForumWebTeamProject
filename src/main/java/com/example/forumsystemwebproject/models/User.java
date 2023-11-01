@@ -1,7 +1,5 @@
 package com.example.forumsystemwebproject.models;
 
-import com.example.forumsystemwebproject.models.Post;
-import com.example.forumsystemwebproject.models.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -34,6 +32,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
     public User() {
     }
 

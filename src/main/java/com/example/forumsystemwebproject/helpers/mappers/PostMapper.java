@@ -1,7 +1,7 @@
 package com.example.forumsystemwebproject.helpers.mappers;
 
-import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.DTOs.PostDto;
+import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.Tag;
 import com.example.forumsystemwebproject.services.contracts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
