@@ -122,10 +122,10 @@ public class PostRepositoryImpl implements PostRepository {
     public List<Post> getMostRecentlyCreatedPosts() {
         try (Session session = sessionFactory.openSession()) {
             Query<Post> query = session.createQuery("""
-            FROM Post p
-            ORDER BY p.creationDate DESC
-            LIMIT 10
-            """, Post.class);
+                    FROM Post p
+                    ORDER BY p.creationDate DESC
+                    LIMIT 10
+                    """, Post.class);
 
             return query.list();
         }

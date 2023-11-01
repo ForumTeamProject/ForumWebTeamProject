@@ -1,12 +1,10 @@
 package com.example.forumsystemwebproject.services;
 
-import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.models.Like;
 import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.LikeRepository;
 import com.example.forumsystemwebproject.services.contracts.LikeService;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

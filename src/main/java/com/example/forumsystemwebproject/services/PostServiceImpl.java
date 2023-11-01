@@ -4,19 +4,13 @@ import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
-import com.example.forumsystemwebproject.models.Like;
-import com.example.forumsystemwebproject.models.Post;
-import com.example.forumsystemwebproject.models.Role;
-import com.example.forumsystemwebproject.models.Tag;
-import com.example.forumsystemwebproject.models.User;
+import com.example.forumsystemwebproject.models.*;
 import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
 import com.example.forumsystemwebproject.repositories.contracts.PostTagRepository;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
-import com.example.forumsystemwebproject.services.contracts.LikeService;
 import com.example.forumsystemwebproject.repositories.contracts.TagRepository;
+import com.example.forumsystemwebproject.services.contracts.LikeService;
 import com.example.forumsystemwebproject.services.contracts.PostService;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +31,7 @@ public class PostServiceImpl implements PostService {
     private final LikeService likeService;
 
     @Autowired
-    public PostServiceImpl(PostRepository postRepository, RoleRepository roleRepository, LikeService likeService,TagRepository tagRepository, PostTagRepository postTagRepository) {
+    public PostServiceImpl(PostRepository postRepository, RoleRepository roleRepository, LikeService likeService, TagRepository tagRepository, PostTagRepository postTagRepository) {
         this.postRepository = postRepository;
         this.roleRepository = roleRepository;
         this.tagRepository = tagRepository;
@@ -73,7 +67,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void likePost(int id, User user) {
         Post post = postRepository.getById(id);
-        try{
+        try {
             Like like = likeService.get(post, user);
             likeService.delete(like);
         } catch (EntityNotFoundException e) {
@@ -110,35 +104,35 @@ public class PostServiceImpl implements PostService {
         return user.getRoles().contains(roleRepository.getByName("admin")) || post.getUser() == user;
     }
 
-        public void addTagToPost(User userWhoAdds, Post post, Tag tag) {
-            AuthorizationHelper.authorizeUser(userWhoAdds, authorizationRolesForDelete);
+    public void addTagToPost(User userWhoAdds, Post post, Tag tag) {
+        AuthorizationHelper.authorizeUser(userWhoAdds, authorizationRolesForDelete);
 
-            if (post.getUser().getId() == userWhoAdds.getId() || AuthorizationHelper.isAdmin(userWhoAdds)) {
-                postRepository.addTagToPost(post, tag);
-            } else {
-                throw new UnauthorizedOperationException("You do not have permission to add this tag!");
-            }
+        if (post.getUser().getId() == userWhoAdds.getId() || AuthorizationHelper.isAdmin(userWhoAdds)) {
+            postRepository.addTagToPost(post, tag);
+        } else {
+            throw new UnauthorizedOperationException("You do not have permission to add this tag!");
         }
-
-        public void addTagsToPost(User userWhoAdds, Post post, List<Tag> tags) {
-            AuthorizationHelper.authorizeUser(userWhoAdds, authorizationRolesForDelete);
-
-            if (post.getUser().getId() == userWhoAdds.getId() || AuthorizationHelper.isAdmin(userWhoAdds)) {
-                postRepository.addTagsToPost(post, tags);
-            } else {
-                throw new UnauthorizedOperationException("You do not have permission to add these tags!");
-            }
-        }
-
-        public void deleteTagFromPost(User userWhoDeletes, Post postFromWhichToDelete, Tag tag) {
-            AuthorizationHelper.authorizeUser(userWhoDeletes, authorizationRolesForDelete);
-
-            if (postFromWhichToDelete.getUser().getId() == userWhoDeletes.getId() || AuthorizationHelper.isAdmin(userWhoDeletes)) {
-                postRepository.deletePostTagAssociation(postFromWhichToDelete, tag);
-            } else {
-                throw new UnauthorizedOperationException("You do not have permission to remove this tag!");
-            }
-        }
-
-
     }
+
+    public void addTagsToPost(User userWhoAdds, Post post, List<Tag> tags) {
+        AuthorizationHelper.authorizeUser(userWhoAdds, authorizationRolesForDelete);
+
+        if (post.getUser().getId() == userWhoAdds.getId() || AuthorizationHelper.isAdmin(userWhoAdds)) {
+            postRepository.addTagsToPost(post, tags);
+        } else {
+            throw new UnauthorizedOperationException("You do not have permission to add these tags!");
+        }
+    }
+
+    public void deleteTagFromPost(User userWhoDeletes, Post postFromWhichToDelete, Tag tag) {
+        AuthorizationHelper.authorizeUser(userWhoDeletes, authorizationRolesForDelete);
+
+        if (postFromWhichToDelete.getUser().getId() == userWhoDeletes.getId() || AuthorizationHelper.isAdmin(userWhoDeletes)) {
+            postRepository.deletePostTagAssociation(postFromWhichToDelete, tag);
+        } else {
+            throw new UnauthorizedOperationException("You do not have permission to remove this tag!");
+        }
+    }
+
+
+}

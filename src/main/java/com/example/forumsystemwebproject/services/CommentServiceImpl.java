@@ -38,14 +38,14 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> getByUserId(CommentFilterOptions filterOptions, int id) {
-        return repository.getByUserId(filterOptions,id);
+        return repository.getByUserId(filterOptions, id);
     }
 
     @Override
     public List<Comment> getByPostId(int id) {
         Post post = postRepository.getById(id);
         return repository.getByPostId(post);
-            }
+    }
 
     @Override
     public Comment getById(int id) {
@@ -54,18 +54,18 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void create(Comment comment, int id) {
-            Post post = postRepository.getById(id);
-            comment.setPost(post);
-            repository.create(comment);
+        Post post = postRepository.getById(id);
+        comment.setPost(post);
+        repository.create(comment);
     }
 
     @Override
     public void update(Comment comment, User user) {
-            if (user.getId() != comment.getUser().getId()) {
-                throw new UnauthorizedOperationException("You do not have permission to edit this comment!");
-            } else {
-                repository.update(comment);
-            }
+        if (user.getId() != comment.getUser().getId()) {
+            throw new UnauthorizedOperationException("You do not have permission to edit this comment!");
+        } else {
+            repository.update(comment);
+        }
     }
 
     @Override

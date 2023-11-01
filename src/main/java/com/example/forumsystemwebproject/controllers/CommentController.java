@@ -46,7 +46,7 @@ public class CommentController {
             authenticationHelper.tryGetUser(headers);
             CommentFilterOptions filterOptions = new CommentFilterOptions(user, content, sortBy, sortOrder);
             return service.get(filterOptions);
-        }  catch (UnauthorizedOperationException e) {
+        } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }

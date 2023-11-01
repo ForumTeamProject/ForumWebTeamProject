@@ -5,13 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
-import java.util.Set;
-
 import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(name="posts")
+@Table(name = "posts")
 public class Post {
 
     @Id
@@ -49,17 +47,17 @@ public class Post {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id")
     private Set<Like> likes;
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "posts_tags",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
-    private Set<Tag> tags;
+//    @JsonIgnore
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(
+//            name = "posts_tags",
+//            joinColumns = @JoinColumn(name = "post_id"),
+//            inverseJoinColumns = @JoinColumn(name = "tag_id")
+//    )
+//    private Set<Tag> tags;
 
     public Post() {
-        }
+    }
 
     public Set<Tag> getTags() {
         return tags;

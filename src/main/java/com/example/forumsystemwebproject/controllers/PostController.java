@@ -7,7 +7,6 @@ import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
 import com.example.forumsystemwebproject.helpers.mappers.PostMapper;
 import com.example.forumsystemwebproject.helpers.mappers.TagMapper;
 import com.example.forumsystemwebproject.models.DTOs.PostDto;
-import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.DTOs.TagDto;
 import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.Tag;

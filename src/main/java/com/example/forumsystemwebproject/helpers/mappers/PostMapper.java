@@ -1,17 +1,14 @@
 package com.example.forumsystemwebproject.helpers.mappers;
 
+import com.example.forumsystemwebproject.models.DTOs.PostDto;
 import com.example.forumsystemwebproject.models.Like;
 import com.example.forumsystemwebproject.models.Post;
-import com.example.forumsystemwebproject.models.DTOs.PostDto;
 import com.example.forumsystemwebproject.models.Tag;
 import com.example.forumsystemwebproject.services.contracts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
 import java.util.HashSet;
 import java.util.Set;
 

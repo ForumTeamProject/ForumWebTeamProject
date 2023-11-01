@@ -9,6 +9,7 @@ import java.util.List;
 public interface LikeRepository {
 
     Like get(Post post, User user);
+
     List<Like> getByUserId(int id);
 
     List<Like> getByPostId(int id);

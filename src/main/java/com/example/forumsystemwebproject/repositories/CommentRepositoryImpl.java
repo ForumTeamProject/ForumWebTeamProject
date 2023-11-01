@@ -33,33 +33,33 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public List<Comment> get(CommentFilterOptions filterOptions) {
-       try (Session session = sessionFactory.openSession()) {
-           List<String> filters = new ArrayList<>();
-           Map<String, Object> params = new HashMap<>();
+        try (Session session = sessionFactory.openSession()) {
+            List<String> filters = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
 
-           filterOptions.getUser().ifPresent(value -> {
-               filters.add("username like :username");
-               params.put("username", value);
-           });
+            filterOptions.getUser().ifPresent(value -> {
+                filters.add("username like :username");
+                params.put("username", value);
+            });
 
-           filterOptions.getContent().ifPresent(value -> {
-               filters.add("content like :content");
-               params.put("content", String.format("%%%s%%", value));
-           });
+            filterOptions.getContent().ifPresent(value -> {
+                filters.add("content like :content");
+                params.put("content", String.format("%%%s%%", value));
+            });
 
 
-           StringBuilder queryString = new StringBuilder("from Comment");
-           if (!filters.isEmpty()) {
-               queryString
-                       .append(" where ")
-                       .append(String.join(" and ", filters));
-           }
-           queryString.append(generateOrderBy(filterOptions));
+            StringBuilder queryString = new StringBuilder("from Comment");
+            if (!filters.isEmpty()) {
+                queryString
+                        .append(" where ")
+                        .append(String.join(" and ", filters));
+            }
+            queryString.append(generateOrderBy(filterOptions));
 
-           Query<Comment> query = session.createQuery(queryString.toString(), Comment.class);
-           query.setProperties(params);
-           return query.list();
-       }
+            Query<Comment> query = session.createQuery(queryString.toString(), Comment.class);
+            query.setProperties(params);
+            return query.list();
+        }
     } //TODO this may be not needed because if you type ?username=johndoe in the request  this is referred  to the username of the post, not the comment.
 //        TODO The comment has a user and you cannot enter the user in the request, so we can use getByUserId instead
 
@@ -103,11 +103,11 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public Comment getById(int id) {
         try (Session session = sessionFactory.openSession()) {
-           Comment comment = session.get(Comment.class, id);
-           if (comment == null) {
-               throw new EntityNotFoundException("Comment", id);
-           }
-           return comment;
+            Comment comment = session.get(Comment.class, id);
+            if (comment == null) {
+                throw new EntityNotFoundException("Comment", id);
+            }
+            return comment;
         }
     }
 

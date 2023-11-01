@@ -5,7 +5,6 @@ import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.models.PhoneNumber;
 import com.example.forumsystemwebproject.models.User;
-import com.example.forumsystemwebproject.repositories.PhoneNumberRepositoryImpl;
 import com.example.forumsystemwebproject.repositories.contracts.PhoneNumberRepository;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import com.example.forumsystemwebproject.services.contracts.PhoneNumberService;
@@ -40,12 +39,12 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
 
     @Override
     public void create(PhoneNumber number, User authenticatedUser) {
-            if (!authenticatedUser.getRoles().contains(roleRepository.getByName("admin"))) {
-                throw new UnauthorizedOperationException("You do not have permission to set a phone number!");
-            }
-            number.setUser(authenticatedUser);
-            checkNumberUniqueness(number);
-            repository.create(number);
+        if (!authenticatedUser.getRoles().contains(roleRepository.getByName("admin"))) {
+            throw new UnauthorizedOperationException("You do not have permission to set a phone number!");
+        }
+        number.setUser(authenticatedUser);
+        checkNumberUniqueness(number);
+        repository.create(number);
     }
 
     @Override

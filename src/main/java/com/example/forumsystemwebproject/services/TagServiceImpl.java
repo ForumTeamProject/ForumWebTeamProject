@@ -7,12 +7,10 @@ import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.Tag;
 import com.example.forumsystemwebproject.models.User;
-import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import com.example.forumsystemwebproject.repositories.contracts.TagRepository;
 import com.example.forumsystemwebproject.services.contracts.TagService;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.example.forumsystemwebproject.helpers.AuthorizationHelper.authorizeUser;
