@@ -148,6 +148,7 @@ public class Helpers {
         mockUserDto.setEmail("mockemail@gmail.com");
         mockUserDto.setUsername("mockUsername");
         mockUserDto.setPassword("Aa123456@");
+        mockUserDto.setPasswordConfirm("Aa123456@");
         return mockUserDto;
     }
 

@@ -18,11 +18,7 @@ public class Tag {
     @Column(name = "content")
     private String content;
 
-    @ManyToMany(mappedBy = "tags")
-    private List<Post> posts;
-
     public Tag() {
-        this.posts = new ArrayList<>();
     }
 
     public int getId() {

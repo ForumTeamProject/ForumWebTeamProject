@@ -16,7 +16,7 @@ public interface CommentService {
 
     Comment getById(int id);
 
-    void create(Comment comment, int id);
+    void create(Comment comment, int id, User user);
 
     void update(Comment comment, User user);
 

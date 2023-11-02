@@ -3,8 +3,10 @@ package com.example.forumsystemwebproject.services;
 import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
+import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
+import com.example.forumsystemwebproject.helpers.AuthorizationHelperImpl;
+import com.example.forumsystemwebproject.helpers.filters.CommentFilterOptions;
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
-import com.example.forumsystemwebproject.models.PhoneNumber;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
@@ -18,9 +20,15 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
 
+    private final RoleRepository roleRepository;
+
+    private final AuthorizationHelper authorizationHelper;
+
     @Autowired
-    public UserServiceImpl(UserRepository repository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository repository, RoleRepository roleRepository, AuthorizationHelper authorizationHelper) {
         this.repository = repository;
+        this.roleRepository = roleRepository;
+        this.authorizationHelper = authorizationHelper;
     }
 
     @Override
@@ -52,8 +60,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(User userToUpdate, User authenticatedUser) {
-        if (userToUpdate.getId() != authenticatedUser.getId()) {
-            throw new UnauthorizedOperationException("You do not have permission to change this user's details!");
+        if (!authorizationHelper.isCreator(userToUpdate, authenticatedUser) || authorizationHelper.isBlockedUser(authenticatedUser)) {
+            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", authenticatedUser.getUsername()));
         }
         checkUsernameUniqueness(userToUpdate);
         checkEmailUniqueness(userToUpdate);
@@ -62,15 +70,46 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(User user, int id) {
-        if (user.getId() != id) {
-            throw new UnauthorizedOperationException("You do not have permission to delete this user!");
+        User userToDelete = getById(id);
+        if (!authorizationHelper.isCreator(user, userToDelete) || authorizationHelper.isBlockedUser(user)) {
+            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
         }
         repository.delete(id);
     }
 
-    public void addPhoneNumber(User user, PhoneNumber number) {
 
+        @Override
+    public void blockUser(User user, int id) {
+        User userToBlock = getById(id);
+        if (authorizationHelper.isBlockedUser(user) || !authorizationHelper.isAdmin(user)) {
+            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
+        }
+        if (authorizationHelper.isBlockedUser(userToBlock)) {
+            throw new DuplicateEntityException(String.format("User with id: %d is already blocked.", id));
+        }
+        userToBlock.getRoles().add(roleRepository.getByName("blockedUser"));
+        repository.update(userToBlock);
     }
+
+
+
+    @Override
+    public void unblockUser(User user, int id) {
+        if (authorizationHelper.isBlockedUser(user) || !authorizationHelper.isAdmin(user)) {
+            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
+        }
+        User userToUnblock = getById(id);
+        if (authorizationHelper.isBlockedUser(userToUnblock)) {
+            userToUnblock.getRoles().remove(roleRepository.getByName("blockedUser"));
+            repository.update(userToUnblock);
+    } else {
+            throw new DuplicateEntityException(String.format("User with id: %d is already unblocked.", id));
+        }
+    }
+
+//    public void addPhoneNumber(User user, PhoneNumber number) {
+//
+//    }
 
     private void checkUsernameUniqueness(User user) {
         boolean duplicateExists = true;
@@ -97,5 +136,4 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateEntityException("User", "email", user.getEmail());
         }
     }
-
 }

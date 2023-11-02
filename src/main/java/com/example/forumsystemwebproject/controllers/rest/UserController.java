@@ -1,15 +1,13 @@
-package com.example.forumsystemwebproject.controllers;
+package com.example.forumsystemwebproject.controllers.rest;
 
 import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
-import com.example.forumsystemwebproject.helpers.mappers.PhoneNumberMapper;
 import com.example.forumsystemwebproject.helpers.mappers.UserMapper;
-import com.example.forumsystemwebproject.models.DTOs.UserDto;
 import com.example.forumsystemwebproject.models.User;
-import com.example.forumsystemwebproject.services.contracts.PhoneNumberService;
+import com.example.forumsystemwebproject.models.DTOs.UserDto;
 import com.example.forumsystemwebproject.services.contracts.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,17 +28,11 @@ public class UserController {
 
     private final AuthenticationHelper authenticationHelper;
 
-    private final PhoneNumberService phoneNumberService;
-
-    private final PhoneNumberMapper phoneNumberMapper;
-
     @Autowired
-    public UserController(UserService userService, UserMapper mapper, AuthenticationHelper authenticationHelper, PhoneNumberService phoneNumberService, PhoneNumberMapper phoneNumberMapper) {
+    public UserController(UserService userService, UserMapper mapper, AuthenticationHelper authenticationHelper) {
         this.userService = userService;
         this.mapper = mapper;
         this.authenticationHelper = authenticationHelper;
-        this.phoneNumberService = phoneNumberService;
-        this.phoneNumberMapper = phoneNumberMapper;
     }
 
     @GetMapping
@@ -97,24 +89,49 @@ public class UserController {
         }
     }
 
-//    @PatchMapping("/api/users/{id}")
-//    public void
+
     //TODO probably add something like users/{id}/block and on this endpoint an admin can block a user
 
     @DeleteMapping("/{id}")
-    public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+    public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id)  {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             userService.delete(user, id);
         } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,  e.getMessage());
+        } catch (EntityNotFoundException e ) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+        @PatchMapping("/api/users/{id}/block")
+    public void blockUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User authenticatedUser = authenticationHelper.tryGetUser(headers);
+            userService.blockUser(authenticatedUser, id);
+        } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
-
-
     }
 
+
+    @PatchMapping("/api/users/{id}/unblock")
+    public void unblockUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User authenticatedUser = authenticationHelper.tryGetUser(headers);
+            userService.unblockUser(authenticatedUser, id);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
+    }
 
 }
 

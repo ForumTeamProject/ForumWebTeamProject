@@ -16,13 +16,6 @@ public interface PostRepository {
 
     List<Post> getMostRecentlyCreatedPosts();
 
-    void addTagToPost(Post post, Tag tag);
-
-    void addTagsToPost(Post post, List<Tag> tags);
-
-    void deletePostTagAssociation(Post post, Tag tag);
-
-
     Post getById(int id);
 
     void create(Post post);

@@ -3,6 +3,7 @@ package com.example.forumsystemwebproject.repositories;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
 import com.example.forumsystemwebproject.models.User;
+import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -157,4 +158,6 @@ public class UserRepositoryImpl implements UserRepository {
 
         return orderBy;
     }
+
+
 }

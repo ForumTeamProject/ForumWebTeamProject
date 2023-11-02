@@ -19,8 +19,6 @@ public interface PostService {
 
     void addTagToPost(User userWhoAdds, Post post, Tag tag);
 
-    void addTagsToPost(User userWhoAdds, Post post, List<Tag> tags);
-
     void deleteTagFromPost(User userWhoDeletes, Post postFromWhichToDelete, Tag tag);
 
     Post getById(int id);

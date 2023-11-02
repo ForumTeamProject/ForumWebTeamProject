@@ -12,7 +12,7 @@ public interface TagService {
 
     Tag getByContent(String content);
 
-    void create(Tag tag, User user);
+    Tag create(Tag tag, User user);
 
     void delete(int id, User user);
 }

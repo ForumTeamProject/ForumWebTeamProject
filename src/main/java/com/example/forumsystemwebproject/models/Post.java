@@ -28,11 +28,11 @@ public class Post {
     private String content;
 
     @JsonIgnore
-    //@ManyToMany(fetch = FetchType.EAGER)
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
+    @ManyToMany(fetch = FetchType.EAGER)
+//    @ManyToMany(cascade = {
+//            CascadeType.PERSIST,
+//            CascadeType.MERGE
+//    })
     @JoinTable(
             name = "posts_tags",
             joinColumns = @JoinColumn(name = "post_id"),

@@ -1,4 +1,4 @@
-package com.example.forumsystemwebproject.controllers;
+package com.example.forumsystemwebproject.controllers.rest;
 
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
@@ -142,23 +142,6 @@ public class PostController {
             Post postToAddTag = postService.getById(id);
             Tag tagToAdd = tagMapper.fromDto(tagDto);
             postService.addTagToPost(authenticatedUser, postToAddTag, tagToAdd);
-        } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
-
-    @PostMapping("posts/{id}/tags")
-    public void addTagsToPost(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody List<TagDto> tagsDtos) {
-        try {
-            User authenticatedUser = authenticationHelper.tryGetUser(headers);
-            Post postToAddTag = postService.getById(id);
-            List<Tag> tags = new ArrayList<>();
-            for (TagDto dto : tagsDtos) {
-                tags.add(tagMapper.fromDto(dto));
-            }
-            postService.addTagsToPost(authenticatedUser, postToAddTag, tags);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {

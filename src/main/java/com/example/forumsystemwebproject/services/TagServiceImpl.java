@@ -4,26 +4,27 @@ import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
-import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.Tag;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.TagRepository;
 import com.example.forumsystemwebproject.services.contracts.TagService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.forumsystemwebproject.helpers.AuthorizationHelper.authorizeUser;
 
 @Service
 public class TagServiceImpl implements TagService {
 
     private static final String UNAUTHORIZED_ACCESS_MSG = "You do not have permission to edit this post!";
-    private final List<Role> authorizationRoles = AuthorizationHelper.makeRoleListFromArgs("admin", "user");
     private final TagRepository tagRepository;
+    private final AuthorizationHelper authorizationHelper;
 
-    public TagServiceImpl(TagRepository tagRepository) {
+    @Autowired
+    public TagServiceImpl(TagRepository tagRepository, AuthorizationHelper authorizationHelper) {
         this.tagRepository = tagRepository;
+        this.authorizationHelper = authorizationHelper;
     }
 
     @Override
@@ -33,7 +34,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag getById(int id) {
-        return tagRepository.getById(id);
+            return tagRepository.getById(id);
     }
 
     @Override
@@ -42,16 +43,19 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void create(Tag tag, User user) {
-        authorizeUser(user, authorizationRoles);
-        checkDuplicateExists(tag);
-        tagRepository.create(tag);
+    public Tag create(Tag tag, User user) {
+        try {
+            return tagRepository.getByContent(tag.getContent());
+        } catch (EntityNotFoundException e) {
+            tagRepository.create(tag);
+            return tagRepository.getByContent(tag.getContent());
+        }
     }
 
 
     @Override
     public void delete(int id, User user) {
-        if (AuthorizationHelper.isAdmin(user)) {
+        if (authorizationHelper.isAdmin(user)) {
             tagRepository.delete(id);
         }
         throw new UnauthorizedOperationException(UNAUTHORIZED_ACCESS_MSG);

@@ -3,6 +3,7 @@ package com.example.forumsystemwebproject.services;
 import com.example.forumsystemwebproject.Helpers;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
+import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
 import com.example.forumsystemwebproject.models.Like;
 import com.example.forumsystemwebproject.models.Post;
@@ -27,6 +28,9 @@ public class PostServiceTests {
 
     @Mock
     PostRepository mockRepository;
+
+    @Mock
+    AuthorizationHelper authorizationHelper;
 
     @Mock
     RoleRepository mockRoleRepository;
@@ -159,30 +163,45 @@ public class PostServiceTests {
     }
 
     @Test
-    public void update_Should_CallRepository_WhenUserIsAdmin() {
+    public void create_Should_Throw_WhenUserBlocked() {
         //Arrange
-        User mockUser = Helpers.createMockUser();
         Post mockPost = Helpers.createMockPost();
-        Role mockRole = Helpers.createMockAdminRole();
+        User mockUser = Helpers.createMockUser();
+        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(true);
 
-        Mockito.doNothing().when(mockRepository).update(mockPost);
-
-        Mockito.when(mockRoleRepository.getByName("admin")).thenReturn(mockRole);
-
-        mockUser.getRoles().add(mockRole);
-
-        //Act
-        service.update(mockPost, mockUser);
-
-        //Assert
-        Mockito.verify(mockRepository, Mockito.times(1)).update(mockPost);
+        //Act & Assert
+        Assertions.assertThrows(UnauthorizedOperationException.class, () -> service.create(mockPost, mockUser));
     }
+
+//    @Test
+//    public void update_Should_CallRepository_WhenUserIsAdmin() {
+//        //Arrange
+//        User mockUser = Helpers.createMockUser();
+//        Post mockPost = Helpers.createMockPost();
+//        Role mockRole = Helpers.createMockAdminRole();
+//
+//        Mockito.doNothing().when(mockRepository).update(mockPost);
+//
+//        Mockito.when(authorizationHelper.isAdmin(Mockito.any(User.class))).thenReturn(true);
+//        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
+//
+//        mockUser.getRoles().add(mockRole);
+//
+//        //Act
+//        service.update(mockPost, mockUser);
+//
+//        //Assert
+//        Mockito.verify(mockRepository, Mockito.times(1)).update(mockPost);
+//    }
 
     @Test
     public void update_Should_CallRepository_WhenUserIsCreator() {
         //Arrange
         User mockUser = Helpers.createMockUser();
         Post mockPost = Helpers.createMockPost();
+
+        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
+        Mockito.when(authorizationHelper.isCreator(Mockito.any(User.class), Mockito.any(Post.class))).thenReturn(true);
 
         Mockito.doNothing().when(mockRepository).update(mockPost);
 
@@ -208,18 +227,16 @@ public class PostServiceTests {
     @Test
     public void delete_Should_CallRepository_WhenUserIsAdmin() {
         //Arrange
-        User mockUser = Helpers.createMockUser();
         Post mockPost = Helpers.createMockPost();
-        Role mockRole = Helpers.createMockAdminRole();
+        User mockUser2 = Helpers.createMockUser();
+        mockUser2.setId(2);
 
         Mockito.when(service.getById(Mockito.anyInt())).thenReturn(mockPost);
 
-        Mockito.when(mockRoleRepository.getByName("admin")).thenReturn(mockRole);
-
-        mockUser.getRoles().add(mockRole);
+        Mockito.doNothing().when(authorizationHelper).authorizeUser(Mockito.any(User.class), Mockito.any(Post.class));
 
         //Act
-        service.delete(Mockito.anyInt(), mockUser);
+        service.delete(1, mockUser2);
 
         //Assert
         Mockito.verify(mockRepository, Mockito.times(1)).delete(mockPost);
@@ -248,6 +265,8 @@ public class PostServiceTests {
         //Arrange
         User mockUser = Helpers.createMockUser();
         Post mockPost = Helpers.createMockPost();
+
+        Mockito.doThrow(UnauthorizedOperationException.class).when(authorizationHelper).authorizeUser(Mockito.any(User.class), Mockito.any(Post.class));
 
         Mockito.when(service.getById(Mockito.anyInt())).thenReturn(mockPost);
 

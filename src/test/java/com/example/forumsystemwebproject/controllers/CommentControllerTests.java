@@ -219,7 +219,7 @@ public class CommentControllerTests {
         Comment mockComment = Helpers.createMockComment();
         Mockito.when(mockAuthenticationHelper.tryGetUser(Mockito.any(HttpHeaders.class))).thenReturn(mockUser);
         Mockito.when(mockCommentMapper.fromDto(Mockito.any(CommentDto.class))).thenReturn(mockComment);
-        Mockito.doThrow(EntityNotFoundException.class).when(mockService).create(mockComment, 1);
+        Mockito.doThrow(EntityNotFoundException.class).when(mockService).create(mockComment, 1, mockUser);
         String body = Helpers.toJson(Helpers.createMockCommentDto());
 
         //Act & Assert

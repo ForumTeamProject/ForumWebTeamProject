@@ -1,4 +1,4 @@
-package com.example.forumsystemwebproject.controllers;
+package com.example.forumsystemwebproject.controllers.rest;
 
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
@@ -104,7 +104,7 @@ public class CommentController {
             User user = authenticationHelper.tryGetUser(headers);
             Comment commentToCreate = mapper.fromDto(dto);
             commentToCreate.setUser(user);
-            service.create(commentToCreate, id);
+            service.create(commentToCreate, id, user);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {

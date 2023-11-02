@@ -1,6 +1,8 @@
 package com.example.forumsystemwebproject.services;
 
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
+import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
+import com.example.forumsystemwebproject.helpers.AuthorizationHelperImpl;
 import com.example.forumsystemwebproject.helpers.filters.CommentFilterOptions;
 import com.example.forumsystemwebproject.models.Comment;
 import com.example.forumsystemwebproject.models.Post;
@@ -21,14 +23,13 @@ public class CommentServiceImpl implements CommentService {
 
     private final PostRepository postRepository;
 
-
-    private final RoleRepository roleRepository;
+    private final AuthorizationHelper authorizationHelper;
 
     @Autowired
-    public CommentServiceImpl(CommentRepository repository, PostRepository postRepository, RoleRepository roleRepository) {
+    public CommentServiceImpl(CommentRepository repository, PostRepository postRepository, AuthorizationHelper authorizationHelper) {
         this.repository = repository;
         this.postRepository = postRepository;
-        this.roleRepository = roleRepository;
+        this.authorizationHelper = authorizationHelper;
     }
 
     @Override
@@ -53,7 +54,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void create(Comment comment, int id) {
+    public void create(Comment comment, int id, User user) {
+        if (authorizationHelper.isBlockedUser(user)) {
+            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
+        }
         Post post = postRepository.getById(id);
         comment.setPost(post);
         repository.create(comment);
@@ -61,20 +65,18 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void update(Comment comment, User user) {
-        if (user.getId() != comment.getUser().getId()) {
-            throw new UnauthorizedOperationException("You do not have permission to edit this comment!");
-        } else {
-            repository.update(comment);
+        if (authorizationHelper.isBlockedUser(user) || !authorizationHelper.isCreator(user, comment)) {
+            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
         }
+        repository.update(comment);
     }
 
     @Override
     public void delete(int id, User user) {
         Comment commentToDelete = getById(id);
-        if (user.getId() != commentToDelete.getUser().getId()) {
-            throw new UnauthorizedOperationException("You do not have permission to delete this comment!");
-        } else {
-            repository.delete(commentToDelete);
+        if (authorizationHelper.isBlockedUser(user) || !authorizationHelper.isCreator(user, commentToDelete)) {
+            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
         }
+        repository.delete(commentToDelete);
     }
 }

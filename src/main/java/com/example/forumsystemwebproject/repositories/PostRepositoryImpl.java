@@ -7,6 +7,7 @@ import com.example.forumsystemwebproject.models.Tag;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
 import com.example.forumsystemwebproject.repositories.contracts.PostTagRepository;
+import com.example.forumsystemwebproject.repositories.contracts.TagRepository;
 import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -23,15 +24,11 @@ import java.util.Map;
 public class PostRepositoryImpl implements PostRepository {
 
     private final SessionFactory sessionFactory;
-
     private final UserRepository userRepository;
-    private final PostTagRepository postTagRepository;
-
     @Autowired
-    public PostRepositoryImpl(SessionFactory sessionFactory, UserRepository userRepository, PostTagRepository postTagRepository) {
+    public PostRepositoryImpl(SessionFactory sessionFactory, UserRepository userRepository) {
         this.sessionFactory = sessionFactory;
         this.userRepository = userRepository;
-        this.postTagRepository = postTagRepository;
     }
 
     @Override
@@ -154,21 +151,6 @@ public class PostRepositoryImpl implements PostRepository {
             session.remove(post);
             session.getTransaction().commit();
         }
-    }
-
-    @Override
-    public void addTagToPost(Post post, Tag tag) {
-        postTagRepository.addTagToPost(post, tag);
-    }
-
-    @Override
-    public void addTagsToPost(Post post, List<Tag> tags) {
-        postTagRepository.createPostTagsAssociation(post, tags);
-    }
-
-    @Override
-    public void deletePostTagAssociation(Post post, Tag tag) {
-        postTagRepository.deletePostTagAssociation(post, tag);
     }
 
     private String generateOrderBy(PostFilterOptions postFilterOptions) {

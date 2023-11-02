@@ -44,4 +44,11 @@ public class PostMapper {
         post.setCreationDate(new Date());
         return post;
     }
+
+    public PostDto toDto(Post post) {
+        PostDto dto = new PostDto();
+        dto.setTitle(post.getTitle());
+        dto.setContent(post.getContent());
+        return dto;
+    }
 }

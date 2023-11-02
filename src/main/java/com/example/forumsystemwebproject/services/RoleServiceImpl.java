@@ -3,21 +3,27 @@ package com.example.forumsystemwebproject.services;
 import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
+import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
+import com.example.forumsystemwebproject.helpers.AuthorizationHelperImpl;
 import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import com.example.forumsystemwebproject.services.contracts.RoleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class RoleServiceImpl implements RoleService {
-
     private final RoleRepository roleRepository;
 
-    public RoleServiceImpl(RoleRepository roleRepository) {
+    private final AuthorizationHelper authorizationHelper;
+
+    @Autowired
+    public RoleServiceImpl(RoleRepository roleRepository, AuthorizationHelper authorizationHelper) {
         this.roleRepository = roleRepository;
+        this.authorizationHelper = authorizationHelper;
     }
 
     @Override
@@ -37,8 +43,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void create(Role role, User authenticatedUser) {
-        if (!(authenticatedUser.getRoles().contains(roleRepository.getByName("admin")))) {
-            throw new UnauthorizedOperationException("You do not have permission to change roles");
+        if (!authorizationHelper.isAdmin(authenticatedUser)) {
+            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", authenticatedUser.getUsername()));
         }
         checkRoleUniqueness(role);
         roleRepository.create(role);
@@ -46,8 +52,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void update(Role role, User authenticatedUser) {
-        if (!(authenticatedUser.getRoles().contains(roleRepository.getByName("admin")))) {
-            throw new UnauthorizedOperationException("You do not have permission to change roles");
+        if (!authorizationHelper.isAdmin(authenticatedUser)) {
+            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", authenticatedUser.getUsername()));
         }
         checkRoleUniqueness(role);
         roleRepository.update(role);
@@ -55,8 +61,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void delete(int id, User authenticatedUser) {
-        if (!(authenticatedUser.getRoles().contains(roleRepository.getByName("admin")))) {
-            throw new UnauthorizedOperationException("You do not have permission to change roles");
+        if (!authorizationHelper.isAdmin(authenticatedUser)) {
+            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User","username", authenticatedUser.getUsername()));
         }
         roleRepository.delete(id);
     }

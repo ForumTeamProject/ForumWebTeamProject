@@ -4,6 +4,7 @@ import com.example.forumsystemwebproject.Helpers;
 import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
+import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.models.PhoneNumber;
 import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.User;
@@ -13,6 +14,7 @@ import org.hibernate.action.internal.EntityActionVetoException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -24,6 +26,9 @@ public class PhoneNumberServiceTests {
 
     @Mock
     PhoneNumberRepository mockRepository;
+
+    @Mock
+    AuthorizationHelper authorizationHelper;
 
     @Mock
     RoleRepository mockRoleRepository;
@@ -86,7 +91,7 @@ public class PhoneNumberServiceTests {
         Role mockRole = Helpers.createMockAdminRole();
         PhoneNumber mockNumber = Helpers.createMockPhoneNumber();
 
-        Mockito.when(mockRoleRepository.getByName("admin")).thenReturn(mockRole);
+        Mockito.when(authorizationHelper.isAdmin(Mockito.any(User.class))).thenReturn(false);
 
         //Act & Assert
         Assertions.assertThrows(UnauthorizedOperationException.class, () -> service.create(mockNumber, mockUser));
@@ -101,7 +106,8 @@ public class PhoneNumberServiceTests {
         PhoneNumber mockNumber = Helpers.createMockPhoneNumber();
         mockUser.getRoles().add(mockRole);
 
-        Mockito.when(mockRoleRepository.getByName("admin")).thenReturn(mockRole);
+        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
+        Mockito.when(authorizationHelper.isAdmin(Mockito.any(User.class))).thenReturn(true);
 
         Mockito.when(mockRepository.getById(Mockito.anyInt())).thenThrow(EntityNotFoundException.class);
 
@@ -121,7 +127,8 @@ public class PhoneNumberServiceTests {
         PhoneNumber mockNumber = Helpers.createMockPhoneNumber();
         mockUser.getRoles().add(mockRole);
 
-        Mockito.when(mockRoleRepository.getByName("admin")).thenReturn(mockRole);
+        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
+        Mockito.when(authorizationHelper.isAdmin(Mockito.any(User.class))).thenReturn(true);
 
         Mockito.when(mockRepository.getById(Mockito.anyInt())).thenReturn(mockNumber);
 
@@ -137,7 +144,8 @@ public class PhoneNumberServiceTests {
         PhoneNumber mockNumber = Helpers.createMockPhoneNumber();
         mockUser.getRoles().add(mockRole);
 
-        Mockito.when(mockRoleRepository.getByName("admin")).thenReturn(mockRole);
+        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
+        Mockito.when(authorizationHelper.isAdmin(Mockito.any(User.class))).thenReturn(true);
 
         Mockito.when(mockRepository.getById(Mockito.anyInt())).thenThrow(EntityNotFoundException.class);
 
@@ -165,6 +173,8 @@ public class PhoneNumberServiceTests {
         User mockUser = Helpers.createMockUser();
         PhoneNumber mockNumber = Helpers.createMockPhoneNumber();
 
+        Mockito.when(authorizationHelper.isCreator(Mockito.any(User.class), Mockito.any(PhoneNumber.class))).thenReturn(true);
+
         Mockito.when(mockRepository.getById(Mockito.anyInt())).thenReturn(mockNumber);
 
         //Act & Assert
@@ -177,6 +187,7 @@ public class PhoneNumberServiceTests {
         User mockUser = Helpers.createMockUser();
         PhoneNumber mockNumber = Helpers.createMockPhoneNumber();
 
+        Mockito.when(authorizationHelper.isCreator(Mockito.any(User.class), Mockito.any(PhoneNumber.class))).thenReturn(true);
         Mockito.when(mockRepository.getById(Mockito.anyInt())).thenThrow(EntityNotFoundException.class);
 
         //Act
@@ -215,6 +226,8 @@ public class PhoneNumberServiceTests {
         User mockUser = Helpers.createMockUser();
 
         Mockito.when(mockRepository.getById(Mockito.anyInt())).thenReturn(mockNumber);
+
+        Mockito.when(authorizationHelper.isCreator(Mockito.any(User.class), Mockito.any(PhoneNumber.class))).thenReturn(true);
 
         //Act
         service.delete(Mockito.anyInt(), mockUser);

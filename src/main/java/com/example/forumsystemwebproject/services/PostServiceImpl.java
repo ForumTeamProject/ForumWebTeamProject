@@ -3,14 +3,17 @@ package com.example.forumsystemwebproject.services;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
+import com.example.forumsystemwebproject.helpers.AuthorizationHelperImpl;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
 import com.example.forumsystemwebproject.models.*;
+import com.example.forumsystemwebproject.repositories.TagRepositoryImpl;
 import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
 import com.example.forumsystemwebproject.repositories.contracts.PostTagRepository;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import com.example.forumsystemwebproject.repositories.contracts.TagRepository;
 import com.example.forumsystemwebproject.services.contracts.LikeService;
 import com.example.forumsystemwebproject.services.contracts.PostService;
+import com.example.forumsystemwebproject.services.contracts.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,25 +21,18 @@ import java.util.List;
 
 @Service
 public class PostServiceImpl implements PostService {
-    private final List<Role> authorizationRoles = AuthorizationHelper.makeRoleListFromArgs("user");
-    private final List<Role> authorizationRolesForDelete = AuthorizationHelper.makeRoleListFromArgs("user", "admin");
-
+    private final AuthorizationHelper authorizationHelper;
     private final PostRepository postRepository;
-
-    private final RoleRepository roleRepository;
-
-    private final TagRepository tagRepository;
-    private final PostTagRepository postTagRepository;
-
     private final LikeService likeService;
 
+    private final TagService tagService;
+
     @Autowired
-    public PostServiceImpl(PostRepository postRepository, RoleRepository roleRepository, LikeService likeService, TagRepository tagRepository, PostTagRepository postTagRepository) {
+    public PostServiceImpl(PostRepository postRepository, LikeService likeService, AuthorizationHelper authorizationHelper, TagService tagService) {
         this.postRepository = postRepository;
-        this.roleRepository = roleRepository;
-        this.tagRepository = tagRepository;
-        this.postTagRepository = postTagRepository;
         this.likeService = likeService;
+        this.authorizationHelper = authorizationHelper;
+        this.tagService = tagService;
     }
 
     @Override
@@ -77,62 +73,43 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void create(Post post, User user) {
+        if (authorizationHelper.isBlockedUser(user)) {
+            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
+        }
         post.setUser(user);
         postRepository.create(post);
     }
 
     @Override
     public void update(Post post, User user) {
-        if (checkPermission(post, user)) {
-            postRepository.update(post);
-        } else {
-            throw new UnauthorizedOperationException("You do not have permission to edit this post!");
+        if (authorizationHelper.isBlockedUser(user) || !authorizationHelper.isCreator(user, post)) {
+           throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
         }
+        postRepository.update(post);
     }
 
     @Override
     public void delete(int id, User user) {
         Post postToDelete = getById(id);
-        if (checkPermission(postToDelete, user)) {
-            postRepository.delete(postToDelete);
-        } else {
-            throw new UnauthorizedOperationException("You do not have permission to delete this post!");
-        }
-    }
-
-    private boolean checkPermission(Post post, User user) {
-        return user.getRoles().contains(roleRepository.getByName("admin")) || post.getUser() == user;
+        authorizationHelper.authorizeUser(user, postToDelete);
+        postRepository.delete(postToDelete);
     }
 
     public void addTagToPost(User userWhoAdds, Post post, Tag tag) {
-        AuthorizationHelper.authorizeUser(userWhoAdds, authorizationRolesForDelete);
-
-        if (post.getUser().getId() == userWhoAdds.getId() || AuthorizationHelper.isAdmin(userWhoAdds)) {
-            postRepository.addTagToPost(post, tag);
-        } else {
-            throw new UnauthorizedOperationException("You do not have permission to add this tag!");
+        if (authorizationHelper.isBlockedUser(userWhoAdds) || !authorizationHelper.isCreator(userWhoAdds, post)) {
+            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", userWhoAdds.getUsername()));
         }
-    }
 
-    public void addTagsToPost(User userWhoAdds, Post post, List<Tag> tags) {
-        AuthorizationHelper.authorizeUser(userWhoAdds, authorizationRolesForDelete);
-
-        if (post.getUser().getId() == userWhoAdds.getId() || AuthorizationHelper.isAdmin(userWhoAdds)) {
-            postRepository.addTagsToPost(post, tags);
-        } else {
-            throw new UnauthorizedOperationException("You do not have permission to add these tags!");
-        }
+        Tag newTag = tagService.create(tag, userWhoAdds);
+        post.getTags().add(newTag);
+        postRepository.update(post);
     }
 
     public void deleteTagFromPost(User userWhoDeletes, Post postFromWhichToDelete, Tag tag) {
-        AuthorizationHelper.authorizeUser(userWhoDeletes, authorizationRolesForDelete);
-
-        if (postFromWhichToDelete.getUser().getId() == userWhoDeletes.getId() || AuthorizationHelper.isAdmin(userWhoDeletes)) {
-            postRepository.deletePostTagAssociation(postFromWhichToDelete, tag);
-        } else {
-            throw new UnauthorizedOperationException("You do not have permission to remove this tag!");
+        if (authorizationHelper.isBlockedUser(userWhoDeletes) || !authorizationHelper.isCreator(userWhoDeletes, postFromWhichToDelete)) {
+            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", userWhoDeletes.getUsername()));
         }
+        postFromWhichToDelete.getTags().remove(tag);
+        postRepository.update(postFromWhichToDelete);
     }
-
-
 }

@@ -1,5 +1,7 @@
 package com.example.forumsystemwebproject.helpers.filters;
 
+import com.example.forumsystemwebproject.models.DTOs.PostFilterDto;
+
 import java.util.Optional;
 
 public class PostFilterOptions {
