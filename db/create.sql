@@ -45,10 +45,11 @@ create table posts
 (
     post_id       int auto_increment
         primary key,
-    user_id       int         not null,
-    title         varchar(64) not null,
-    content       text        not null,
-    creation_date timestamp   not null,
+    user_id       int          not null,
+    title         varchar(64)  not null,
+    content       text         not null,
+    creation_date timestamp    not null,
+    photo_url     varchar(100),
     constraint posts_users_fk
         foreign key (user_id) references users (user_id)
 );

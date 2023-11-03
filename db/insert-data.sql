@@ -1,89 +1,60 @@
-INSERT INTO tags (content) VALUES
-                               ('Technology'),
-                               ('Travel'),
-                               ('Food'),
-                               ('Fashion'),
-                               ('Sports'),
-                               ('Music'),
-                               ('Science'),
-                               ('Movies'),
-                               ('Health'),
-                               ('Books');
+INSERT INTO roles (name) VALUES ('blockedUser'), ('admin'), ('user');
 
--- Insert sample data for the "users" table
+-- Sample records for 'tags'
+INSERT INTO tags (content) VALUES
+                               ('Tag 1'), ('Tag 2'), ('Tag 3'), ('Tag 4'), ('Tag 5'),
+                               ('Tag 6'), ('Tag 7'), ('Tag 8'), ('Tag 9'), ('Tag 10');
+
+-- Sample records for 'users'
 INSERT INTO users (first_name, last_name, email, username, password) VALUES
                                                                          ('John', 'Doe', 'john@example.com', 'johndoe', 'password1'),
                                                                          ('Jane', 'Smith', 'jane@example.com', 'janesmith', 'password2'),
-                                                                         ('Robert', 'Johnson', 'robert@example.com', 'robertjohnson', 'password3'),
-                                                                         ('Emily', 'Davis', 'emily@example.com', 'emilydavis', 'password4'),
-                                                                         ('Michael', 'Brown', 'michael@example.com', 'michaelbrown', 'password5'),
-                                                                         ('Sarah', 'Williams', 'sarah@example.com', 'sarahwilliams', 'password6'),
-                                                                         ('David', 'Jones', 'david@example.com', 'davidjones', 'password7'),
-                                                                         ('Olivia', 'Miller', 'olivia@example.com', 'oliviamiller', 'password8'),
-                                                                         ('William', 'Wilson', 'william@example.com', 'williamwilson', 'password9'),
-                                                                         ('Linda', 'Lee', 'linda@example.com', 'lindalee', 'password10');
+                                                                         ('Mike', 'Johnson', 'mike@example.com', 'mikejohnson', 'password3'),
+                                                                         ('Emily', 'Brown', 'emily@example.com', 'emilybrown', 'password4'),
+                                                                         ('Chris', 'Lee', 'chris@example.com', 'chrislee', 'password5'),
+                                                                         ('Ava', 'Garcia', 'ava@example.com', 'avagarcia', 'password6'),
+                                                                         ('David', 'Martinez', 'david@example.com', 'davidmartinez', 'password7'),
+                                                                         ('Sophia', 'Lopez', 'sophia@example.com', 'sophialopez', 'password8'),
+                                                                         ('Michael', 'Hill', 'michael@example.com', 'michaelhill', 'password9'),
+                                                                         ('Emma', 'Adams', 'emma@example.com', 'emmaadams', 'password10');
 
--- Insert sample data for the "phone_numbers" table
+-- Sample records for 'phone_numbers'
 INSERT INTO phone_numbers (user_id, number) VALUES
-                                                (1, '123-456-7890'),
-                                                (2, '987-654-3210'),
-                                                (3, '555-123-4567'),
-                                                (4, '123-555-7890'),
-                                                (5, '987-123-3210'),
-                                                (6, '555-123-5555'),
-                                                (7, '123-555-1234'),
-                                                (8, '987-123-9876'),
-                                                (9, '555-987-5555'),
-                                                (10, '123-123-1234');
+                                                (1, '1234567890'), (2, '2345678901'), (3, '3456789012'), (4, '4567890123'),
+                                                (5, '5678901234'), (6, '6789012345'), (7, '7890123456'), (8, '8901234567'),
+                                                (9, '9012345678'), (10, '0123456789');
 
--- Insert sample data for the "posts" table
-INSERT INTO posts (user_id, title, content, creation_date) VALUES
-                                                               (1, 'Introduction to Java Programming', 'This is a Java programming tutorial.', NOW()),
-                                                               (2, 'Traveling to Paris', 'My recent trip to Paris was amazing!', NOW()),
-                                                               (3, 'Delicious Italian Recipes', 'Learn how to make authentic Italian dishes.', NOW()),
-                                                               (4, 'Fashion Trends for 2023', 'Discover the latest fashion trends.', NOW()),
-                                                               (5, 'Top 10 Sports Moments of the Year', 'Recap of the most exciting sports events.', NOW()),
-                                                               (6, 'Music Concert Highlights', 'Relive the best moments from the music concert.', NOW()),
-                                                               (7, 'Latest Scientific Discoveries', 'Explore recent breakthroughs in science.', NOW()),
-                                                               (8, 'Must-Watch Movies of the Year', 'Check out the top films of 2023.', NOW()),
-                                                               (9, 'Healthy Living Tips', 'Tips for maintaining a healthy lifestyle.', NOW()),
-                                                               (10, 'Best Books of the Year', 'A list of recommended books to read.', NOW());
+-- Sample records for 'posts' (with photo_url set to NULL)
+INSERT INTO posts (user_id, title, content, creation_date, photo_url) VALUES
+                                                                          (1, 'Post 1', 'Content for Post 1', CURRENT_TIMESTAMP, NULL),
+                                                                          (2, 'Post 2', 'Content for Post 2', CURRENT_TIMESTAMP, NULL),
+                                                                          (3, 'Post 3', 'Content for Post 3', CURRENT_TIMESTAMP, NULL),
+                                                                          (4, 'Post 4', 'Content for Post 4', CURRENT_TIMESTAMP, NULL),
+                                                                          (5, 'Post 5', 'Content for Post 5', CURRENT_TIMESTAMP, NULL),
+                                                                          (6, 'Post 6', 'Content for Post 6', CURRENT_TIMESTAMP, NULL),
+                                                                          (7, 'Post 7', 'Content for Post 7', CURRENT_TIMESTAMP, NULL),
+                                                                          (8, 'Post 8', 'Content for Post 8', CURRENT_TIMESTAMP, NULL),
+                                                                          (9, 'Post 9', 'Content for Post 9', CURRENT_TIMESTAMP, NULL),
+                                                                          (10, 'Post 10', 'Content for Post 10', CURRENT_TIMESTAMP, NULL);
 
--- Insert sample data for the "likes" table
+-- Sample records for 'likes'
 INSERT INTO likes (post_id, user_id) VALUES
-                                         (1, 2),
-                                         (2, 3),
-                                         (3, 4),
-                                         (4, 5),
-                                         (5, 6),
-                                         (6, 7),
-                                         (7, 8),
-                                         (8, 9),
-                                         (9, 10),
-                                         (10, 1);
+                                         (1, 2), (1, 4), (2, 3), (3, 1), (4, 5),
+                                         (5, 7), (6, 6), (6, 9), (7, 8), (8, 10);
 
--- Insert sample data for the "posts_tags" table
+-- Sample records for 'posts_tags'
 INSERT INTO posts_tags (post_id, tag_id) VALUES
-                                             (1, 1),
-                                             (2, 2),
-                                             (3, 3),
-                                             (4, 4),
-                                             (5, 5),
-                                             (6, 6),
-                                             (7, 7),
-                                             (8, 8),
-                                             (9, 9),
-                                             (10, 10);
+                                             (1, 2), (1, 4), (2, 3), (3, 5), (4, 1),
+                                             (5, 6), (6, 8), (6, 10), (7, 7), (8, 9);
 
--- Insert sample data for the "replies" table
+-- Sample records for 'replies'
 INSERT INTO replies (post_id, user_id, content) VALUES
-                                                    (1, 2, 'Great tutorial!'),
-                                                    (2, 3, 'Paris is amazing, indeed!'),
-                                                    (3, 4, 'I love Italian food.'),
-                                                    (4, 5, 'Fashion is my passion.'),
-                                                    (5, 6, 'What a year for sports!'),
-                                                    (6, 7, 'The concert was fantastic.'),
-                                                    (7, 8, 'Science never ceases to amaze me.'),
-                                                    (8, 9, 'Movies are a great escape.'),
-                                                    (9, 10, 'Health is wealth.'),
-                                                    (10, 1, 'I love reading books.');
+                                                    (1, 3, 'Reply to Post 1'), (2, 5, 'Reply to Post 2'), (3, 1, 'Reply to Post 3'),
+                                                    (4, 6, 'Reply to Post 4'), (5, 8, 'Reply to Post 5'), (6, 2, 'Reply to Post 6'),
+                                                    (7, 4, 'Reply to Post 7'), (8, 7, 'Reply to Post 8'), (9, 10, 'Reply to Post 9'),
+                                                    (10, 9, 'Reply to Post 10');
+
+-- Sample records for 'roles_users'
+INSERT INTO roles_users (role_id, user_id) VALUES
+                                               (1, 3), (1, 5), (1, 7), (1, 9), (1, 2),
+                                               (2, 1), (2, 4), (2, 6), (2, 8), (3, 10);

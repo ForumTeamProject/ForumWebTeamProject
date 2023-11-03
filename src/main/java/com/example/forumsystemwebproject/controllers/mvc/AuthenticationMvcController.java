@@ -50,7 +50,7 @@ public class AuthenticationMvcController {
 
         try {
             User user = authenticationHelper.verifyAuthentication(dto.getUsername(), dto.getPassword());
-            session.setAttribute("currentUser", user.getUsername());
+            session.setAttribute("currentUser", user);
             return "redirect:/";
         } catch (AuthenticationFailureException e) {
             bindingResult.rejectValue("password", "password_error", e.getMessage());

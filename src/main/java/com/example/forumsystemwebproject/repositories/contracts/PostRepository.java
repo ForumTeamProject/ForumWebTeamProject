@@ -18,6 +18,8 @@ public interface PostRepository {
 
     Post getById(int id);
 
+    long getCount();
+
     void create(Post post);
 
     void update(Post post);

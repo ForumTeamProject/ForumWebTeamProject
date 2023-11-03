@@ -13,6 +13,8 @@ public interface UserRepository {
 
     User getByUsername(String username);
 
+    long getCount();
+
     User getByEmail(String email);
 
     void create(User user);

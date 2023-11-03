@@ -47,14 +47,9 @@ public class Post {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id")
     private Set<Like> likes;
-//    @JsonIgnore
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "posts_tags",
-//            joinColumns = @JoinColumn(name = "post_id"),
-//            inverseJoinColumns = @JoinColumn(name = "tag_id")
-//    )
-//    private Set<Tag> tags;
+
+    @Column(name="photo_url")
+    private String photoUrl;
 
     public Post() {
     }
@@ -123,5 +118,13 @@ public class Post {
     @Override
     public boolean equals(Object obj) {
         return super.equals(obj);
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

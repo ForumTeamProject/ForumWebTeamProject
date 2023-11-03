@@ -3,11 +3,8 @@ package com.example.forumsystemwebproject.repositories;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
 import com.example.forumsystemwebproject.models.Post;
-import com.example.forumsystemwebproject.models.Tag;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
-import com.example.forumsystemwebproject.repositories.contracts.PostTagRepository;
-import com.example.forumsystemwebproject.repositories.contracts.TagRepository;
 import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -104,12 +101,13 @@ public class PostRepositoryImpl implements PostRepository {
     public List<Post> getMostCommented() {
         try (Session session = sessionFactory.openSession()) {
             Query<Post> query = session.createQuery("""
-                    SELECT p.id, p.title, COUNT(c.id) AS comment_count
-                    FROM Post p
-                    LEFT JOIN Comment c on p.id = c.post.id
-                    GROUP BY p.id, p.title
-                    ORDER BY comment_count DESC
-                    LIMIT 10""", Post.class);
+                SELECT p
+                FROM Post p
+                LEFT JOIN Comment c ON p.id = c.post.id
+                GROUP BY p
+                ORDER BY COUNT(c.id) DESC
+                """, Post.class)
+                    .setMaxResults(10); // Limit the result to 10
 
             return query.list();
         }
@@ -125,6 +123,14 @@ public class PostRepositoryImpl implements PostRepository {
                     """, Post.class);
 
             return query.list();
+        }
+    }
+
+    @Override
+    public long getCount() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Long> query = session.createQuery("select COUNT(p) from Post p", Long.class);
+            return query.uniqueResult();
         }
     }
 

@@ -10,6 +10,7 @@ import com.example.forumsystemwebproject.models.DTOs.PostDto;
 import com.example.forumsystemwebproject.models.DTOs.PostFilterDto;
 import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.User;
+import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import com.example.forumsystemwebproject.services.contracts.PostService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -29,11 +30,17 @@ public class PostMvcController {
 
     private final PostMapper mapper;
 
+    private final RoleRepository roleRepository;
+
     @Autowired
-    public PostMvcController(PostService postService, AuthenticationHelper authenticationHelper, PostMapper mapper) {
+    public PostMvcController(PostService postService,
+                             AuthenticationHelper authenticationHelper,
+                             PostMapper mapper,
+                             RoleRepository roleRepository) {
         this.postService = postService;
         this.authenticationHelper = authenticationHelper;
         this.mapper = mapper;
+        this.roleRepository = roleRepository;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -79,7 +86,7 @@ public class PostMvcController {
             return "redirect/auth/login";
         }
         model.addAttribute("post", new PostDto());
-        return "post-new";
+        return "PostForm";
     }
 
     @PostMapping("/create")
@@ -183,6 +190,16 @@ public class PostMvcController {
             model.addAttribute("error", e.getMessage());
             return "not-found";
         }
+    }
+
+    @ModelAttribute("isAdmin")
+    public boolean isAdmin(HttpSession session) {
+        User user = (User) session.getAttribute("currentUser");
+        if (user != null && user.getRoles() != null) {
+            return user.getRoles().contains(roleRepository.getByName("admin"));
+        }
+
+        return false;
     }
     //TODO this method needs to be reworked probably after the apply theme lecture ^^^
 }
