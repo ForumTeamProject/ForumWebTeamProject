@@ -46,7 +46,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticationHelper {
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
-    public static final String INVALID_AUTHENTICATION_ERROR = "Wrong username or password";
+    public static final String INVALID_AUTHENTICATION_ERROR = "Wrong username or password !";
     private final UserService userService;
 
     @Autowired

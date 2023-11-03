@@ -15,7 +15,7 @@
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
 </head>
 
-<header th:fragment="header">
+<header th:fragment="header" class="masthead">
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,24 +27,41 @@
                     <a class="nav-link" th:unless="${isAuthenticated}" th:text="Welcome">Welcome</a>
                 </h3>
                 <h3 class="nav-item" th:if="${isAuthenticated}">
-                    <a class="nav-link" th:text="${session.currentUser}" th:href="@{'/users/' + ${session.currentUser.id}}">Username</a>
+                    <a class="nav-link" th:text="${session.currentUser.username}" th:href="@{'/users/' + ${session.currentUser.id}}">Username</a>
                 </h3>
                 <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                     <li class="nav-item"><a class="nav-link" href="#" th:href="@{/auth/login}" th:unless="${isAuthenticated}">Login</a></li>
                     <li class="nav-item"><a class="nav-link" href="#" th:href="@{/auth/register}" th:unless="${isAuthenticated}">Register</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/auth/register}" th:if="${isAuthenticated && isAdmin}">Admin Portal</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/posts}">Posts</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about">Activity</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/auth/portal}" th:if="${isAdmin}">Admin Portal</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/}" th:if="${isAuthenticated}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/posts}" th:if="${isAuthenticated}">Posts</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/auth/logout}" th:if="${isAuthenticated}">Logout</a></li>
                 </ul>
             </div>
         </div>
     </nav>
+
+    <div class="container">
+        <div class="masthead-subheading">Welcome To Pet Lounge</div>
+        <div class="masthead-heading text-uppercase">Where Pets Unite!</div>
+        <a class="btn btn-primary btn-xl text-uppercase" th:href="@{/#services}">Tell Me More</a>
+    </div>
 </header>
 
-
-
-
-<footer></footer>
+<footer th:fragment="footer" class="footer py-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-4 text-lg-start">Copyright &copy; Your Website 2023</div>
+            <div class="col-lg-4 my-3 my-lg-0">
+                <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a class="link-dark text-decoration-none me-3" href="#!">Privacy Policy</a>
+                <a class="link-dark text-decoration-none" href="#!">Terms of Use</a>
+            </div>
+        </div>
+    </div>
+</footer>
 

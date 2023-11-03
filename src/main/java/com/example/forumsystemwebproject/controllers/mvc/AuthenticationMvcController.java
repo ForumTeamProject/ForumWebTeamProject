@@ -2,7 +2,6 @@ package com.example.forumsystemwebproject.controllers.mvc;
 
 import com.example.forumsystemwebproject.exceptions.AuthenticationFailureException;
 import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
-import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
 import com.example.forumsystemwebproject.helpers.mappers.UserMapper;
 import com.example.forumsystemwebproject.models.DTOs.LoginDto;
@@ -36,16 +35,17 @@ public class AuthenticationMvcController {
         this.userMapper = userMapper;
         this.userService = userService;
     }
+
     @GetMapping("/login")
     public String showLoginPage(Model model) {
         model.addAttribute("login", new LoginDto());
-        return "login";
+        return "LoginView";
     }
 
     @PostMapping("/login")
     public String handleLogin(@Valid @ModelAttribute("login") LoginDto dto, HttpSession session, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "login";
+            return "LoginView";
         }
 
         try {
@@ -54,7 +54,7 @@ public class AuthenticationMvcController {
             return "redirect:/";
         } catch (AuthenticationFailureException e) {
             bindingResult.rejectValue("password", "password_error", e.getMessage());
-            return "login";
+            return "LoginView";
         }
     }
 

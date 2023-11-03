@@ -194,8 +194,8 @@ public class PostMvcController {
 
     @ModelAttribute("isAdmin")
     public boolean isAdmin(HttpSession session) {
-        User user = (User) session.getAttribute("currentUser");
-        if (user != null && user.getRoles() != null) {
+        if (populateIsAuthenticated(session)) {
+            User user = (User) session.getAttribute("currentUser");
             return user.getRoles().contains(roleRepository.getByName("admin"));
         }
 
