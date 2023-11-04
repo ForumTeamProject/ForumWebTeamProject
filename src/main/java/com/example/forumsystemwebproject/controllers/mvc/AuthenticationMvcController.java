@@ -61,18 +61,18 @@ public class AuthenticationMvcController {
     @GetMapping("/register")
     public String showRegisterPage(Model model) {
         model.addAttribute("register", new UserDto());
-        return "register";
+        return "RegisterView";
     }
 
     @PostMapping("/register")
-    public String handleRegister(@Valid @ModelAttribute UserDto dto, BindingResult bindingResult) {
+    public String handleRegister(@Valid @ModelAttribute("register") UserDto dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "register";
+            return "RegisterView";
         }
 
         if (!dto.getPassword().equals(dto.getPasswordConfirm())) {
             bindingResult.rejectValue("passwordConfirm", "password_error", "Passwords must match!");
-            return "register";
+            return "RegisterView";
         }
 
         try {
@@ -85,7 +85,7 @@ public class AuthenticationMvcController {
             } else {
                 bindingResult.rejectValue("username", "username_error", e.getMessage());
             }
-            return "register";
+            return "RegisterView";
         }
     }
 
