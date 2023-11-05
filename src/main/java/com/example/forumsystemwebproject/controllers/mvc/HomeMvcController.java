@@ -1,6 +1,7 @@
 package com.example.forumsystemwebproject.controllers.mvc;
 
 import com.example.forumsystemwebproject.models.Post;
+import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
@@ -64,7 +65,12 @@ public class HomeMvcController {
     public boolean isAdmin(HttpSession session) {
         if (populateIsAuthenticated(session)) {
             User user = (User) session.getAttribute("currentUser");
-            return user.getRoles().contains(roleRepository.getByName("admin"));
+            for (Role role: user.getRoles()) {
+                if (role.getId() == roleRepository.getByName("admin").getId()) {
+                    return true;
+                }
+            }
+            return false;
         }
         return false;
     }

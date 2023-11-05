@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService {
         return repository.get(filterOptions);
     }
 
+
     @Override
     public User getByUsername(String username) {
         return repository.getByUsername(username);

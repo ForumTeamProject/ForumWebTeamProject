@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form th:replace="~{PostForm.html :: head('Users')}"></form>
+<style>
+</style>
+<body id="page-top">
+<form th:replace="PostForm.html :: header"></form>
+
+<div class="body-content">
+    <form action="#" th:action="@{/users}" method="get" th:object="${filterOptions}">
+        <label style="margin-top: 50px; margin-bottom: 50px;  font-weight: 700;  line-height: 1.2;" th:text="#{users.filter.label}">Browse Users</label>
+        <br/><br/>
+        <input type="text" placeholder="Username" th:field="*{username}"/>
+        <input type="text" placeholder="Email" th:field="*{email}"/>
+        <input type="text" placeholder="First Name" th:field="*{firstName}"/>
+        <input type="text" placeholder="Last Name" th:field="*{lastName}"/>
+        <select th:field="*{sortBy}">
+            <option value="">Sort By</option>
+            <option value="username">Username</option>
+            <option value="email">Email</option>
+            <option value="firstName">First Name</option>
+            <option value="lastName">Last Name</option>
+        </select>
+        <select th:field="*{sortOrder}">
+            <option value="">Sort Order</option>
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+        </select>
+        <br/><br/>
+
+        <input class="btn btn-primary btn-xl text-uppercase" type="submit" value="Search"/>
+        <br/>
+        <br/>
+    </form>
+
+    <div th:if="${users.isEmpty()}">
+        <h2 th:text="#{users.title.empty}">No Users</h2>
+    </div>
+    <div th:unless="${users.isEmpty()}">
+        <h2 th:text="#{users.title}">All Users</h2>
+
+        <div id="table">
+            <div id="header">
+                <div class="cell" th:text="#{user.label.username}">Username</div>
+                <div class="cell" th:text="#{user.label.email}">Email</div>
+                <div class="cell" th:text="#{user.label.first-name}">First Name</div>
+                <div class="cell" th:text="#{user.label.last-name}">Last Name</div>
+            </div>
+            <div id="row" th:each="user : ${userPage}">
+                <div class="cell">
+                    <a href="#" th:href="@{/users/{id}(id=${user.id})}" th:text="${user.username}">User</a>
+                </div>
+                <div class="cell" th:text="${user.email}">Email</div>
+                <div class="cell" th:text="${user.firstName}">First Name</div>
+                <div class="cell" th:text="${user.lastName}">Last Name</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="pagination_section" style="text-align: center">
+<!--    <a th:if="${userPage.hasPrevious()}" th:href="@{'/users?page=' + ${userPage.previousPageable().pageNumber}}" th:text="Previous"></a>-->
+    <span th:if="${userPage.totalPages > 0}" th:each="pageNumber : ${#numbers.sequence(1, userPage.totalPages)}">
+    <a th:href="@{'/users?page=' + ${pageNumber} +
+        '&size=' + ${userPage.getSize()} +
+        '&username=' + ${filterOptions.username} +
+        '&email=' + ${filterOptions.email} +
+        '&firstName=' + ${filterOptions.firstName} +
+        '&lastName=' + ${filterOptions.lastName} +
+        '&sortBy=' + ${filterOptions.sortBy} +
+        '&sortOrder=' + ${filterOptions.sortOrder}}"
+       th:text="${pageNumber}" th:class="${pageNumber == userPage.number + 1} ? 'active'"></a>
+</span>
+<!--    <a th:if="${userPage.hasNext()}" th:href="@{'/users?page=' + ${userPage.nextPageable().pageNumber}}" th:text="Next"></a>-->
+</div>
+
+<form th:replace="PostForm.html :: footer"></form>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="/js/scripts.js"></script>
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<!-- * *                               SB Forms JS                               * *-->
+<!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+</body>
+</html>

@@ -32,8 +32,8 @@
                 <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                     <li class="nav-item"><a class="nav-link" href="#" th:href="@{/auth/login}" th:unless="${isAuthenticated}">Login</a></li>
                     <li class="nav-item"><a class="nav-link" href="#" th:href="@{/auth/register}" th:unless="${isAuthenticated}">Register</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/auth/portal}" th:if="${isAdmin}">Admin Portal</a></li>
                     <li class="nav-item"><a class="nav-link" href="#" th:href="@{/}" th:if="${isAuthenticated}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/users}" th:if="${isAdmin}">Users</a></li>
                     <li class="nav-item"><a class="nav-link" href="#" th:href="@{/posts}" th:if="${isAuthenticated}">Posts</a></li>
                     <li class="nav-item"><a class="nav-link" href="#" th:href="@{/auth/logout}" th:if="${isAuthenticated}">Logout</a></li>
                 </ul>

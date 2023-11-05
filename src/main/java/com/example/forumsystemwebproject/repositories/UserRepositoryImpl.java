@@ -31,21 +31,21 @@ public class UserRepositoryImpl implements UserRepository {
 
             filterOptions.getUsername().ifPresent(value -> {
                 filters.add("username like :username");
-                params.put("username", value);
+                params.put("username", String.format("%%%s%%",value));
             });
 
             filterOptions.getEmail().ifPresent(value -> {
                 filters.add("email like :email");
-                params.put("email", value);
+                params.put("email", String.format("%%%s%%",value));
             });
 
             filterOptions.getFirstName().ifPresent(value -> {
                 filters.add("firstName like :firstName");
-                params.put("firstName", value);
+                params.put("firstName", String.format("%%%s%%",value));
             });
             filterOptions.getLastName().ifPresent(value -> {
                 filters.add("lastName like :lastName");
-                params.put("lastName", value);
+                params.put("lastName", String.format("%%%s%%",value));
             });
 
             StringBuilder queryString = new StringBuilder("from User");
@@ -148,13 +148,17 @@ public class UserRepositoryImpl implements UserRepository {
             case "username":
                 orderBy = "username";
                 break;
-            case "first_name":
-                orderBy = "first_name";
-            case "last_name":
-                orderBy = "last_name";
+            case "firstName":
+                orderBy = "firstName";
+                break;
+            case "lastName":
+                orderBy = "lastName";
+                break;
             case "email":
                 orderBy = "email";
                 break;
+            default:
+                return "";
         }
 
         orderBy = String.format(" order by %s", orderBy);
