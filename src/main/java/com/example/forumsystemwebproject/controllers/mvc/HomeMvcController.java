@@ -33,7 +33,7 @@ public class HomeMvcController {
 
     @GetMapping
     public String showHomePage() {
-        return "home";
+        return "HomeView";
     }
 
     @ModelAttribute("recentlyCreatedPosts")

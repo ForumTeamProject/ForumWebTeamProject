@@ -11,15 +11,15 @@ public interface AuthorizationHelper {
 
     void authorizeUser(User userToAuthorize, Comment comment);
 
-    boolean isCreator(User user, Post post);
+    void creatorCheck(User user, Post post);
 
-    boolean isCreator(User user, Comment comment);
+    void creatorCheck(User user, Comment comment);
 
-    boolean isCreator(User user, PhoneNumber number);
+    void creatorCheck(User user, PhoneNumber number);
 
-    boolean isCreator(User userToCheck, User authenticatedUser);
+    void creatorCheck(User userToCheck, User authenticatedUser);
 
-    boolean isAdmin(User user);
+    void adminCheck(User user);
 
-    boolean isBlockedUser(User userToBlock);
+    void blockedCheck(User user);
 }

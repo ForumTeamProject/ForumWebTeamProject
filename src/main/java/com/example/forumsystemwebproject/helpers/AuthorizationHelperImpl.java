@@ -23,45 +23,59 @@ public class AuthorizationHelperImpl implements AuthorizationHelper{
 
     @Override
     public void authorizeUser(User userToAuthorize, Post post) {
-        if (isBlockedUser(userToAuthorize) || (!isAdmin(userToAuthorize) && !isCreator(userToAuthorize, post))) {
-            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_MSG, "User", "username", userToAuthorize.getUsername()));
-        }
+        adminCheck(userToAuthorize);
+        creatorCheck(userToAuthorize, post);
+        blockedCheck(userToAuthorize);
     }
 
     @Override
     public void authorizeUser(User userToAuthorize, Comment comment) {
-        if (isBlockedUser(userToAuthorize) || (!isAdmin(userToAuthorize) && !isCreator(userToAuthorize, comment))) {
-            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_MSG, "User", "username", userToAuthorize.getUsername()));
+        adminCheck(userToAuthorize);
+        creatorCheck(userToAuthorize, comment);
+        blockedCheck(userToAuthorize);
+    }
+
+    @Override
+    public void creatorCheck(User user, Post post) {
+        if (user.getId() != post.getUser().getId()) {
+            throw new UnauthorizedOperationException(String.format("%s with %s %s is unauthorized to do this operation!", "User", "username", user.getUsername()));
+
         }
     }
 
     @Override
-    public boolean isCreator(User user, Post post) {
-        return user.getId() == post.getUser().getId();
+    public void creatorCheck(User user, Comment comment) {
+        if (user.getId() != comment.getUser().getId()) {
+            throw new UnauthorizedOperationException(String.format("%s with %s %s is unauthorized to do this operation!", "User", "username", user.getUsername()));
+
+        }
     }
 
     @Override
-    public boolean isCreator(User user, Comment comment) {
-        return user.getId() == comment.getUser().getId();
+    public void creatorCheck(User user, PhoneNumber number) {
+        if(user.getId() != number.getUser().getId()) {
+            throw new UnauthorizedOperationException(String.format("%s with %s %s is unauthorized to do this operation!", "User", "username", user.getUsername()));
+        }
     }
 
     @Override
-    public boolean isCreator(User user, PhoneNumber number) {
-        return user.getId() == number.getUser().getId();
+    public void creatorCheck(User userToCheck, User authenticatedUser) {
+        if (userToCheck.getId() != authenticatedUser.getId()) {
+            throw new UnauthorizedOperationException(String.format("%s with %s %s is unauthorized to do this operation!", "User", "username", authenticatedUser.getUsername()));
+        }
     }
 
     @Override
-    public boolean isCreator(User userToCheck, User authenticatedUser) {
-        return userToCheck.getId() == authenticatedUser.getId();
+    public void adminCheck(User user) {
+        if (user.getRoles().contains(roleRepository.getByName(ADMIN_ROLE))) {
+            throw new UnauthorizedOperationException(String.format("%s with %s %s is unauthorized to do this operation!", "User", "username", user.getUsername()));
+        }
     }
 
     @Override
-    public boolean isAdmin(User user) {
-        return user.getRoles().contains(roleRepository.getByName(ADMIN_ROLE));
-    }
-
-    @Override
-    public boolean isBlockedUser(User userToBlock) {
-        return userToBlock.getRoles().contains(roleRepository.getByName(BLOCKED_USER_ROLE));
+    public void blockedCheck(User user) {
+        if (user.getRoles().contains(roleRepository.getByName(BLOCKED_USER_ROLE))) {
+            throw new UnauthorizedOperationException(String.format("%s with %s %s is blocked and therefore unauthorized to do this operation!", "User", "username", user.getUsername()));
+        }
     }
 }

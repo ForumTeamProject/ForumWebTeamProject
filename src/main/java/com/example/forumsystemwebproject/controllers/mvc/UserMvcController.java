@@ -1,5 +1,9 @@
 package com.example.forumsystemwebproject.controllers.mvc;
 
+import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
+import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
+import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
+import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.helpers.PaginationHelper;
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
 import com.example.forumsystemwebproject.models.DTOs.UserFilterDto;
@@ -14,13 +18,12 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,10 +37,16 @@ public class UserMvcController {
 
     private final UserService userService;
 
+    private final AuthenticationHelper authenticationHelper;
+
+    private final AuthorizationHelper authorizationHelper;
+
     @Autowired
-    public UserMvcController(RoleRepository roleRepository, UserService userService) {
+    public UserMvcController(RoleRepository roleRepository, UserService userService, AuthenticationHelper authenticationHelper, AuthorizationHelper authorizationHelper) {
         this.roleRepository = roleRepository;
         this.userService = userService;
+        this.authenticationHelper = authenticationHelper;
+        this.authorizationHelper = authorizationHelper;
     }
 
     @ModelAttribute("requestURI")
@@ -68,40 +77,68 @@ public class UserMvcController {
     public String showUsers(HttpSession session, @ModelAttribute("filterOptions") UserFilterDto filterDto, Model model,
                             @RequestParam("page") Optional<Integer> page,
                             @RequestParam("size") Optional<Integer> size) {
-        if (populateIsAuthenticated(session)) {
-            if (isAdmin(session)) {
-                UserFilterOptions userFilterOptions = new UserFilterOptions(
-                        filterDto.getUsername(),
-                        filterDto.getEmail(),
-                        filterDto.getFirstName(),
-                        filterDto.getLastName(),
-                        filterDto.getSortBy(),
-                        filterDto.getSortOrder()
-                );
-                List<User> users = userService.get(userFilterOptions);
-
-                int currentPage = page.orElse(1);
-                int pageSize = size.orElse(10);
-
-                Page<User> userPage = PaginationHelper.findPaginated(PageRequest.of(currentPage - 1, pageSize), users);
-
-                model.addAttribute("userPage", userPage);
-
-                int totalPages = userPage.getTotalPages();
-                if (totalPages > 0) {
-                    List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                            .boxed()
-                            .collect(Collectors.toList());
-                    model.addAttribute("pageNumbers", pageNumbers);
-                }   model.addAttribute("users", users);
-                model.addAttribute("filterOptions", filterDto);
-
-                return "UsersView";
-            } else {
-                return "AccessDeniedView";
-            }
-        } else {
+        User user;
+        try {
+          user = authenticationHelper.tryGetUser(session);
+        } catch (UnauthorizedOperationException e) {
             return "redirect:/auth/login";
+        }
+
+        try {
+            authorizationHelper.adminCheck(user);
+            UserFilterOptions userFilterOptions = new UserFilterOptions(
+                    filterDto.getUsername(),
+                    filterDto.getEmail(),
+                    filterDto.getFirstName(),
+                    filterDto.getLastName(),
+                    filterDto.getSortBy(),
+                    filterDto.getSortOrder()
+            );
+            List<User> users = userService.get(userFilterOptions);
+            int currentPage = page.orElse(1);
+            int pageSize = size.orElse(10);
+
+            Page<User> userPage = PaginationHelper.findPaginated(PageRequest.of(currentPage - 1, pageSize), users);
+
+            model.addAttribute("userPage", userPage);
+
+            int totalPages = userPage.getTotalPages();
+            if (totalPages > 0) {
+                List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                        .boxed()
+                        .collect(Collectors.toList());
+                model.addAttribute("pageNumbers", pageNumbers);
+            }   model.addAttribute("users", users);
+            model.addAttribute("filterOptions", filterDto);
+
+            return "UsersView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "AccessDenied";
+        }
+    }
+
+    @GetMapping("/{id}")
+    public String showUser(@PathVariable int id, HttpSession session, Model model) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (UnauthorizedOperationException e) {
+            return "redirect:/auth/login";
+        }
+
+        try {
+            User userToShow = userService.getById(id);
+            authorizationHelper.adminCheck(user);
+            model.addAttribute("user", userToShow);
+            return "UserView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("notFound", e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("unauthorized", e.getMessage());
         }
     }
 }
