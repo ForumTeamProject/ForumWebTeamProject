@@ -42,9 +42,8 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
 
     @Override
     public void create(PhoneNumber number, User authenticatedUser) {
-        if (!authorizationHelper.isAdmin(authenticatedUser) || authorizationHelper.isBlockedUser(authenticatedUser)) {
-            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_MSG, "User", "username", authenticatedUser.getUsername()));
-        }
+        authorizationHelper.adminCheck(authenticatedUser);
+        authorizationHelper.blockedCheck(authenticatedUser);
         number.setUser(authenticatedUser);
         checkNumberUniqueness(number);
         repository.create(number);
@@ -52,9 +51,7 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
 
     @Override
     public void update(PhoneNumber number, User authenticatedUser) {
-        if (!authorizationHelper.isCreator(authenticatedUser, number)) {
-            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_MSG, "User", "username", authenticatedUser.getUsername()));
-        }
+        authorizationHelper.creatorCheck(authenticatedUser,number);
         checkNumberUniqueness(number);
         repository.update(number);
     }
@@ -62,9 +59,7 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
     @Override
     public void delete(int id, User authenticatedUser) {
         PhoneNumber number = getById(id);
-        if (!authorizationHelper.isCreator(authenticatedUser, number)) {
-            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_MSG, "User", "username", authenticatedUser.getUsername()));
-        }
+        authorizationHelper.creatorCheck(authenticatedUser,number);
         repository.delete(number);
     }
 

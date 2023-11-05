@@ -15,6 +15,7 @@ import com.example.forumsystemwebproject.services.contracts.PostService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -50,38 +51,48 @@ public class PostMvcController {
 
     @GetMapping
     public String showPosts(HttpSession session, Model model, @Valid @ModelAttribute("filters") PostFilterDto dto) {
-        if (populateIsAuthenticated(session)) {
+
+        User user;
+        try {
+           user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
-        model.addAttribute("posts", postService.get(new PostFilterOptions(
-                dto.getUser(),
-                dto.getTitle(),
-                dto.getSortBy(),
-                dto.getSortOrder())));
-        model.addAttribute("filters", dto);
-        return "posts";
+
+            model.addAttribute("posts", postService.get(new PostFilterOptions(
+                    dto.getUser(),
+                    dto.getTitle(),
+                    dto.getSortBy(),
+                    dto.getSortOrder())));
+            model.addAttribute("filters", dto);
+            return "PostsView";
     }
 
     @GetMapping("/{id}")
     public String showSinglePost(@PathVariable int id, Model model, HttpSession session) {
-        if (populateIsAuthenticated(session)) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
 
         try {
             Post post = postService.getById(id);
             model.addAttribute("post", post);
-            return "post";
+            return "PostView";
         } catch (EntityNotFoundException e) {
-            model.addAttribute("error", e.getMessage());
-            return "not-found";
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("notFound", e.getMessage());
+            return "NotFound";
         }
     }
 
     @GetMapping("/create")
     public String showCreatePostPage(HttpSession session, Model model) {
+        User user;
         try {
-            authenticationHelper.tryGetUser(session);
+            user = authenticationHelper.tryGetUser(session);
         } catch (AuthenticationFailureException e) {
             return "redirect/auth/login";
         }
@@ -99,12 +110,12 @@ public class PostMvcController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "post-new";
+            return "NewPostView";
         }
 
         Post post = mapper.fromDto(dto);
         postService.create(post, user);
-        return "posts";
+        return "PostsView";
     }
 
     @GetMapping("/{id}/update")
@@ -120,10 +131,11 @@ public class PostMvcController {
             PostDto dto = mapper.toDto(post);
             model.addAttribute("postId", id);
             model.addAttribute("post", dto);
-            return "post-update";
+            return "PostUpdateView";
         } catch (EntityNotFoundException e) {
-            model.addAttribute("error", e.getMessage());
-            return "not-found";
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("notFound", e.getMessage());
+            return "NotFound";
         }
     }
 
@@ -138,16 +150,17 @@ public class PostMvcController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "post-update";
+            return "PostUpdateView";
         }
 
         try {
             Post post = mapper.fromDto(dto);
             postService.update(post, user);
-            return "posts";
+            return "PostsView";
         } catch (UnauthorizedOperationException e) {
-            model.addAttribute("error", e.getMessage());
-            return "access-denied";
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("unauthorized", e.getMessage());
+            return "AccessDenied";
         }
     }
 
@@ -164,11 +177,13 @@ public class PostMvcController {
             postService.delete(id, user);
             return "redirect:/posts";
         } catch (EntityNotFoundException e) {
-            model.addAttribute("error", e.getMessage());
-            return "not-found";
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("notFound", e.getMessage());
+            return "NotFound";
         } catch (UnauthorizedOperationException e) {
-            model.addAttribute("error", e.getMessage());
-            return "access-denied";
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("unauthorized", e.getMessage());
+            return "AccessDenied";
         }
     }
 
@@ -185,10 +200,11 @@ public class PostMvcController {
             postService.likePost(id, user);
             Post updatedPost = postService.getById(id);
             model.addAttribute("post", updatedPost);
-            return "post";
+            return "PostView";
         } catch (EntityNotFoundException e) {
-            model.addAttribute("error", e.getMessage());
-            return "not-found";
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("notFound", e.getMessage());
+            return "NotFound";
         }
     }
 

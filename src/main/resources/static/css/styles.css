@@ -612,6 +612,23 @@ progress {
   height: auto;
 }
 
+.users-image {
+  max-width: 200px;
+  max-height: 200px;
+  display: block;
+  margin: 0 auto;
+  margin-top: 100px;
+  margin-bottom: 50px;
+
+.block-button {
+  justify-content: center;
+}
+}
+
+.users-name {
+  text-align: center;
+}
+
 .img-thumbnail {
   padding: 0.25rem;
   background-color: #fff;
@@ -11371,7 +11388,7 @@ section#contact form#contactForm :-ms-input-placeholder {
 }
 
 a:nth-child(5) {
-  background-color: #ffc800;
+  background-color: #212529;
   color: white;
 }
 

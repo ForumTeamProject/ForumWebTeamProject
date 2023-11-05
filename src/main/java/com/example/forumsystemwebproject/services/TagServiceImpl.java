@@ -55,10 +55,8 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void delete(int id, User user) {
-        if (authorizationHelper.isAdmin(user)) {
-            tagRepository.delete(id);
-        }
-        throw new UnauthorizedOperationException(UNAUTHORIZED_ACCESS_MSG);
+        authorizationHelper.adminCheck(user);
+        tagRepository.delete(id);
     }
 
     public void checkDuplicateExists(Tag tag) {

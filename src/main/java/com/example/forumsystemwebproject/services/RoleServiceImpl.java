@@ -43,27 +43,21 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void create(Role role, User authenticatedUser) {
-        if (!authorizationHelper.isAdmin(authenticatedUser)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", authenticatedUser.getUsername()));
-        }
+        authorizationHelper.adminCheck(authenticatedUser);
         checkRoleUniqueness(role);
         roleRepository.create(role);
     }
 
     @Override
     public void update(Role role, User authenticatedUser) {
-        if (!authorizationHelper.isAdmin(authenticatedUser)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", authenticatedUser.getUsername()));
-        }
+        authorizationHelper.adminCheck(authenticatedUser);
         checkRoleUniqueness(role);
         roleRepository.update(role);
     }
 
     @Override
     public void delete(int id, User authenticatedUser) {
-        if (!authorizationHelper.isAdmin(authenticatedUser)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User","username", authenticatedUser.getUsername()));
-        }
+        authorizationHelper.adminCheck(authenticatedUser);
         roleRepository.delete(id);
     }
 

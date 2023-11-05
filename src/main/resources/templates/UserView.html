@@ -1,8 +1,37 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <form th:replace="PostForm.html :: head(${user.username})"></form>
 <body>
+
+<form th:replace="PostForm.html :: header"></form>
+
+<img class="users-image"
+     th:src="${user.photoUrl != null ? user.photoUrl : '/assets/img/users/default-icon.png'}"
+     alt="..." />
+<h3 class="users-name" th:text="${user.firstName} + ' ' + ${user.lastName}">Full Name</h3>
+<br>
+<h5 class="users-name" th:text="'(' + ${user.username} + ')'"></h5>
+<br/>
+<br/>
+<br/>
+<br/>
+<form th:action="@{'/users/' + ${user.id} + '/blockOrUnblock'}" method="post">
+    <button style="display: block; margin: 0 auto;" th:unless="${isBlocked}" th:text="Block" class="btn btn-primary btn-xl text-uppercase" type="submit">Block</button>
+    <button style="display: block; margin: 0 auto;" th:if="${isBlocked}" th:text="Unblock" class="btn btn-primary btn-xl text-uppercase" type="submit">Unblock</button>
+</form>
+
+
+<form th:replace="PostForm.html :: footer"></form>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="/js/scripts.js"></script>
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<!-- * *                               SB Forms JS                               * *-->
+<!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 
 </body>
 </html>

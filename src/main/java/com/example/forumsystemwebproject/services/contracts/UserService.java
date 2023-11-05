@@ -21,7 +21,5 @@ public interface UserService {
 
     void delete(User user, int id);
 
-    void blockUser(User user, int id);
-
-    void unblockUser(User user, int id);
+    void blockOrUnblockUser(User user, User userToUpdate);
 }

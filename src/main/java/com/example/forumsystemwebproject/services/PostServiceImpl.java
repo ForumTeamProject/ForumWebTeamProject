@@ -73,18 +73,15 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void create(Post post, User user) {
-        if (authorizationHelper.isBlockedUser(user)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
-        }
+        authorizationHelper.blockedCheck(user);
         post.setUser(user);
         postRepository.create(post);
     }
 
     @Override
     public void update(Post post, User user) {
-        if (authorizationHelper.isBlockedUser(user) || !authorizationHelper.isCreator(user, post)) {
-           throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
-        }
+        authorizationHelper.blockedCheck(user);
+        authorizationHelper.creatorCheck(user,post);
         postRepository.update(post);
     }
 
@@ -96,9 +93,8 @@ public class PostServiceImpl implements PostService {
     }
 
     public void addTagToPost(User userWhoAdds, Post post, Tag tag) {
-        if (authorizationHelper.isBlockedUser(userWhoAdds) || !authorizationHelper.isCreator(userWhoAdds, post)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", userWhoAdds.getUsername()));
-        }
+        authorizationHelper.blockedCheck(userWhoAdds);
+        authorizationHelper.creatorCheck(userWhoAdds, post);
 
         Tag newTag = tagService.create(tag, userWhoAdds);
         post.getTags().add(newTag);
@@ -106,9 +102,8 @@ public class PostServiceImpl implements PostService {
     }
 
     public void deleteTagFromPost(User userWhoDeletes, Post postFromWhichToDelete, Tag tag) {
-        if (authorizationHelper.isBlockedUser(userWhoDeletes) || !authorizationHelper.isCreator(userWhoDeletes, postFromWhichToDelete)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", userWhoDeletes.getUsername()));
-        }
+        authorizationHelper.blockedCheck(userWhoDeletes);
+        authorizationHelper.creatorCheck(userWhoDeletes, postFromWhichToDelete);
         postFromWhichToDelete.getTags().remove(tag);
         postRepository.update(postFromWhichToDelete);
     }

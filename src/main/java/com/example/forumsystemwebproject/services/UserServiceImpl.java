@@ -4,9 +4,8 @@ import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
-import com.example.forumsystemwebproject.helpers.AuthorizationHelperImpl;
-import com.example.forumsystemwebproject.helpers.filters.CommentFilterOptions;
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
+import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
@@ -61,9 +60,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(User userToUpdate, User authenticatedUser) {
-        if (!authorizationHelper.isCreator(userToUpdate, authenticatedUser) || authorizationHelper.isBlockedUser(authenticatedUser)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", authenticatedUser.getUsername()));
-        }
+        authorizationHelper.creatorCheck(authenticatedUser, userToUpdate);
+        authorizationHelper.blockedCheck(authenticatedUser);
         checkUsernameUniqueness(userToUpdate);
         checkEmailUniqueness(userToUpdate);
         repository.update(userToUpdate);
@@ -72,39 +70,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(User user, int id) {
         User userToDelete = getById(id);
-        if (!authorizationHelper.isCreator(user, userToDelete) || authorizationHelper.isBlockedUser(user)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
-        }
+        authorizationHelper.blockedCheck(user);
+        authorizationHelper.creatorCheck(user, userToDelete);
         repository.delete(id);
     }
 
-
-        @Override
-    public void blockUser(User user, int id) {
-        User userToBlock = getById(id);
-        if (authorizationHelper.isBlockedUser(user) || !authorizationHelper.isAdmin(user)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
-        }
-        if (authorizationHelper.isBlockedUser(userToBlock)) {
-            throw new DuplicateEntityException(String.format("User with id: %d is already blocked.", id));
-        }
-        userToBlock.getRoles().add(roleRepository.getByName("blockedUser"));
-        repository.update(userToBlock);
-    }
-
-
-
     @Override
-    public void unblockUser(User user, int id) {
-        if (authorizationHelper.isBlockedUser(user) || !authorizationHelper.isAdmin(user)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
-        }
-        User userToUnblock = getById(id);
-        if (authorizationHelper.isBlockedUser(userToUnblock)) {
-            userToUnblock.getRoles().remove(roleRepository.getByName("blockedUser"));
-            repository.update(userToUnblock);
-    } else {
-            throw new DuplicateEntityException(String.format("User with id: %d is already unblocked.", id));
+    public void blockOrUnblockUser(User user, User userToUpdate) {
+        try {
+            authorizationHelper.blockedCheck(userToUpdate);
+            userToUpdate.getRoles().add(roleRepository.getByName("blockedUser"));
+            repository.update(userToUpdate);
+        } catch (UnauthorizedOperationException e) {
+            for (Role role : userToUpdate.getRoles()) {
+                if (role.getName().equals("blockedUser")) {
+                    userToUpdate.getRoles().remove(role);
+                    repository.update(userToUpdate);
+                }
+            }
         }
     }
 
@@ -124,6 +107,7 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateEntityException("User", "username", user.getUsername());
         }
     }
+
 
     private void checkEmailUniqueness(User user) {
         boolean duplicateExists = true;

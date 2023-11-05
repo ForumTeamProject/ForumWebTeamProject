@@ -25,6 +25,7 @@ create table users
     email      varchar(50) not null,
     username   varchar(50) not null,
     password   varchar(50) not null,
+    photo_url  varchar(50) null,
     constraint email
         unique (email),
     constraint username
@@ -49,7 +50,7 @@ create table posts
     title         varchar(64)  not null,
     content       text         not null,
     creation_date timestamp    not null,
-    photo_url     varchar(100),
+    photo_url     varchar(100) null,
     constraint posts_users_fk
         foreign key (user_id) references users (user_id)
 );

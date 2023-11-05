@@ -1,10 +1,7 @@
 package com.example.forumsystemwebproject.helpers;
 
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
-import com.example.forumsystemwebproject.models.Comment;
-import com.example.forumsystemwebproject.models.PhoneNumber;
-import com.example.forumsystemwebproject.models.Post;
-import com.example.forumsystemwebproject.models.User;
+import com.example.forumsystemwebproject.models.*;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -67,15 +64,22 @@ public class AuthorizationHelperImpl implements AuthorizationHelper{
 
     @Override
     public void adminCheck(User user) {
-        if (user.getRoles().contains(roleRepository.getByName(ADMIN_ROLE))) {
-            throw new UnauthorizedOperationException(String.format("%s with %s %s is unauthorized to do this operation!", "User", "username", user.getUsername()));
+        for (Role role: user.getRoles()) {
+            if (role.getName().equals(roleRepository.getByName(ADMIN_ROLE).getName())) {
+                return;
+            }
         }
+        throw new UnauthorizedOperationException(String.format("%s with %s %s is blocked and therefore unauthorized to do this operation!", "User", "username", user.getUsername()));
     }
 
     @Override
     public void blockedCheck(User user) {
-        if (user.getRoles().contains(roleRepository.getByName(BLOCKED_USER_ROLE))) {
-            throw new UnauthorizedOperationException(String.format("%s with %s %s is blocked and therefore unauthorized to do this operation!", "User", "username", user.getUsername()));
+        for (Role role : user.getRoles()) {
+            if (role.getName().equals(roleRepository.getByName("blockedUser").getName())) {
+                throw new UnauthorizedOperationException(String.format("%s with %s %s is blocked and therefore unauthorized to do this operation!", "User", "username", user.getUsername()));
+            }
         }
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.example.forumsystemwebproject.controllers.mvc;
 
+import com.example.forumsystemwebproject.exceptions.AuthenticationFailureException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
@@ -80,12 +81,11 @@ public class UserMvcController {
         User user;
         try {
           user = authenticationHelper.tryGetUser(session);
-        } catch (UnauthorizedOperationException e) {
+        } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
 
         try {
-            authorizationHelper.adminCheck(user);
             UserFilterOptions userFilterOptions = new UserFilterOptions(
                     filterDto.getUsername(),
                     filterDto.getEmail(),
@@ -110,7 +110,6 @@ public class UserMvcController {
                 model.addAttribute("pageNumbers", pageNumbers);
             }   model.addAttribute("users", users);
             model.addAttribute("filterOptions", filterDto);
-
             return "UsersView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
@@ -124,21 +123,61 @@ public class UserMvcController {
         User user;
         try {
             user = authenticationHelper.tryGetUser(session);
-        } catch (UnauthorizedOperationException e) {
+        } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
 
         try {
-            User userToShow = userService.getById(id);
             authorizationHelper.adminCheck(user);
+            User userToShow = userService.getById(id);
             model.addAttribute("user", userToShow);
             return "UserView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("notFound", e.getMessage());
+            return "NotFound";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("unauthorized", e.getMessage());
+            return "АccessDenied";
         }
     }
+
+    @PostMapping("/{id}/blockOrUnblock")
+    public String blockOrUnblockUser(@PathVariable int id, HttpSession session, Model model) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+
+        try {
+            authorizationHelper.adminCheck(user);
+            authorizationHelper.blockedCheck(user);
+            User userToUpdate = userService.getById(id);
+            userService.blockOrUnblockUser(user, userToUpdate);
+            model.addAttribute("isBlocked", isBlocked(userToUpdate));
+            model.addAttribute("user", userToUpdate);
+            return "UserView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("unauthorized", e.getMessage());
+            return "AccessDenied";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("notFound", e.getMessage());
+            return "NotFound";
+        }
+    }
+
+    private boolean isBlocked(User user) {
+        try {
+            authorizationHelper.blockedCheck(user);
+            return false;
+        } catch (UnauthorizedOperationException e) {
+            return true;
+        }
+    }
+
 }
