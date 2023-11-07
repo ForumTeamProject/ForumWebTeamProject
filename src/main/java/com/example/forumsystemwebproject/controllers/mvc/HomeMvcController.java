@@ -1,5 +1,9 @@
 package com.example.forumsystemwebproject.controllers.mvc;
 
+import com.example.forumsystemwebproject.exceptions.AuthenticationFailureException;
+import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
+import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
+import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.User;
@@ -9,6 +13,7 @@ import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,14 +30,17 @@ public class HomeMvcController {
 
     private final RoleRepository roleRepository;
 
-    public HomeMvcController(PostRepository postRepository, UserRepository userRepository, RoleRepository roleRepository) {
+    private final AuthorizationHelper authorizationHelper;
+
+    public HomeMvcController(PostRepository postRepository, UserRepository userRepository, RoleRepository roleRepository, AuthorizationHelper authorizationHelper, AuthenticationHelper authenticationHelper) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.authorizationHelper = authorizationHelper;
     }
 
     @GetMapping
-    public String showHomePage() {
+    public String showHomePage(Model model, HttpSession session) {
         return "HomeView";
     }
 
@@ -79,4 +87,5 @@ public class HomeMvcController {
     public boolean populateIsAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;
     }
+
 }

@@ -13,6 +13,8 @@ public class PostDto {
     @Size(min = 32, max = 8192, message = "Content must be between 32 to 8192 characters long!")
     private String content;
 
+    private String photoUrl;
+
     public PostDto() {
 
     }
@@ -31,5 +33,13 @@ public class PostDto {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

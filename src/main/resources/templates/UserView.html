@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<form th:replace="PostForm.html :: head(${user.username})"></form>
+<form th:replace="~{PostForm.html :: head(${user.username})}"></form>
 <body>
 
 <form th:replace="PostForm.html :: header"></form>
@@ -29,7 +29,8 @@
             class="btn btn-primary btn-xl text-uppercase" th:text="Update"
             type="submit">Update</button>
 </form>
-<form th:if="${session.currentUser.getId() != user.getId()}" th:action="@{'/users/' + ${user.id} + '/blockOrUnblock'}" method="post">
+
+<form th:if="${isAdmin && session.currentUser.id != user.id}" th:action="@{'/users/' + ${user.id} + '/blockOrUnblock'}" method="post">
     <button style="display: block; margin: 0 auto;" th:unless="${isBlocked}" th:text="Block" class="btn btn-primary btn-xl text-uppercase" type="submit">Block</button>
     <button style="display: block; margin: 0 auto;" th:if="${isBlocked}" th:text="Unblock" class="btn btn-primary btn-xl text-uppercase" type="submit">Unblock</button>
 </form>
@@ -37,7 +38,7 @@
 <form th:if="${session.currentUser.getId() == user.getId()}" th:method="post" th:action="@{'/users/' + ${user.id} + '/delete'}">
     <button style="display: block; background-color: red; margin: 50px auto 0;"
             class="btn btn-primary btn-xl text-uppercase" th:text="Delete"
-            type="submit">Update</button>
+            type="submit">Delete</button>
 </form>
 
 

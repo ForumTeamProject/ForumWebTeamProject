@@ -92,6 +92,7 @@ public class UserMvcController {
         }
 
         try {
+            authorizationHelper.adminCheck(user);
             UserFilterOptions userFilterOptions = new UserFilterOptions(
                     filterDto.getUsername(),
                     filterDto.getEmail(),
@@ -287,4 +288,3 @@ public class UserMvcController {
 }
 
 
-//TODO see how you save photoUrl in the database}
