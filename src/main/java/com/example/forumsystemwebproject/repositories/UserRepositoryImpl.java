@@ -2,6 +2,9 @@ package com.example.forumsystemwebproject.repositories;
 
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
+import com.example.forumsystemwebproject.models.Comment;
+import com.example.forumsystemwebproject.models.Like;
+import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
 import org.hibernate.Session;
@@ -128,11 +131,15 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void delete(int id) {
-        User userToRemove = getById(id);
+    public void delete(User userToDelete, User deletedUser) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.remove(userToRemove);
+            processCommentsTransferQuery(session, deletedUser, userToDelete);
+            processLikesTransferQuery(session, deletedUser, userToDelete);
+            processPostsTransferQuery(session,deletedUser, userToDelete);
+            processPhoneNumbersTransferQuery(session, deletedUser, userToDelete);
+            session.merge(deletedUser);
+            session.remove(userToDelete);
             session.getTransaction().commit();
         }
     }
@@ -168,6 +175,39 @@ public class UserRepositoryImpl implements UserRepository {
         }
 
         return orderBy;
+    }
+
+    private void processCommentsTransferQuery(Session session,User deletedUser, User userToDelete) {
+            String query = "UPDATE Comment c SET c.user = :deletedUser WHERE c.user = :userToDelete";
+            session.createQuery(query)
+                    .setParameter("deletedUser", deletedUser)
+                    .setParameter("userToDelete", userToDelete)
+                    .executeUpdate();
+    }
+
+    private void processLikesTransferQuery(Session session,User deletedUser, User userToDelete) {
+
+            String query = "UPDATE Like l SET l.user = :deletedUser WHERE l.user = :userToDelete";
+            session.createQuery(query)
+                    .setParameter("deletedUser", deletedUser)
+                    .setParameter("userToDelete", userToDelete)
+                    .executeUpdate();
+    }
+
+    private void processPostsTransferQuery(Session session, User deletedUser, User userToDelete) {
+            String query = "UPDATE Post p SET p.user = :deletedUser WHERE p.user = :userToDelete";
+            session.createQuery(query)
+                    .setParameter("deletedUser", deletedUser)
+                    .setParameter("userToDelete", userToDelete)
+                    .executeUpdate();
+    }
+
+    private void processPhoneNumbersTransferQuery(Session session, User deletedUser, User userToDelete) {
+        String query = "UPDATE PhoneNumber n SET n.user = :deletedUser WHERE n.user = :userToDelete";
+        session.createQuery(query)
+                .setParameter("deletedUser", deletedUser)
+                .setParameter("userToDelete", userToDelete)
+                .executeUpdate();
     }
 
 

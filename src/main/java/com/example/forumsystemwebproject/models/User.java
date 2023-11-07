@@ -1,5 +1,6 @@
 package com.example.forumsystemwebproject.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -36,6 +37,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
 
     public User() {
     }
@@ -95,6 +97,8 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+
 
     public String getPhotoUrl() {
         return photoUrl;

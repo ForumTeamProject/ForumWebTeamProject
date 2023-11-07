@@ -259,6 +259,31 @@ public class UserMvcController {
             return "NotFound";
         }
     }
+
+    @PostMapping("/{id}/delete")
+    public String deleteUser(@PathVariable int id,
+                             HttpSession session,
+                             Model model) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+
+        try {
+            userService.delete(user, id);
+            return "redirect:/auth/logout";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "NotFound";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "AccessDenied";
+        }
+    }
 }
 
 

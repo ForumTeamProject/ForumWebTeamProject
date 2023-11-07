@@ -2,6 +2,8 @@ package com.example.forumsystemwebproject.models;
 
 import jakarta.persistence.*;
 
+@Entity
+@Table(name = "phone_numbers")
 public class PhoneNumber {
 
     @Id

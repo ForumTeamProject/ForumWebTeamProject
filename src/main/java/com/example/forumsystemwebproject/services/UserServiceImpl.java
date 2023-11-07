@@ -77,8 +77,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(User user, int id) {
         User userToDelete = getById(id);
+        User deletedUser = getById(999);
         authorizationHelper.creatorCheck(user, userToDelete);
-        repository.delete(id);
+
+        repository.delete(userToDelete, deletedUser);
     }
 
     @Override
