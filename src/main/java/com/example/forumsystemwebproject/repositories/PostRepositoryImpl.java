@@ -3,8 +3,10 @@ package com.example.forumsystemwebproject.repositories;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
 import com.example.forumsystemwebproject.models.Post;
+import com.example.forumsystemwebproject.models.Tag;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
+import com.example.forumsystemwebproject.repositories.contracts.PostTagRepository;
 import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,16 +14,14 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class PostRepositoryImpl implements PostRepository {
 
     private final SessionFactory sessionFactory;
     private final UserRepository userRepository;
+
     @Autowired
     public PostRepositoryImpl(SessionFactory sessionFactory, UserRepository userRepository) {
         this.sessionFactory = sessionFactory;
@@ -157,6 +157,24 @@ public class PostRepositoryImpl implements PostRepository {
             session.remove(post);
             session.getTransaction().commit();
         }
+    }
+
+    @Override
+    public void addTagToPost(Post post, Tag tag) {
+        Set<Tag> refTags = post.getTags();
+        refTags.add(tag);
+    }
+
+    @Override
+    public void addTagsToPost(Post post, List<Tag> tags) {
+        Set<Tag> refTags = post.getTags();
+        refTags.addAll(tags);
+    }
+
+    @Override
+    public void deleteTagFromPost(Post post, Tag tag) {
+        Set<Tag> refTags = post.getTags();
+        refTags.remove(tag);
     }
 
     private String generateOrderBy(PostFilterOptions postFilterOptions) {

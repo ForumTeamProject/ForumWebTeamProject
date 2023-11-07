@@ -17,6 +17,9 @@ public interface PostRepository {
     List<Post> getMostRecentlyCreatedPosts();
 
     Post getById(int id);
+    void addTagToPost(Post post, Tag tag);
+    void addTagsToPost(Post post, List<Tag> tags);
+    void deleteTagFromPost(Post post, Tag tag);
 
     long getCount();
 

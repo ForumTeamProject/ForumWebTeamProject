@@ -6,17 +6,19 @@ import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-@PropertySource("classpath:application.properties")
+//@PropertySource("classpath:application.properties")
 public class RoleRepositoryImpl implements RoleRepository {
 
     private final SessionFactory sessionFactory;
 
+    @Autowired
     public RoleRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }

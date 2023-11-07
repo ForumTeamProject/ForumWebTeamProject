@@ -27,7 +27,7 @@ public class Post {
     @Column(name = "content")
     private String content;
 
-    @JsonIgnore
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.EAGER)
 //    @ManyToMany(cascade = {
 //            CascadeType.PERSIST,
