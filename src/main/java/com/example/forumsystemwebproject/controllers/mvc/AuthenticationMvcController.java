@@ -2,13 +2,13 @@ package com.example.forumsystemwebproject.controllers.mvc;
 
 import com.example.forumsystemwebproject.exceptions.AuthenticationFailureException;
 import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
-import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
 import com.example.forumsystemwebproject.helpers.mappers.UserMapper;
 import com.example.forumsystemwebproject.models.DTOs.LoginDto;
 import com.example.forumsystemwebproject.models.DTOs.UserDto;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.services.contracts.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,43 +36,49 @@ public class AuthenticationMvcController {
         this.userMapper = userMapper;
         this.userService = userService;
     }
+
+    @ModelAttribute("requestURI")
+    public String requestURI(final HttpServletRequest request) {
+        return request.getRequestURI();
+    }
+
     @GetMapping("/login")
     public String showLoginPage(Model model) {
         model.addAttribute("login", new LoginDto());
-        return "login";
+        return "LoginView";
     }
 
     @PostMapping("/login")
-    public String handleLogin(@Valid @ModelAttribute("login") LoginDto dto, HttpSession session, BindingResult bindingResult) {
+    public String handleLogin(@Valid @ModelAttribute("login") LoginDto login, BindingResult bindingResult, HttpSession session) {
         if (bindingResult.hasErrors()) {
-            return "login";
+            return "LoginView";
         }
 
         try {
-            User user = authenticationHelper.verifyAuthentication(dto.getUsername(), dto.getPassword());
+            User user = authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
             session.setAttribute("currentUser", user);
             return "redirect:/";
         } catch (AuthenticationFailureException e) {
             bindingResult.rejectValue("password", "password_error", e.getMessage());
-            return "login";
+            return "LoginView";
         }
     }
 
     @GetMapping("/register")
     public String showRegisterPage(Model model) {
         model.addAttribute("register", new UserDto());
-        return "register";
+        return "RegisterView";
     }
 
     @PostMapping("/register")
-    public String handleRegister(@Valid @ModelAttribute UserDto dto, BindingResult bindingResult) {
+    public String handleRegister(@Valid @ModelAttribute("register") UserDto dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "register";
+            return "RegisterView";
         }
 
         if (!dto.getPassword().equals(dto.getPasswordConfirm())) {
             bindingResult.rejectValue("passwordConfirm", "password_error", "Passwords must match!");
-            return "register";
+            return "RegisterView";
         }
 
         try {
@@ -85,7 +91,7 @@ public class AuthenticationMvcController {
             } else {
                 bindingResult.rejectValue("username", "username_error", e.getMessage());
             }
-            return "register";
+            return "RegisterView";
         }
     }
 

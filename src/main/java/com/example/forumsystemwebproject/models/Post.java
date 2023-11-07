@@ -1,6 +1,7 @@
 package com.example.forumsystemwebproject.models;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -26,8 +27,7 @@ public class Post {
 
     @Column(name = "content")
     private String content;
-
-    @JsonManagedReference
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
 //    @ManyToMany(cascade = {
 //            CascadeType.PERSIST,

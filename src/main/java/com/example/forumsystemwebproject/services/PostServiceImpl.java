@@ -5,10 +5,7 @@ import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationExcepti
 import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.helpers.AuthorizationHelperImpl;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
-import com.example.forumsystemwebproject.models.Like;
-import com.example.forumsystemwebproject.models.Post;
-import com.example.forumsystemwebproject.models.Tag;
-import com.example.forumsystemwebproject.models.User;
+import com.example.forumsystemwebproject.models.*;
 import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
 import com.example.forumsystemwebproject.services.contracts.LikeService;
 import com.example.forumsystemwebproject.services.contracts.PostService;
@@ -16,22 +13,22 @@ import com.example.forumsystemwebproject.services.contracts.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class PostServiceImpl implements PostService {
-    private final PostRepository postRepository;
     private final AuthorizationHelper authorizationHelper;
-    private final TagService tagService;
+    private final PostRepository postRepository;
     private final LikeService likeService;
 
+    private final TagService tagService;
+
     @Autowired
-    public PostServiceImpl(PostRepository postRepository, AuthorizationHelper authorizationHelper, TagService tagService, LikeService likeService) {
+    public PostServiceImpl(PostRepository postRepository, LikeService likeService, AuthorizationHelper authorizationHelper, TagService tagService) {
         this.postRepository = postRepository;
+        this.likeService = likeService;
         this.authorizationHelper = authorizationHelper;
         this.tagService = tagService;
-        this.likeService = likeService;
     }
 
     @Override
@@ -72,18 +69,15 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void create(Post post, User user) {
-        if (authorizationHelper.isBlockedUser(user)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
-        }
+        authorizationHelper.blockedCheck(user);
         post.setUser(user);
         postRepository.create(post);
     }
 
     @Override
     public void update(Post post, User user) {
-        if (authorizationHelper.isBlockedUser(user) || !authorizationHelper.isCreator(user, post)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
-        }
+        authorizationHelper.blockedCheck(user);
+        authorizationHelper.creatorCheck(user, post);
         postRepository.update(post);
     }
 
@@ -95,9 +89,8 @@ public class PostServiceImpl implements PostService {
     }
 
     public void addTagToPost(User userWhoAdds, Post post, Tag tag) {
-        if (authorizationHelper.isBlockedUser(userWhoAdds) || !authorizationHelper.isCreator(userWhoAdds, post)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", userWhoAdds.getUsername()));
-        }
+        authorizationHelper.blockedCheck(userWhoAdds);
+        authorizationHelper.creatorCheck(userWhoAdds, post);
 
         Tag newTag = tagService.create(tag, userWhoAdds);
         post.getTags().add(newTag);
@@ -125,12 +118,9 @@ public class PostServiceImpl implements PostService {
 
 
     public void deleteTagFromPost(User userWhoDeletes, Post postFromWhichToDelete, Tag tag) {
-        if (authorizationHelper.isBlockedUser(userWhoDeletes) || !authorizationHelper.isCreator(userWhoDeletes, postFromWhichToDelete)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", userWhoDeletes.getUsername()));
-        }
+        authorizationHelper.blockedCheck(userWhoDeletes);
+        authorizationHelper.creatorCheck(userWhoDeletes, postFromWhichToDelete);
         postFromWhichToDelete.getTags().remove(tag);
         postRepository.update(postFromWhichToDelete);
     }
-
-
 }

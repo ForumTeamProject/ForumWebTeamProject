@@ -55,9 +55,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void create(Comment comment, int id, User user) {
-        if (authorizationHelper.isBlockedUser(user)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
-        }
+        authorizationHelper.blockedCheck(user);
         Post post = postRepository.getById(id);
         comment.setPost(post);
         repository.create(comment);
@@ -65,18 +63,16 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void update(Comment comment, User user) {
-        if (authorizationHelper.isBlockedUser(user) || !authorizationHelper.isCreator(user, comment)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
-        }
+        authorizationHelper.blockedCheck(user);
+        authorizationHelper.creatorCheck(user,comment);
         repository.update(comment);
     }
 
     @Override
     public void delete(int id, User user) {
         Comment commentToDelete = getById(id);
-        if (authorizationHelper.isBlockedUser(user) || !authorizationHelper.isCreator(user, commentToDelete)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", user.getUsername()));
-        }
+        authorizationHelper.blockedCheck(user);
+        authorizationHelper.creatorCheck(user, commentToDelete);
         repository.delete(commentToDelete);
     }
 }

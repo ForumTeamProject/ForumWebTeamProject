@@ -1,10 +1,7 @@
 package com.example.forumsystemwebproject.helpers;
 
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
-import com.example.forumsystemwebproject.models.Comment;
-import com.example.forumsystemwebproject.models.PhoneNumber;
-import com.example.forumsystemwebproject.models.Post;
-import com.example.forumsystemwebproject.models.User;
+import com.example.forumsystemwebproject.models.*;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,45 +20,66 @@ public class AuthorizationHelperImpl implements AuthorizationHelper{
 
     @Override
     public void authorizeUser(User userToAuthorize, Post post) {
-        if (isBlockedUser(userToAuthorize) || (!isAdmin(userToAuthorize) && !isCreator(userToAuthorize, post))) {
-            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_MSG, "User", "username", userToAuthorize.getUsername()));
-        }
+        adminCheck(userToAuthorize);
+        creatorCheck(userToAuthorize, post);
+        blockedCheck(userToAuthorize);
     }
 
     @Override
     public void authorizeUser(User userToAuthorize, Comment comment) {
-        if (isBlockedUser(userToAuthorize) || (!isAdmin(userToAuthorize) && !isCreator(userToAuthorize, comment))) {
-            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_MSG, "User", "username", userToAuthorize.getUsername()));
+        adminCheck(userToAuthorize);
+        creatorCheck(userToAuthorize, comment);
+        blockedCheck(userToAuthorize);
+    }
+
+    @Override
+    public void creatorCheck(User user, Post post) {
+        if (user.getId() != post.getUser().getId()) {
+            throw new UnauthorizedOperationException(String.format("%s with %s %s is unauthorized to do this operation!", "User", "username", user.getUsername()));
+
         }
     }
 
     @Override
-    public boolean isCreator(User user, Post post) {
-        return user.getId() == post.getUser().getId();
+    public void creatorCheck(User user, Comment comment) {
+        if (user.getId() != comment.getUser().getId()) {
+            throw new UnauthorizedOperationException(String.format("%s with %s %s is unauthorized to do this operation!", "User", "username", user.getUsername()));
+
+        }
     }
 
     @Override
-    public boolean isCreator(User user, Comment comment) {
-        return user.getId() == comment.getUser().getId();
+    public void creatorCheck(User user, PhoneNumber number) {
+        if(user.getId() != number.getUser().getId()) {
+            throw new UnauthorizedOperationException(String.format("%s with %s %s is unauthorized to do this operation!", "User", "username", user.getUsername()));
+        }
     }
 
     @Override
-    public boolean isCreator(User user, PhoneNumber number) {
-        return user.getId() == number.getUser().getId();
+    public void creatorCheck(User userToCheck, User authenticatedUser) {
+        if (userToCheck.getId() != authenticatedUser.getId()) {
+            throw new UnauthorizedOperationException(String.format("%s with %s %s is unauthorized to do this operation!", "User", "username", authenticatedUser.getUsername()));
+        }
     }
 
     @Override
-    public boolean isCreator(User userToCheck, User authenticatedUser) {
-        return userToCheck.getId() == authenticatedUser.getId();
+    public void adminCheck(User user) {
+        for (Role role: user.getRoles()) {
+            if (role.getName().equals(roleRepository.getByName(ADMIN_ROLE).getName())) {
+                return;
+            }
+        }
+        throw new UnauthorizedOperationException(String.format("%s with %s %s is blocked and therefore unauthorized to do this operation!", "User", "username", user.getUsername()));
     }
 
     @Override
-    public boolean isAdmin(User user) {
-        return user.getRoles().contains(roleRepository.getByName(ADMIN_ROLE));
+    public void blockedCheck(User user) {
+        for (Role role : user.getRoles()) {
+            if (role.getName().equals(roleRepository.getByName("blockedUser").getName())) {
+                throw new UnauthorizedOperationException(String.format("%s with %s %s is blocked and therefore unauthorized to do this operation!", "User", "username", user.getUsername()));
+            }
+        }
     }
 
-    @Override
-    public boolean isBlockedUser(User userToBlock) {
-        return userToBlock.getRoles().contains(roleRepository.getByName(BLOCKED_USER_ROLE));
-    }
+
 }

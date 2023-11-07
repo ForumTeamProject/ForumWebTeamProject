@@ -1,5 +1,6 @@
 package com.example.forumsystemwebproject.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -25,6 +26,9 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "photo_url")
+    private String photoUrl;
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -33,6 +37,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
 
     public User() {
     }
@@ -93,6 +98,16 @@ public class User {
         this.roles = roles;
     }
 
+
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -107,5 +122,10 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getUsername(), getFirstName(), getEmail());
+    }
+
+    @Override
+    public String toString() {
+        return this.username;
     }
 }

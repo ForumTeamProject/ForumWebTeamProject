@@ -1,7 +1,11 @@
 package com.example.forumsystemwebproject.controllers.mvc;
 
+import com.example.forumsystemwebproject.exceptions.AuthenticationFailureException;
+import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
+import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
 import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.models.Post;
+import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
@@ -26,15 +30,18 @@ public class HomeMvcController {
 
     private final RoleRepository roleRepository;
 
-    public HomeMvcController(PostRepository postRepository, UserRepository userRepository, RoleRepository roleRepository) {
+    private final AuthorizationHelper authorizationHelper;
+
+    public HomeMvcController(PostRepository postRepository, UserRepository userRepository, RoleRepository roleRepository, AuthorizationHelper authorizationHelper, AuthenticationHelper authenticationHelper) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.authorizationHelper = authorizationHelper;
     }
 
     @GetMapping
-    public String showHomePage() {
-        return "home";
+    public String showHomePage(Model model, HttpSession session) {
+        return "HomeView";
     }
 
     @ModelAttribute("recentlyCreatedPosts")
@@ -56,23 +63,29 @@ public class HomeMvcController {
     public long userCount() {
         return userRepository.getCount();
     }
+
     @ModelAttribute("posts")
-    public long postCount()  {
+    public long postCount() {
         return postRepository.getCount();
     }
 
     @ModelAttribute("isAdmin")
     public boolean isAdmin(HttpSession session) {
-        User user = (User) session.getAttribute("currentUser");
-
-        if (user != null && user.getRoles() != null) {
-            return user.getRoles().contains(roleRepository.getByName("admin"));
+        if (populateIsAuthenticated(session)) {
+            User user = (User) session.getAttribute("currentUser");
+            for (Role role: user.getRoles()) {
+                if (role.getId() == roleRepository.getByName("admin").getId()) {
+                    return true;
+                }
+            }
+            return false;
         }
-
         return false;
     }
+
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;
     }
+
 }

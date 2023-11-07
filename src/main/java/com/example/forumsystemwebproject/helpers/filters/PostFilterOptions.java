@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public class PostFilterOptions {
 
-    private Optional<String> user;
+    private Optional<String> username;
 
     private Optional<String> title;
 
@@ -19,14 +19,14 @@ public class PostFilterOptions {
             String sortBy,
             String sortOrder
     ) {
-        this.user = Optional.ofNullable(user);
+        this.username = Optional.ofNullable(user);
         this.title = Optional.ofNullable(title);
         this.sortBy = Optional.ofNullable(sortBy);
         this.sortOrder = Optional.ofNullable(sortOrder);
     }
 
     public Optional<String> getUser() {
-        return user;
+        return username;
     }
 
     public Optional<String> getTitle() {

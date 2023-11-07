@@ -2,6 +2,7 @@ package com.example.forumsystemwebproject.repositories;
 
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
+import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
 import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.Tag;
 import com.example.forumsystemwebproject.models.User;
@@ -34,14 +35,14 @@ public class PostRepositoryImpl implements PostRepository {
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
 
+            filterOptions.getUser().ifPresent(value -> {
+                filters.add("user.username like :username");
+                params.put("username", String.format("%%%s%%", value));
+            });
+
             filterOptions.getTitle().ifPresent(value -> {
                 filters.add("title like :title");
                 params.put("title", String.format("%%%s%%", value));
-            });
-
-            filterOptions.getUser().ifPresent(value -> {
-                filters.add("username like :username");
-                params.put("username", value);
             });
 
             StringBuilder queryString = new StringBuilder("from Post");
@@ -185,12 +186,14 @@ public class PostRepositoryImpl implements PostRepository {
         String orderBy = "";
 
         switch (postFilterOptions.getSortBy().get()) {
+            case "username":
+                orderBy = "user.username";
+                break;
             case "title":
                 orderBy = "title";
                 break;
-            case "username":
-                orderBy = "username";
-                break;
+            default:
+                return "";
         }
 
         orderBy = String.format(" order by %s", orderBy);
@@ -201,4 +204,5 @@ public class PostRepositoryImpl implements PostRepository {
 
         return orderBy;
     }
+
 }

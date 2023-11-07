@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<form th:replace="PostForm.html :: head(${user.getUsername()})"></form>
+<body>
+<form th:replace="PostForm.html :: header"></form>
+
+
+
+<div class="body-content">
+    <h2 th:text="${title}">Title</h2>
+
+
+    <div class="rounded-container" id="profilePictureContainer">
+        <img class="users-image"
+             th:src="${user.photoUrl != null ? user.photoUrl : '/assets/img/users/default-icon.png'}"
+             alt="Profile Picture" id="profilePicture" />
+    </div>
+
+    <form action="#" th:action="@{'/users/' + ${id} + '/update'}" th:object="${user}" method="post">
+
+        <input type="hidden" id="hiddenPhotoInput" name="photoUrl" th:value="${user.photoUrl}" />
+
+        <label th:text="#{user.label.username}">Username</label>
+        <br/>
+        <!-- Display username as a readonly input field -->
+        <input type="text" th:field="*{username}" th:value="${user.username}" readonly style="background-color: #f0f0f0; color: #555"/>
+        <br/>
+        <label class="error" th:errors="*{username}">Username error placeholder</label>
+        <br/><br/>
+
+        <label th:text="#{user.label.first-name}">First Name</label>
+        <br/>
+        <input type="text" th:field="*{firstName}" th:value="${user.firstName}"/>
+        <br/>
+        <label class="error" th:errors="*{firstName}">First Name error placeholder</label>
+        <br/><br/>
+
+        <label th:text="#{user.label.last-name}">Last Name</label>
+        <br/>
+        <input type="text" th:field="*{lastName}" th:value="${user.lastName}"/>
+        <br/>
+        <label class="error" th:errors="*{lastName}">Last Name error placeholder</label>
+        <br/><br/>
+
+        <label th:text="#{user.label.email}">Email</label>
+        <br/>
+        <input type="email" th:field="*{email}"/>
+        <br/>
+        <label class="error" th:errors="*{email}">Email error placeholder</label>
+        <br/><br/>
+
+        <label th:text="#{user.label.new.password}">New Password</label>
+        <br/>
+        <input type="password" th:field="*{password}"/>
+        <br/>
+        <label class="error" th:errors="*{password}">Password error placeholder</label>
+        <br/><br/>
+
+        <label th:text="#{user.label.new.password.confirm}">New Password Confirm</label>
+        <br/>
+        <input type="password" th:field="*{passwordConfirm}"/>
+        <br/>
+        <label class="error" th:errors="*{passwordConfirm}">Password Confirm error placeholder</label>
+        <br/><br/>
+
+        <input class="btn btn-primary btn-xl text-uppercase" type="submit" value="Save"/>
+    </form>
+</div>
+
+</form>
+
+
+
+
+
+
+
+
+
+<form th:replace="PostForm.html :: footer"></form>
+
+
+
+
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="/js/scripts.js"></script>
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<!-- * *                               SB Forms JS                               * *-->
+<!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', event => {
+        const profilePicture = document.getElementById('profilePicture');
+        const profilePictureContainer = document.getElementById('profilePictureContainer');
+
+        if (profilePictureContainer) {
+            profilePictureContainer.addEventListener('click', function() {
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*';
+                fileInput.style.display = 'none';
+
+                fileInput.addEventListener('change', function(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+
+                        reader.onload = function(event) {
+                            profilePicture.src = event.target.result;
+                            // Update hidden input value to include the file as a base64 data URL
+                            const hiddenInput = document.getElementById('hiddenPhotoInput');
+                            hiddenInput.value = event.target.result;
+                        };
+
+                        reader.readAsDataURL(file);
+                    }
+                });
+
+                fileInput.click(); // Trigger file input when the container is clicked
+            });
+        }
+    });
+</script>
+
+</body>
+</html>

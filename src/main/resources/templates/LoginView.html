@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form th:replace="~{PostForm.html :: head('Login')}"></form>
+<body id="page-top">
+
+<form th:replace="~{PostForm.html :: header}"></form>
+
+<div class="body-content">
+    <h2 style="margin-top: 50px; margin-bottom: 50px">Please enter your credentials below</h2>
+    <form action="#" th:action="@{/auth/login}" th:object="${login}" method="post">
+        <label for="username" th:text="#{user.label.username}">Username</label>
+        <br/>
+        <input id="username" type="text" th:field="*{username}"/>
+        <br/>
+        <label class="error" th:errors="*{username}">Username error placeholder</label>
+        <br/><br/>
+
+        <label for="password" th:text="#{user.label.password}">Password</label>
+        <br/>
+        <input id="password" type="password" th:field="*{password}"/>
+        <br/>
+        <label class="error" th:errors="*{password}">Password error placeholder</label>
+        <br/><br/>
+
+        <input class="btn btn-primary btn-xl text-uppercase" type="submit" value="Login"/>
+    </form>
+</div>
+
+
+
+
+<form th:replace="~{PostForm.html :: footer}"></form>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="/js/scripts.js"></script>
+
+
+</body>
+</html>

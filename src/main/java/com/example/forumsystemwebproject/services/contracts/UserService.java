@@ -2,6 +2,7 @@ package com.example.forumsystemwebproject.services.contracts;
 
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
 import com.example.forumsystemwebproject.models.User;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public interface UserService {
 
     void delete(User user, int id);
 
-    void blockUser(User user, int id);
+    void blockOrUnblockUser(User user, User userToUpdate);
 
-    void unblockUser(User user, int id);
+    String saveUploadedFileAndGetUrl(MultipartFile file);
 }
