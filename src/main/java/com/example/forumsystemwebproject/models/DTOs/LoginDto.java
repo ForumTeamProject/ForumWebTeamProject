@@ -1,13 +1,13 @@
 package com.example.forumsystemwebproject.models.DTOs;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.*;
 
 public class LoginDto {
 
-    @NotEmpty
+    @NotEmpty(message = "Username can't be empty")
     public String username;
 
-    @NotEmpty
+    @NotEmpty(message = "Password can't be empty")
     public String password;
 
     public LoginDto() {

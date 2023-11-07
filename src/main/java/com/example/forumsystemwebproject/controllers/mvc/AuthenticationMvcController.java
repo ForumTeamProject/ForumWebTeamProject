@@ -8,6 +8,7 @@ import com.example.forumsystemwebproject.models.DTOs.LoginDto;
 import com.example.forumsystemwebproject.models.DTOs.UserDto;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.services.contracts.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,11 @@ public class AuthenticationMvcController {
         this.userService = userService;
     }
 
+    @ModelAttribute("requestURI")
+    public String requestURI(final HttpServletRequest request) {
+        return request.getRequestURI();
+    }
+
     @GetMapping("/login")
     public String showLoginPage(Model model) {
         model.addAttribute("login", new LoginDto());
@@ -43,13 +49,13 @@ public class AuthenticationMvcController {
     }
 
     @PostMapping("/login")
-    public String handleLogin(@Valid @ModelAttribute("login") LoginDto dto, HttpSession session, BindingResult bindingResult) {
+    public String handleLogin(@Valid @ModelAttribute("login") LoginDto login, BindingResult bindingResult, HttpSession session) {
         if (bindingResult.hasErrors()) {
             return "LoginView";
         }
 
         try {
-            User user = authenticationHelper.verifyAuthentication(dto.getUsername(), dto.getPassword());
+            User user = authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
             session.setAttribute("currentUser", user);
             return "redirect:/";
         } catch (AuthenticationFailureException e) {

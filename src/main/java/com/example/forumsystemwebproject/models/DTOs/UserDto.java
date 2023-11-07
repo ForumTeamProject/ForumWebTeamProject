@@ -20,7 +20,7 @@ public class UserDto {
                     "it must be 8-16 characters long.")
     private String password;
 
-    @NotEmpty
+    @NotEmpty(message = "You must confirm your password!")
     private String passwordConfirm;
     @NotEmpty(message = "First name can't be empty!")
     @Size(min = 4, max = 32, message = "First name must be between 4 and 32 characters long!")
@@ -33,7 +33,18 @@ public class UserDto {
     @Email
     private String email;
 
+    private String photoUrl;
+
     public UserDto() {
+        this.photoUrl = null;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public String getUsername() {

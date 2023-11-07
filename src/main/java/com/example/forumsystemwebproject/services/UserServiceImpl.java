@@ -2,6 +2,7 @@ package com.example.forumsystemwebproject.services;
 
 import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
+import com.example.forumsystemwebproject.exceptions.FileOperationException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
@@ -12,8 +13,16 @@ import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
 import com.example.forumsystemwebproject.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -61,8 +70,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(User userToUpdate, User authenticatedUser) {
         authorizationHelper.creatorCheck(authenticatedUser, userToUpdate);
-        authorizationHelper.blockedCheck(authenticatedUser);
-        checkUsernameUniqueness(userToUpdate);
         checkEmailUniqueness(userToUpdate);
         repository.update(userToUpdate);
     }
@@ -70,7 +77,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(User user, int id) {
         User userToDelete = getById(id);
-        authorizationHelper.blockedCheck(user);
         authorizationHelper.creatorCheck(user, userToDelete);
         repository.delete(id);
     }
@@ -112,7 +118,10 @@ public class UserServiceImpl implements UserService {
     private void checkEmailUniqueness(User user) {
         boolean duplicateExists = true;
         try {
-            repository.getByEmail(user.getEmail());
+            User userToCheck = repository.getByEmail(user.getEmail());
+            if (userToCheck.getId() == user.getId()) {
+                duplicateExists = false;
+            }
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
@@ -121,4 +130,32 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateEntityException("User", "email", user.getEmail());
         }
     }
+
+    public String saveUploadedFileAndGetUrl(MultipartFile file) {
+        if (!file.isEmpty()) {
+            try {
+                // Define the directory where you want to save the uploaded file
+                String uploadDir = "classpath:static/assets/img/users/";
+                String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+
+                // Create the directory if it doesn't exist
+                File uploadPath = new File(uploadDir);
+                if (!uploadPath.exists()) {
+                    uploadPath.mkdirs();
+                }
+
+                // Save the file to the specified directory
+                Path filePath = Paths.get(uploadDir + fileName);
+                Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                // Return the URL where the file is saved (this URL can be used to retrieve the image)
+                return "/assets/img/users/" + fileName;  // This can be the relative path to the image
+            } catch (IOException e) {
+                throw new FileOperationException("An error with uploading the image occurred");
+            }
+        } else {
+            return null;
+        }
+    }
+
 }

@@ -5,9 +5,18 @@
 
 <form th:replace="PostForm.html :: header"></form>
 
-<img class="users-image"
-     th:src="${user.photoUrl != null ? user.photoUrl : '/assets/img/users/default-icon.png'}"
-     alt="..." />
+<!--<div class="rounded-container">-->
+<!--    <img class="users-image"-->
+<!--         th:src="${user.photoUrl != null ? user.photoUrl : '/assets/img/users/default-icon.png'}"-->
+<!--         alt="..." />-->
+<!--</div>-->
+
+<div class="rounded-container-user" id="profilePictureContainer">
+    <img class="users-image"
+         th:src="${user.photoUrl != null ? user.photoUrl : '/assets/img/users/default-icon.png'}"
+         alt="Profile Picture" id="profilePicture" />
+</div>
+
 <h3 class="users-name" th:text="${user.firstName} + ' ' + ${user.lastName}">Full Name</h3>
 <br>
 <h5 class="users-name" th:text="'(' + ${user.username} + ')'"></h5>
@@ -15,7 +24,12 @@
 <br/>
 <br/>
 <br/>
-<form th:action="@{'/users/' + ${user.id} + '/blockOrUnblock'}" method="post">
+<form th:if="${session.currentUser.getId() == user.getId()}" th:method="get" th:action="@{'/users/' + ${user.id} + '/update'}">
+    <button style="display: block; margin: 0 auto;"
+            class="btn btn-primary btn-xl text-uppercase" th:text="Update"
+            type="submit">Update</button>
+</form>
+<form th:if="${session.currentUser.getId() != user.getId()}" th:action="@{'/users/' + ${user.id} + '/blockOrUnblock'}" method="post">
     <button style="display: block; margin: 0 auto;" th:unless="${isBlocked}" th:text="Block" class="btn btn-primary btn-xl text-uppercase" type="submit">Block</button>
     <button style="display: block; margin: 0 auto;" th:if="${isBlocked}" th:text="Unblock" class="btn btn-primary btn-xl text-uppercase" type="submit">Unblock</button>
 </form>

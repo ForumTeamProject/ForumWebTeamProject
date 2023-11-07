@@ -30,6 +30,7 @@ public class UserMapper {
         user.setId(id);
         User repositoryUser = service.getById(id);
         user.setRoles(repositoryUser.getRoles());
+        user.setPhotoUrl(dto.getPhotoUrl());
         return user;
     }
 
@@ -45,6 +46,19 @@ public class UserMapper {
         user.setRoles(roles);
         return user;
     }
+
+    public UserDto toDto(User user) {
+        UserDto userDto = new UserDto();
+        userDto.setUsername(user.getUsername());
+        userDto.setPassword(user.getPassword());
+        userDto.setPasswordConfirm("");
+        userDto.setEmail(user.getEmail());
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setPhotoUrl(user.getPhotoUrl());
+        return userDto;
+    }
+
 
 
 }
