@@ -19,20 +19,6 @@ public class AuthorizationHelperImpl implements AuthorizationHelper{
     }
 
     @Override
-    public void authorizeUser(User userToAuthorize, Post post) {
-        adminCheck(userToAuthorize);
-        creatorCheck(userToAuthorize, post);
-        blockedCheck(userToAuthorize);
-    }
-
-    @Override
-    public void authorizeUser(User userToAuthorize, Comment comment) {
-        adminCheck(userToAuthorize);
-        creatorCheck(userToAuthorize, comment);
-        blockedCheck(userToAuthorize);
-    }
-
-    @Override
     public void creatorCheck(User user, Post post) {
         if (user.getId() != post.getUser().getId()) {
             throw new UnauthorizedOperationException(String.format("%s with %s %s is unauthorized to do this operation!", "User", "username", user.getUsername()));

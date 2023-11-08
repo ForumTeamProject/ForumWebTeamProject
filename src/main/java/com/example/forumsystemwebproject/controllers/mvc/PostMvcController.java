@@ -77,8 +77,6 @@ public class PostMvcController {
         return session.getAttribute("currentUser") != null;
     }
 
-    @ModelAttribute("isBlocked")
-
 
     @GetMapping
     public String showPosts(HttpSession session,
@@ -223,7 +221,7 @@ public class PostMvcController {
         try {
             user = authenticationHelper.tryGetUser(session);
         } catch (AuthenticationFailureException e) {
-            return "redirect/auth/login";
+            return "redirect:/auth/login";
         }
 
         try {

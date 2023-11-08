@@ -6,11 +6,6 @@ import java.util.List;
 
 public interface AuthorizationHelper {
 
-
-    void authorizeUser(User userToAuthorize, Post post);
-
-    void authorizeUser(User userToAuthorize, Comment comment);
-
     void creatorCheck(User user, Post post);
 
     void creatorCheck(User user, Comment comment);
