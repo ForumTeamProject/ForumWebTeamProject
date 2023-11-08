@@ -3,6 +3,8 @@ package com.example.forumsystemwebproject.repositories;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
+import com.example.forumsystemwebproject.models.Comment;
+import com.example.forumsystemwebproject.models.Like;
 import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.Tag;
 import com.example.forumsystemwebproject.models.User;
@@ -16,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class PostRepositoryImpl implements PostRepository {
@@ -155,6 +159,8 @@ public class PostRepositoryImpl implements PostRepository {
     public void delete(Post post) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
+            processCommentRemoval(session, post);
+            processLikesRemoval(session,post);
             session.remove(post);
             session.getTransaction().commit();
         }
@@ -205,4 +211,15 @@ public class PostRepositoryImpl implements PostRepository {
         return orderBy;
     }
 
+    private void processLikesRemoval(Session session, Post post) {
+        String query = "Delete from Like l where l.post = :post";
+        session.createQuery(query).setParameter("post", post)
+                .executeUpdate();
+    }
+
+    private void processCommentRemoval(Session session, Post post) {
+        String query = "Delete from Comment c where c.post = :post";
+        session.createQuery(query).setParameter("post", post)
+                .executeUpdate();
+    }
 }

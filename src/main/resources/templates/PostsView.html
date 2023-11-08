@@ -40,11 +40,16 @@
 
             </div>
             <div id="row" th:each="post : ${postPage}">
-                <div class="cell">
+                <div style="width: 40%; padding: 12px; border-bottom: 1px solid #dee2e6;  display: table-cell;">
                     <a href="#" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Title</a>
                 </div>
-                <div class="cell">
-                    <a href="#" th:href="@{/users/{id}(id=${post.user.id})}" th:text="${post.user.username}"> User</a>
+                <div style="width: 20%; padding: 12px; border-bottom: 1px solid #dee2e6; display: table-cell;">
+                    <a href="#" th:href="@{/users/{id}(id=${post.user.id})}" th:text="${post.user.username}">User</a>
+                </div>
+                <div style="width: 1%; padding: 12px; border-top: 1px solid #dee2e6; display: table-cell;">
+                   <form th:action="@{'/posts/' + ${post.id}  + '/delete'}" th:method="get">
+                       <button th:if="${post.user.id} == ${session.currentUser.id}"  style="background-color: red; border: none; color: white"   th:text="#{post.label.delete}" type="submit">Delete</button>
+                   </form>
                 </div>
             </div>
         </div>

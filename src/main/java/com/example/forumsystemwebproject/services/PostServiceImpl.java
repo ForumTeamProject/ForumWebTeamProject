@@ -84,8 +84,13 @@ public class PostServiceImpl implements PostService {
     @Override
     public void delete(int id, User user) {
         Post postToDelete = getById(id);
-        authorizationHelper.authorizeUser(user, postToDelete);
-        postRepository.delete(postToDelete);
+        try {
+            authorizationHelper.adminCheck(user);
+            postRepository.delete(postToDelete);
+        } catch (UnauthorizedOperationException e) {
+            authorizationHelper.creatorCheck(user, postToDelete);
+            postRepository.delete(postToDelete);
+        }
     }
 
     public void addTagToPost(User userWhoAdds, Post post, Tag tag) {
