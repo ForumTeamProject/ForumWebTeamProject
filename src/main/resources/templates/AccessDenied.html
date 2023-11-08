@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html class="html-denied" lang="en">
+<form th:replace="~{PostForm.html :: head('Access Denied')}"></form>
+<body class="body-denied">
+<div class="wrapper-denied">
+    <div class="box-denied">
+        <h1 class="h1-denied">403</h1>
+        <p class="p-denied">Sorry, it's not allowed to go beyond this point!</p>
+        <p class="p-denied"><a th:href="@{/}">Please, go back this way.</a></p>
+    </div>
+</div>
+</body>
+</html>

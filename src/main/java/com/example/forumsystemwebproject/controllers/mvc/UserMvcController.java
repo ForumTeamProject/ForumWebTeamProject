@@ -135,6 +135,7 @@ public class UserMvcController {
         }
 
         try {
+            authorizationHelper.adminCheck(user);
             User userToShow = userService.getById(id);
             model.addAttribute("user", userToShow);
             return "UserView";
@@ -145,7 +146,7 @@ public class UserMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("unauthorized", e.getMessage());
-            return "АccessDenied";
+            return "AccessDenied";
         }
     }
 

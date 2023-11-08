@@ -152,7 +152,8 @@ public class PostMvcController {
     }
 
     @PostMapping("/create")
-    public String createPost(@Valid @ModelAttribute("post") PostDto dto, BindingResult bindingResult,HttpSession session) {
+    public String createPost(@Valid @ModelAttribute("post") PostDto dto, BindingResult bindingResult,HttpSession session, Model model,
+                             @RequestParam(value = "photoUrl", required = false) String photoUrl) {
         User user;
         try {
             user = authenticationHelper.tryGetUser(session);
@@ -163,10 +164,20 @@ public class PostMvcController {
         if (bindingResult.hasErrors()) {
             return "PostForm";
         }
-
-        Post post = mapper.fromDto(dto);
-        postService.create(post, user);
-        return "PostsView";
+        try {
+            Post post = mapper.fromDto(dto);
+            if (photoUrl != null && !photoUrl.isEmpty()) {
+                // Update the photo URL in the UserDto object
+                post.setPhotoUrl(photoUrl);
+            }
+            postService.create(post, user);
+            model.addAttribute("post", post);
+            return "PostView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("unauthorized", e.getMessage());
+            return "AccessDenied";
+        }
     }
 
     @GetMapping("/{id}/update")

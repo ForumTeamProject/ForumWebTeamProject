@@ -48,7 +48,7 @@
                 </div>
                 <div style="width: 1%; padding: 12px; border-top: 1px solid #dee2e6; display: table-cell;">
                    <form th:action="@{'/posts/' + ${post.id}  + '/delete'}" th:method="get">
-                       <button th:if="${post.user.id} == ${session.currentUser.id}"  style="background-color: red; border: none; color: white"   th:text="#{post.label.delete}" type="submit">Delete</button>
+                       <button th:if="${post.user.id == session.currentUser.id || isAdmin}"  style="background-color: red; border: none; color: white"   th:text="#{post.label.delete}" type="submit">Delete</button>
                    </form>
                 </div>
             </div>
