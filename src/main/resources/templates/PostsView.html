@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<form th:replace="~{PostForm.html :: head('Posts')}"></form>
+<form th:replace="~{PostFormView.html :: head('Posts')}"></form>
 <body>
-<form th:replace="~{PostForm.html :: header}"></form>
+<form th:replace="~{PostFormView.html :: header}"></form>
 
+<br/>
+<br/>
+<br/>
+<div class="text-center">
+<a th:if="${!isBlocked}" class="btn btn-primary btn-xl text-uppercase" th:href="@{/posts/create}">New Post</a>
+</div>
 <div class="body-content">
     <form action="#" th:action="@{/posts}" method="get" th:object="${filterOptions}">
         <label style="margin-top: 50px; margin-bottom: 50px;  font-weight: 700;  line-height: 1.2;" th:text="#{posts.filter.label}">Browse Posts</label>
@@ -70,7 +76,7 @@
     <!--    <a th:if="${userPage.hasNext()}" th:href="@{'/users?page=' + ${userPage.nextPageable().pageNumber}}" th:text="Next"></a>-->
 </div>
 
-<form th:replace="~{PostForm.html :: footer}"></form>
+<form th:replace="~{PostFormView.html :: footer}"></form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Core theme JS-->

@@ -58,6 +58,7 @@ public class CommentServiceImpl implements CommentService {
         authorizationHelper.blockedCheck(user);
         Post post = postRepository.getById(id);
         comment.setPost(post);
+        comment.setUser(user);
         repository.create(comment);
     }
 

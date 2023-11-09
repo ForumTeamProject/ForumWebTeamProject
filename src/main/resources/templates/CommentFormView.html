@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form th:replace="~{PostFormView.html :: head('New Comment')}"></form>
+<body>
+
+<form th:replace="~{PostFormView.html :: header}"></form>
+
+
+<div class="body-content">
+    <h2 style="margin-top: 50px; margin-bottom: 50px">New Comment</h2>
+
+    <form action="#" th:action="@{'/posts/' + ${id} + '/comments/create'}" th:object="${comment}" method="post">
+        <label th:text="#{comment.label.content}">Content</label>
+        <br/>
+        <textarea th:maxlength="8192" class="textarea-content" id="symbolTextArea" oninput="countSymbols()" th:field="*{content}">Content</textarea>
+        <p>Number of symbols: <span id="symbolCount">0</span></p>
+        <br/>
+        <label class="error" th:errors="*{content}">Content error placeholder</label>
+        <br/><br/>
+
+        <input class="btn btn-primary btn-xl text-uppercase" type="submit" value="Create"/>
+    </form>
+</div>
+
+
+
+
+
+
+
+
+
+<form th:replace="~{PostFormView.html :: footer}"></form>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="/js/scripts.js"></script>
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<!-- * *                               SB Forms JS                               * *-->
+<!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+
+<script>
+    function countSymbols() {
+        const input = document.getElementById('symbolTextArea');
+        const count = document.getElementById('symbolCount');
+        count.textContent = input.value.length;
+    }
+
+</script>
+</body>
+</html>

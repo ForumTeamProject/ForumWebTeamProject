@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<form th:replace="~{PostForm.html :: head('Users')}"></form>
+<form th:replace="~{PostFormView.html :: head('Users')}"></form>
 <style>
 </style>
 <body id="page-top">
-<form th:replace="PostForm.html :: header"></form>
+<form th:replace="PostFormView.html :: header"></form>
 
 <div class="body-content">
     <form action="#" th:action="@{/users}" method="get" th:object="${filterOptions}">
@@ -74,7 +74,7 @@
 <!--    <a th:if="${userPage.hasNext()}" th:href="@{'/users?page=' + ${userPage.nextPageable().pageNumber}}" th:text="Next"></a>-->
 </div>
 
-<form th:replace="PostForm.html :: footer"></form>
+<form th:replace="PostFormView.html :: footer"></form>
 
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>

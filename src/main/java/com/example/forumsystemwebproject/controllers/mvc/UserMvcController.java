@@ -76,6 +76,20 @@ public class UserMvcController {
         return session.getAttribute("currentUser") != null;
     }
 
+    @ModelAttribute("isBlocked")
+    public boolean isBlocked(HttpSession session) {
+        if (populateIsAuthenticated(session)) {
+            User user = (User) session.getAttribute("currentUser");
+            for (Role role: user.getRoles()) {
+                if (role.getName().equals(roleRepository.getByName("blockedUser").getName())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
     @GetMapping
     public String showUsers(HttpSession session, @ModelAttribute("filterOptions") UserFilterDto filterDto, Model model,
                             @RequestParam("page") Optional<Integer> page,
@@ -131,7 +145,6 @@ public class UserMvcController {
         }
 
         try {
-            authorizationHelper.adminCheck(user);
             User userToShow = userService.getById(id);
             model.addAttribute("user", userToShow);
             return "UserView";
@@ -240,7 +253,8 @@ public class UserMvcController {
                 userToUpdate.setPhotoUrl(photoUrl);
             }
             userService.update(userToUpdate, authenticatedUser);
-            return "redirect:/";
+            model.addAttribute("user", userToUpdate);
+            return "UserView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());

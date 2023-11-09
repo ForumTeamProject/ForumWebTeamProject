@@ -76,6 +76,19 @@ public class PostMvcController {
     }
 
 
+    @ModelAttribute("isBlocked")
+    public boolean isBlocked(HttpSession session) {
+        if (populateIsAuthenticated(session)) {
+            User user = (User) session.getAttribute("currentUser");
+            for (Role role: user.getRoles()) {
+                if (role.getName().equals(roleRepository.getByName("blockedUser").getName())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
     @GetMapping
     public String showPosts(HttpSession session,
                             Model model,
@@ -146,7 +159,7 @@ public class PostMvcController {
             return "redirect:/auth/login";
         }
         model.addAttribute("post", new PostDto());
-        return "PostForm";
+        return "PostFormView";
     }
 
     @PostMapping("/create")
@@ -160,7 +173,7 @@ public class PostMvcController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "PostForm";
+            return "PostFormView";
         }
         try {
             Post post = mapper.fromDto(dto);
@@ -200,7 +213,7 @@ public class PostMvcController {
     }
 
     @PostMapping("/{id}/update")
-    public String updatePost(@Valid @ModelAttribute("post") PostDto dto, HttpSession session, BindingResult bindingResult, Model model) {
+    public String updatePost(@Valid @ModelAttribute("post") PostDto dto, HttpSession session, BindingResult bindingResult, Model model, @PathVariable int id) {
 
         User user;
         try {
