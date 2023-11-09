@@ -7,7 +7,6 @@ import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
 import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.helpers.PaginationHelper;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
-import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
 import com.example.forumsystemwebproject.helpers.mappers.PostMapper;
 import com.example.forumsystemwebproject.models.DTOs.PostDto;
 import com.example.forumsystemwebproject.models.DTOs.PostFilterDto;
@@ -16,7 +15,6 @@ import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import com.example.forumsystemwebproject.services.contracts.PostService;
-import com.example.forumsystemwebproject.services.contracts.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -135,7 +133,7 @@ public class PostMvcController {
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("notFound", e.getMessage());
-            return "NotFound";
+            return "ErrorView";
         }
     }
 
@@ -145,7 +143,7 @@ public class PostMvcController {
         try {
             user = authenticationHelper.tryGetUser(session);
         } catch (AuthenticationFailureException e) {
-            return "redirect/auth/login";
+            return "redirect:/auth/login";
         }
         model.addAttribute("post", new PostDto());
         return "PostForm";
@@ -176,7 +174,7 @@ public class PostMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("unauthorized", e.getMessage());
-            return "AccessDenied";
+            return "ErrorView";
         }
     }
 
@@ -197,7 +195,7 @@ public class PostMvcController {
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("notFound", e.getMessage());
-            return "NotFound";
+            return "ErrorView";
         }
     }
 
@@ -222,7 +220,7 @@ public class PostMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("unauthorized", e.getMessage());
-            return "AccessDenied";
+            return "ErrorView";
         }
     }
 
@@ -241,11 +239,11 @@ public class PostMvcController {
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("notFound", e.getMessage());
-            return "NotFound";
+            return "ErrorView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("unauthorized", e.getMessage());
-            return "AccessDenied";
+            return "ErrorView";
         }
     }
 
@@ -266,7 +264,7 @@ public class PostMvcController {
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("notFound", e.getMessage());
-            return "NotFound";
+            return "ErrorView";
         }
     }
 

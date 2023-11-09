@@ -69,7 +69,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(User userToUpdate, User authenticatedUser) {
-        authorizationHelper.creatorCheck(authenticatedUser, userToUpdate);
         checkEmailUniqueness(userToUpdate);
         repository.update(userToUpdate);
     }
