@@ -42,7 +42,7 @@ public class AuthorizationHelperImpl implements AuthorizationHelper{
     }
 
     @Override
-    public void creatorCheck(User userToCheck, User authenticatedUser) {
+    public void creatorCheck(User authenticatedUser,User userToCheck) {
         if (userToCheck.getId() != authenticatedUser.getId()) {
             throw new UnauthorizedOperationException(String.format("%s with %s %s is unauthorized to do this operation!", "User", "username", authenticatedUser.getUsername()));
         }
@@ -55,7 +55,7 @@ public class AuthorizationHelperImpl implements AuthorizationHelper{
                 return;
             }
         }
-        throw new UnauthorizedOperationException(String.format("%s with %s %s is blocked and therefore unauthorized to do this operation!", "User", "username", user.getUsername()));
+        throw new UnauthorizedOperationException(String.format("%s with %s %s is unauthorized to do this operation!", "User", "username", user.getUsername()));
     }
 
     @Override

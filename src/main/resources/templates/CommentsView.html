@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form th:replace="~{PostFormView.html :: head('Comments')}"></form>
+<body id="page-top">
+
+<form th:replace="~{PostFormView.html :: header}"></form>
+
+<section class="page-section bg-light" id="portfolio">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-heading text-uppercase" th:text="#{comment.label.section}">Comment Section</h2>
+            <h3 class="section-subheading text-muted" th:text="${post.title}">Title</h3>
+            <a th:unless="${isBlocked}" class="btn btn-primary btn-xl text-uppercase"
+               th:href="@{'/posts/' + ${post.id} + '/comments/create'}">New Comment</a>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-lg-4 col-sm-6 mb-4" th:each="comment : ${commentPage}">
+                <!-- Portfolio item 1-->
+                <div class="portfolio-item">
+                    <a class="portfolio-link" data-bs-toggle="modal" th:href="@{'#portfolioModal' + ${comment.id}}">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                        </div>
+                        <img class="img-fluid" style="width: 336px; height: 200px; object-fit: cover; object-position: center;"
+                             th:src="${comment.user.photoUrl != null ? comment.user.photoUrl : '/assets/img/posts/default-icon.jpg'}"
+                             alt="..."/>
+                    </a>
+                    <div class="portfolio-caption">
+                        <div class="portfolio-caption-heading" th:text="${comment.user.firstName}">Creator's first
+                            name
+                        </div>
+                        <div class="portfolio-caption-subheading text-muted" th:text="${post.getTitle()}">Post's title
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div th:each="comment : ${commentPage}" class="portfolio-modal modal fade" th:id="'portfolioModal' + ${comment.id}"
+     tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="close-modal" data-bs-dismiss="modal"><img src="/assets/img/close-icon.svg" alt="Close modal"/>
+            </div>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="modal-body">
+                            <!-- Project details-->
+                            <h3 class="text-uppercase" th:text="${post.title}">Post Title</h3>
+                            <br/>
+<!--                            <img class="img-fluid" style="width: 336px; height: 200px; object-fit: cover; object-position: center;"-->
+<!--                                 th:src="${comment.user.photoUrl != null ? comment.user.photoUrl : '/assets/img/posts/default-icon.jpg'}"-->
+<!--                                 alt="..."/>-->
+
+                            <div class="rounded-container-user" id="profilePictureContainer">
+                               <a th:href="@{'/users/' + ${comment.user.id}}"> <img class="users-image"
+                                     th:src="${comment.user.photoUrl != null ? comment.user.photoUrl : '/assets/img/users/default-icon.png'}"
+                                     alt="Profile Picture" id="profilePicture" /> </a>
+                            </div>
+                            <textarea class="textarea-content" style="resize: none" id="commentText" th:text="${comment.content}" readonly>Comment content</textarea>
+
+                            <br/>
+                            <br/>
+
+                            <form style="display: inline; margin: 0; padding: 0" th:if="${comment.user.id == session.currentUser.id}"
+                                  th:method="get" th:action="@{'/posts/' + ${post.id} + '/comments/' + ${comment.id} + '/update'}">
+                            <button style="margin-right: 50px"  class="btn btn-primary btn-xl text-uppercase"  type="submit">
+                                Edit
+                            </button>
+                            </form>
+
+                            <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button">
+                                <i class="fas fa-xmark me-1"></i>
+                                Close Comment
+                            </button>
+
+                            <form style="display: inline; margin: 0; padding: 0" th:action="@{/posts/__${post.id}__/comments/__${comment.id}__/delete}" th:method="post" th:if="${comment.user.id == session.currentUser.id}">
+                            <button class="btn btn-primary btn-xl text-uppercase" style="background-color: red; margin-left: 50px;" type="submit">
+                                Delete
+                            </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="pagination_section" style="text-align: center">
+    <!--    <a th:if="${userPage.hasPrevious()}" th:href="@{'/users?page=' + ${userPage.previousPageable().pageNumber}}" th:text="Previous"></a>-->
+    <span th:if="${commentPage.totalPages > 0}" th:each="pageNumber : ${#numbers.sequence(1, commentPage.totalPages)}">
+    <a th:href="@{'/posts/' + ${post.id} + '/comments?page=' + ${pageNumber} +
+        '&size=' + ${commentPage.getSize()}}"
+       th:text="${pageNumber}" th:class="${pageNumber == commentPage.number + 1} ? 'active'"></a>
+</span>
+    <!--    <a th:if="${userPage.hasNext()}" th:href="@{'/users?page=' + ${userPage.nextPageable().pageNumber}}" th:text="Next"></a>-->
+</div>
+
+
+<form th:replace="~{PostFormView.html :: footer}"></form>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="/js/scripts.js"></script>
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<!-- * *                               SB Forms JS                               * *-->
+<!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+</body>
+</html>

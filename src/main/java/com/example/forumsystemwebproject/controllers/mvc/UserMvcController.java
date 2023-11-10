@@ -12,7 +12,6 @@ import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import com.example.forumsystemwebproject.services.contracts.UserService;
-import jakarta.servlet.Filter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -24,10 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.parser.Entity;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -80,6 +76,20 @@ public class UserMvcController {
         return session.getAttribute("currentUser") != null;
     }
 
+    @ModelAttribute("isBlocked")
+    public boolean isBlocked(HttpSession session) {
+        if (populateIsAuthenticated(session)) {
+            User user = (User) session.getAttribute("currentUser");
+            for (Role role: user.getRoles()) {
+                if (role.getName().equals(roleRepository.getByName("blockedUser").getName())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
     @GetMapping
     public String showUsers(HttpSession session, @ModelAttribute("filterOptions") UserFilterDto filterDto, Model model,
                             @RequestParam("page") Optional<Integer> page,
@@ -121,7 +131,7 @@ public class UserMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "AccessDenied";
+            return "ErrorView";
         }
     }
 
@@ -140,12 +150,12 @@ public class UserMvcController {
             return "UserView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("notFound", e.getMessage());
-            return "NotFound";
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
-            model.addAttribute("unauthorized", e.getMessage());
-            return "АccessDenied";
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
         }
     }
 
@@ -169,11 +179,11 @@ public class UserMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("unauthorized", e.getMessage());
-            return "AccessDenied";
+            return "ErrorView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("notFound", e.getMessage());
-            return "NotFound";
+            return "ErrorView";
         }
     }
 
@@ -197,6 +207,7 @@ public class UserMvcController {
 
         try {
             User userToUpdate = userService.getById(id);
+            authorizationHelper.creatorCheck(user, userToUpdate);
             UserDto dto = mapper.toDto(userToUpdate);
             model.addAttribute("userId", id);
             model.addAttribute("user", dto);
@@ -204,11 +215,11 @@ public class UserMvcController {
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "NotFound";
+            return "ErrorView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "AccessDenied";
+            return "ErrorView";
         }
     }
 
@@ -242,11 +253,12 @@ public class UserMvcController {
                 userToUpdate.setPhotoUrl(photoUrl);
             }
             userService.update(userToUpdate, authenticatedUser);
-            return "redirect:/";
+            model.addAttribute("user", userToUpdate);
+            return "UserView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "AccessDenied";
+            return "ErrorView";
         } catch (DuplicateEntityException e) {
             if (e.getMessage().contains("email")) {
                 bindingResult.rejectValue("email", "email_error", e.getMessage());
@@ -257,7 +269,7 @@ public class UserMvcController {
         }  catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "NotFound";
+            return "ErrorView";
         }
     }
 
@@ -278,11 +290,11 @@ public class UserMvcController {
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "NotFound";
+            return "ErrorView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "AccessDenied";
+            return "ErrorView";
         }
     }
 }

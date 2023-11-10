@@ -62,17 +62,18 @@
 
         <input type="hidden" id="hiddenPhotoInput" name="photoUrl" th:value="${post.photoUrl}" />
 
-        <label for="title" th:text="#{post.label.title}">Title</label>
+        <label th:text="#{post.label.title}">Title</label>
         <br/>
-        <input id="title" type="text" th:field="*{title}"/>
+        <input th:maxlength="64" class="input-title" type="text" th:field="*{title}"/>
         <br/>
         <label class="error" th:errors="*{title}">Title error placeholder</label>
         <br/><br/>
 
 
-        <label for="content" th:text="#{post.label.content}">Content</label>
+        <label th:text="#{post.label.content}">Content</label>
         <br/>
-        <input id="content" type="text" th:field="*{content}"/>
+        <textarea th:maxlength="8192" class="textarea-content" id="symbolTextArea" oninput="countSymbols()" th:field="*{content}">Content</textarea>
+        <p>Number of symbols: <span id="symbolCount">0</span></p>
         <br/>
         <label class="error" th:errors="*{content}">Content error placeholder</label>
         <br/><br/>
@@ -159,6 +160,14 @@
             });
         }
     });
+</script>
+<script>
+    function countSymbols() {
+        const input = document.getElementById('symbolTextArea');
+        const count = document.getElementById('symbolCount');
+        count.textContent = input.value.length;
+    }
+
 </script>
 </body>
 </html>

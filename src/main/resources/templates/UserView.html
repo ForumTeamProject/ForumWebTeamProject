@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<form th:replace="~{PostForm.html :: head(${user.username})}"></form>
+<form th:replace="~{PostFormView.html :: head(${user.username})}"></form>
 <body>
 
-<form th:replace="PostForm.html :: header"></form>
+<form th:replace="PostFormView.html :: header"></form>
 
 <!--<div class="rounded-container">-->
 <!--    <img class="users-image"-->
@@ -20,6 +20,11 @@
 <h3 class="users-name" th:text="${user.firstName} + ' ' + ${user.lastName}">Full Name</h3>
 <br>
 <h5 class="users-name" th:text="'(' + ${user.username} + ')'"></h5>
+<br/>
+<br/>
+<h6 class="users-name" th:if="${!isBlocked}" th:attr="title='This status indicates that you are fully-fledged user of the website.'">Status: <span style="color: green">Active</span></h6>
+<h6 class="users-name" th:if="${isBlocked}" th:attr="title='This status indicates that you are blocked user and therefore not authorized to create post nor comments.'">Status: <span style="color: red">Blocked</span></h6>
+
 <br/>
 <br/>
 <br/>
@@ -42,7 +47,7 @@
 </form>
 
 
-<form th:replace="PostForm.html :: footer"></form>
+<form th:replace="PostFormView.html :: footer"></form>
 
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
