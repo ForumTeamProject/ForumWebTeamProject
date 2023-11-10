@@ -91,6 +91,21 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
+    public List<Comment> getByUserId(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            User user = userRepository.getById(id);
+            Map<String, Object> params = new HashMap<>();
+
+            StringBuilder queryString = new StringBuilder("from Comment where user = :user");
+
+            Query<Comment> query = session.createQuery(queryString.toString(), Comment.class);
+            query.setParameter("user", user);
+            query.setProperties(params);
+            return query.list();
+        }
+    }
+
+    @Override
     public List<Comment> getByPostId(Post post) {
         try (Session session = sessionFactory.openSession()) {
             Query<Comment> query = session.createQuery("from Comment where post = :post", Comment.class);

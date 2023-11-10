@@ -41,6 +41,10 @@ public class CommentServiceImpl implements CommentService {
     public List<Comment> getByUserId(CommentFilterOptions filterOptions, int id) {
         return repository.getByUserId(filterOptions, id);
     }
+    @Override
+    public List<Comment> getByUserId(int id){
+        return repository.getByUserId(id);
+    }
 
     @Override
     public List<Comment> getByPostId(int id) {
@@ -64,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void update(Comment comment, User user) {
         authorizationHelper.blockedCheck(user);
-        authorizationHelper.creatorCheck(user,comment);
+        authorizationHelper.creatorCheck(user, comment);
         repository.update(comment);
     }
 

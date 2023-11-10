@@ -11,6 +11,7 @@ public interface CommentService {
     List<Comment> get(CommentFilterOptions filterOptions);
 
     List<Comment> getByUserId(CommentFilterOptions filterOptions, int id);
+    List<Comment> getByUserId(int id);
 
     List<Comment> getByPostId(int id);
 

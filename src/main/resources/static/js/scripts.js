@@ -51,3 +51,13 @@ window.addEventListener('DOMContentLoaded', event => {
         });
     });
 });
+
+//comment
+function showComment() {
+    var block = document.getElementById("comment-area");
+    if (block.style.display === "none") {
+        block.style.display = "block";
+    } else {
+        block.style.display = "none";
+    }
+}

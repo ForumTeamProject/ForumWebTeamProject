@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form th:replace="~{PostForm.html :: head(${post.getTitle()})}"></form>
+<head th:fragment="head(title)">
+    <meta charset="utf-8"/>
+    <title th:text="'Pet Lounge | ' + ${title}">Post</title>
+
+    <!-- Favicon-->
+    <!-- <link rel="icon" type="image/x-icon" href="../static/assets/favicon.ico"/> -->
+    <!-- Font Awesome icons (free version)-->
+    <!-- <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script> -->
+    <!-- Google fonts-->
+    <!--  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css"/>-->
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+
+</head>
+<body>
+<form th:replace="~{PostForm.html :: header}"></form>
+
+<div class="body-content">
+    <!-- <label style="margin-top: 50px; margin-bottom: 50px;  font-weight: 700;  line-height: 1.2;"
+    th:text="~{${post.getUser().name} + #{post.label.post}}">User's Post</label> -->
+    <div class="post-container">
+        <div class="head">
+            <div class="author" th:text="${post.getUser().getUsername()}">Author:</div>
+            <div class="content" th:text="${'Topic: ' + post.getTitle()}">Topic: post's title</div>
+        </div>
+        <div class="body">
+            <div class="authors">
+                <div class="username"><a th:href="${'/users/' + post.getUser().getId()}"
+                                         th:text="${post.getUser().getUsername()}">Author's Username</a></div>
+                <div class="created-at" th:text="${'Created: ' + post.getCreationDate()}">CreationDate:11.11.1111</div>
+                <img src="https://mystickermania.com/cdn/stickers/adventure-time/adventure-time-jake-with-sandwich-512x512.png"
+                     alt="Default"/>
+            </div>
+            <div class="content" th:utext="${post.getContent()}">
+                Just some test content.
+            </div>
+            <div class="comment">
+                <button onclick="showComment()">Comment</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Comment input-->
+    <div class="hidden-comment-area" id="comment-area" style="display: none;">
+        <textarea name="comment" placeholder="comment here..."></textarea>
+        <input type="submit" name="" value="submit">
+    </div>
+    <!-- Show Comments -->
+    <div class="comments-container">
+        <div class="head">
+            <div class="author" th:text="${post.getUser().getUsername()}">Author's post comments:</div>
+            <div class="content">Comments</div>
+        </div>
+
+        <div class="body" th:each="comment : ${comments}">
+            <div class="authors">
+                <div class="username"><a th:href="${'/users/' + comment.getUser().getUsername()}"
+                                         th:text="${ comment.getUser().getUsername()}">Username</a></div>
+                <!--                    <div th:text="${'Role: ' + String.join(' ', comment.getUser().getRoles())}">Role</div> -->
+                <img src="https://mystickermania.com/cdn/stickers/adventure-time/adventure-time-jake-with-sandwich-512x512.png"
+                     alt="Default"/>
+            </div>
+
+            <div class="content" th:utext="${comment.getContent()}">
+                Test Comment Content aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+            </div>
+
+            <!-- <div class="comment">
+                 <button onclick="showComment()">Reply?</button>
+             </div> -->
+        </div>
+
+    </div>
+</div>
+<form th:replace="~{PostForm.html :: footer}"></form>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="/js/scripts.js"></script>
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<!-- * *                               SB Forms JS                               * *-->
+<!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+</body>
+</html>

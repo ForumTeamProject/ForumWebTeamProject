@@ -14,7 +14,7 @@ public interface RoleService {
 
     void create(Role role, User authenticatedUser);
 
-    public void update(Role role, User authenticatedUser);
+    void update(Role role, User authenticatedUser);
 
-    public void delete(int id, User authenticatedUser);
+    void delete(int id, User authenticatedUser);
 }

@@ -12,6 +12,8 @@ public interface CommentRepository {
 
     List<Comment> getByUserId(CommentFilterOptions filterOptions, int id);
 
+    List<Comment> getByUserId(int id);
+
     List<Comment> getByPostId(Post post);
 
     Comment getById(int id);
