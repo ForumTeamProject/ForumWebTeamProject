@@ -64,33 +64,6 @@ public class CommentRepositoryImpl implements CommentRepository {
 //        TODO The comment has a user and you cannot enter the user in the request, so we can use getByUserId instead
 
     @Override
-    public List<Comment> getByUserId(CommentFilterOptions filterOptions, int id) {
-        try (Session session = sessionFactory.openSession()) {
-            User user = userRepository.getById(id);
-            List<String> filters = new ArrayList<>();
-            Map<String, Object> params = new HashMap<>();
-
-            filterOptions.getContent().ifPresent(value -> {
-                filters.add("content like :content");
-                params.put("content", String.format("%%%s%%", value));
-            });
-
-            StringBuilder queryString = new StringBuilder("from Comment where user = :user");
-            if (!filters.isEmpty()) {
-                queryString
-                        .append(" and ")
-                        .append(String.join(" and ", filters));
-            }
-            queryString.append(generateOrderBy(filterOptions));
-
-            Query<Comment> query = session.createQuery(queryString.toString(), Comment.class);
-            query.setParameter("user", user);
-            query.setProperties(params);
-            return query.list();
-        }
-    }
-
-    @Override
     public List<Comment> getByUserId(int id) {
         try (Session session = sessionFactory.openSession()) {
             User user = userRepository.getById(id);

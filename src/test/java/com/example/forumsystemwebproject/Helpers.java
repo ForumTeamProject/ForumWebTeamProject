@@ -82,6 +82,13 @@ public class Helpers {
         return mockRole;
     }
 
+    public static Role createMockBlockRole() {
+        var mockRole = new Role();
+        mockRole.setId(3);
+        mockRole.setName("blockedUser");
+        return mockRole;
+    }
+
     public static Set<Role> createUserMockRoles() {
         var mockRoles = new HashSet<Role>();
         mockRoles.add(createMockUserRole());

@@ -53,16 +53,12 @@ public class CommentController {
 
     @GetMapping("/users/{id}/comments")
     public List<Comment> getByUserId(
-            @RequestParam(required = false) String content,
-            @RequestParam(required = false) String sortBy,
-            @RequestParam(required = false) String sortOrder,
             @PathVariable int id,
             @RequestHeader HttpHeaders headers
     ) {
         try {
             authenticationHelper.tryGetUser(headers);
-            CommentFilterOptions filterOptions = new CommentFilterOptions(null, content, sortBy, sortOrder);
-            return service.getByUserId(filterOptions, id);
+            return service.getByUserId(id);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {

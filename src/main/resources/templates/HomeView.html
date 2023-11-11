@@ -47,9 +47,10 @@
                                 <div class="portfolio-hover">
                                     <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                                 </div>
+                                <a  th:href="@{'/posts/' + ${post.id}}">
                                 <img class="img-fluid"
                                      th:src="${post.photoUrl != null ? post.photoUrl : '/assets/img/posts/default-icon.jpg'}"
-                                     alt="..." />
+                                     alt="..." /></a>
                             </a>
                             <div class="portfolio-caption">
                                 <div class="portfolio-caption-heading" th:text="${post.getUser().firstName}">Creator's first name</div>

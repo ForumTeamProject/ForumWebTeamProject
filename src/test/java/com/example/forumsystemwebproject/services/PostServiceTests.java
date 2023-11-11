@@ -13,6 +13,7 @@ import com.example.forumsystemwebproject.repositories.contracts.LikeRepository;
 import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import com.example.forumsystemwebproject.services.contracts.LikeService;
+import org.hibernate.id.uuid.Helper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -167,7 +168,9 @@ public class PostServiceTests {
         //Arrange
         Post mockPost = Helpers.createMockPost();
         User mockUser = Helpers.createMockUser();
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(true);
+        mockUser.getRoles().add(Helpers.createMockBlockRole());
+
+        Mockito.doThrow(UnauthorizedOperationException.class).when(authorizationHelper).blockedCheck(Mockito.any(User.class));
 
         //Act & Assert
         Assertions.assertThrows(UnauthorizedOperationException.class, () -> service.create(mockPost, mockUser));
@@ -200,8 +203,7 @@ public class PostServiceTests {
         User mockUser = Helpers.createMockUser();
         Post mockPost = Helpers.createMockPost();
 
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
-        Mockito.when(authorizationHelper.isCreator(Mockito.any(User.class), Mockito.any(Post.class))).thenReturn(true);
+        Mockito.doNothing().when(authorizationHelper).creatorCheck(Mockito.any(User.class), Mockito.any(Post.class));
 
         Mockito.doNothing().when(mockRepository).update(mockPost);
 
@@ -220,6 +222,8 @@ public class PostServiceTests {
         User mockUser = Helpers.createMockUser();
         Post mockPost = Helpers.createMockPost();
 
+        Mockito.doThrow(UnauthorizedOperationException.class).when(authorizationHelper).creatorCheck(Mockito.any(User.class), Mockito.any(Post.class));
+
         //Act & Assert
         Assertions.assertThrows(UnauthorizedOperationException.class, () -> service.update(mockPost, mockUser));
     }
@@ -230,10 +234,9 @@ public class PostServiceTests {
         Post mockPost = Helpers.createMockPost();
         User mockUser2 = Helpers.createMockUser();
         mockUser2.setId(2);
+        mockUser2.getRoles().add(Helpers.createMockAdminRole());
 
         Mockito.when(service.getById(Mockito.anyInt())).thenReturn(mockPost);
-
-        Mockito.doNothing().when(authorizationHelper).authorizeUser(Mockito.any(User.class), Mockito.any(Post.class));
 
         //Act
         service.delete(1, mockUser2);
@@ -266,9 +269,9 @@ public class PostServiceTests {
         User mockUser = Helpers.createMockUser();
         Post mockPost = Helpers.createMockPost();
 
-        Mockito.doThrow(UnauthorizedOperationException.class).when(authorizationHelper).authorizeUser(Mockito.any(User.class), Mockito.any(Post.class));
-
-        Mockito.when(service.getById(Mockito.anyInt())).thenReturn(mockPost);
+        Mockito.when(mockRepository.getById(Mockito.anyInt())).thenReturn(mockPost);
+        Mockito.doThrow(UnauthorizedOperationException.class).when(authorizationHelper).creatorCheck(Mockito.any(User.class), Mockito.any(Post.class));
+        Mockito.doThrow(UnauthorizedOperationException.class).when(authorizationHelper).adminCheck(Mockito.any(User.class));
 
         //Act & Assert
         Assertions.assertThrows(UnauthorizedOperationException.class, () -> service.delete(Mockito.anyInt(), mockUser));

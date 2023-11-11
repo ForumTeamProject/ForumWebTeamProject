@@ -76,7 +76,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void update(Post post, User user) {
-        authorizationHelper.blockedCheck(user);
         authorizationHelper.creatorCheck(user, post);
         postRepository.update(post);
     }
@@ -103,9 +102,8 @@ public class PostServiceImpl implements PostService {
     }
 
     public void addTagsToPost(User userWhoAdds, Post post, List<Tag> tags) {
-        if (authorizationHelper.isBlockedUser(userWhoAdds) || !authorizationHelper.isCreator(userWhoAdds, post)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", userWhoAdds.getUsername()));
-        }
+        authorizationHelper.blockedCheck(userWhoAdds);
+        authorizationHelper.creatorCheck(userWhoAdds, post);
         List<Tag> tagsToAdd = new ArrayList<>();
         for (Tag tag :
                 tags) {

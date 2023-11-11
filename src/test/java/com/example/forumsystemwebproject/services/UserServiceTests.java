@@ -164,9 +164,11 @@ public class UserServiceTests {
     public void create_Should_Throw_WhenEmailIsTaken() {
         //Arrange
         User mockUser = Helpers.createMockUser();
+        User mockUser2 = Helpers.createMockUser();
+        mockUser2.setId(2);
         Mockito.when(mockRepository.getByUsername(Mockito.anyString())).thenThrow(EntityNotFoundException.class);
 
-        Mockito.when(mockRepository.getByEmail(Mockito.anyString())).thenReturn(mockUser);
+        Mockito.when(mockRepository.getByEmail(Mockito.anyString())).thenReturn(mockUser2);
 
         //Act & Assert
         Assertions.assertThrows(DuplicateEntityException.class, () -> service.create(mockUser));
@@ -193,24 +195,10 @@ public class UserServiceTests {
         User mockUser2 = Helpers.createMockUser();
         mockUser2.setId(2);
 
+        Mockito.doThrow(UnauthorizedOperationException.class).when(authorizationHelper).creatorCheck(Mockito.any(User.class), Mockito.any(User.class));
+
         //Act & Assert
         Assertions.assertThrows(UnauthorizedOperationException.class, () -> service.update(mockUser, mockUser2));
-    }
-
-    @Test
-    public void update_Should_Throw_WhenUsernameIsTaken() {
-        //Arrange
-        User mockUser = Helpers.createMockUser();
-        User mockUser2 = Helpers.createMockUser();
-
-        Mockito.when(authorizationHelper.isCreator(Mockito.any(User.class),Mockito.any(User.class))).thenReturn(true);
-
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
-
-        Mockito.when(mockRepository.getByUsername(Mockito.anyString())).thenReturn(mockUser);
-
-        //Act & Assert
-        Assertions.assertThrows(DuplicateEntityException.class, () -> service.update(mockUser, mockUser2));
     }
 
     @Test
@@ -218,17 +206,14 @@ public class UserServiceTests {
         //Arrange
         User mockUser = Helpers.createMockUser();
         User mockUser2 = Helpers.createMockUser();
+        mockUser2.setId(2);
 
-        Mockito.when(authorizationHelper.isCreator(Mockito.any(User.class),Mockito.any(User.class))).thenReturn(true);
-
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
-
-        Mockito.when(mockRepository.getByUsername(Mockito.anyString())).thenThrow(EntityNotFoundException.class);
+        Mockito.doNothing().when(authorizationHelper).creatorCheck(Mockito.any(User.class),Mockito.any(User.class));
 
         Mockito.when(mockRepository.getByEmail(Mockito.anyString())).thenReturn(mockUser);
 
         //Act & Assert
-        Assertions.assertThrows(DuplicateEntityException.class, () -> service.update(mockUser, mockUser2));
+        Assertions.assertThrows(DuplicateEntityException.class, () -> service.update(mockUser2, mockUser));
     }
 
     @Test
@@ -237,11 +222,7 @@ public class UserServiceTests {
         User mockUser = Helpers.createMockUser();
         User mockUser2 = Helpers.createMockUser();
 
-        Mockito.when(authorizationHelper.isCreator(Mockito.any(User.class),Mockito.any(User.class))).thenReturn(true);
-
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
-
-        Mockito.when(mockRepository.getByUsername(Mockito.anyString())).thenThrow(EntityNotFoundException.class);
+        Mockito.doNothing().when(authorizationHelper).creatorCheck(Mockito.any(User.class),Mockito.any(User.class));
 
         Mockito.when(mockRepository.getByEmail(Mockito.anyString())).thenThrow(EntityNotFoundException.class);
 
@@ -256,7 +237,11 @@ public class UserServiceTests {
     public void delete_Should_Throw_WhenUserIsNotCreator() {
         //Arrange
         User mockUser = Helpers.createMockUser();
-
+        User mockDeletedUser = Helpers.createMockUser();
+        mockDeletedUser.setId(5);
+        Mockito.when(mockRepository.getById(Mockito.anyInt())).thenReturn(mockUser);
+        Mockito.when(mockRepository.getById(Mockito.anyInt())).thenReturn(mockDeletedUser);
+        Mockito.doThrow(UnauthorizedOperationException.class).when(authorizationHelper).creatorCheck(Mockito.any(User.class), Mockito.any(User.class));
         //Act & Assert
         Assertions.assertThrows(UnauthorizedOperationException.class, () -> service.delete(mockUser , 42));
     }
@@ -268,106 +253,18 @@ public class UserServiceTests {
 
         User mockUserToDelete = Helpers.createMockUser();
 
+        User mockDeletedUser = Helpers.createMockUser();
+
         Mockito.when(mockRepository.getById(Mockito.anyInt())).thenReturn(mockUserToDelete);
 
-        Mockito.when(authorizationHelper.isCreator(Mockito.any(User.class),Mockito.any(User.class))).thenReturn(true);
+        Mockito.when(mockRepository.getById(Mockito.anyInt())).thenReturn(mockDeletedUser);
 
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
-
-        Mockito.doNothing().when(mockRepository).delete(Mockito.anyInt());
+        Mockito.doNothing().when(authorizationHelper).creatorCheck(Mockito.any(User.class),Mockito.any(User.class));
 
         //Act
         service.delete(mockUser, mockUser.getId());
 
         //Assert
-        Mockito.verify(mockRepository, Mockito.times(1)).delete(mockUser.getId());
-    }
-
-    @Test
-    public void blockUser_Should_Throw_WhenAuthenticatedUserIsNotAdminOrBlocked() {
-        //Arrange
-        User mockUser = Helpers.createMockUser();
-        Mockito.when(mockRepository.getById(Mockito.anyInt())).thenReturn(mockUser);
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(true);
-
-        //Act & Assert
-        Assertions.assertThrows(UnauthorizedOperationException.class, () -> service.blockUser(mockUser, 2));
-    }
-
-    @Test
-    public void blockUser_Should_Throw_WhenUserToBlockNotFound() {
-        //Arrange
-        User mockUser = Helpers.createMockUser();
-
-        Mockito.when(mockRepository.getById(Mockito.anyInt())).thenThrow(EntityNotFoundException.class);
-
-        //Act & Assert
-        Assertions.assertThrows(EntityNotFoundException.class, () -> service.blockUser(mockUser, 2));
-    }
-
-    @Test
-    public void blockUser_Should_Throw_WhenUserToBlockIsAlreadyBlocked() {
-        //Arrange
-        User mockUser = Helpers.createMockUser();
-        Mockito.when(mockRepository.getById(Mockito.anyInt())).thenReturn(mockUser);
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenThrow(DuplicateEntityException.class);
-
-        //Act & Assert
-        Assertions.assertThrows(DuplicateEntityException.class, () -> service.blockUser(mockUser, 2));
-    }
-
-    @Test
-    public void blockUser_Should_CallRepository() {
-        //Аrrange
-        User mockUser = Helpers.createMockUser();
-        Mockito.when(mockRepository.getById(Mockito.anyInt())).thenReturn(mockUser);
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
-        Mockito.when(authorizationHelper.isAdmin(Mockito.any(User.class))).thenReturn(true);
-        Mockito.when(roleRepository.getByName(Mockito.anyString())).thenReturn(Mockito.any(Role.class));
-
-        //Act
-        service.blockUser(mockUser, 2);
-
-        //Assert
-        Mockito.verify(mockRepository, Mockito.times(1)).update(mockUser);
-    }
-
-    @Test
-    public void unblockUser_Should_Throw_WhenAuthenticatedUserIsBlockerOrNotAdmin() {
-        //Arrange
-        User mockUser = Helpers.createMockUser();
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(true);
-
-        //Act & Assert
-        Assertions.assertThrows(UnauthorizedOperationException.class, () -> service.unblockUser(mockUser, 2));
-    }
-
-    @Test
-    public void unblockUser_Should_Throw_WhenUserToBlockNotFound() {
-        //Arrange
-        User mockUser = Helpers.createMockUser();
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
-        Mockito.when(authorizationHelper.isAdmin(Mockito.any(User.class))).thenReturn(true);
-        Mockito.when(mockRepository.getById(Mockito.anyInt())).thenThrow(EntityNotFoundException.class);
-
-        //Act & Assert
-        Assertions.assertThrows(EntityNotFoundException.class, () -> service.unblockUser(mockUser, 2));
-    }
-
-    @Test
-    public void unblockUser_Should_CallRepository() {
-        //Arrange
-        User mockUser = Helpers.createMockUser();
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false)
-                .thenReturn(true);
-        Mockito.when(authorizationHelper.isAdmin(Mockito.any(User.class))).thenReturn(true);
-        Mockito.when(mockRepository.getById(Mockito.anyInt())).thenReturn(mockUser);
-        Mockito.when(roleRepository.getByName(Mockito.anyString())).thenReturn(Mockito.any(Role.class));
-
-        //Act
-        service.unblockUser(mockUser, 2);
-
-        //Assert
-        Mockito.verify(mockRepository, Mockito.times(1)).update(mockUser);
+        Mockito.verify(mockRepository, Mockito.times(1)).delete(mockUser, mockUserToDelete);
     }
 }

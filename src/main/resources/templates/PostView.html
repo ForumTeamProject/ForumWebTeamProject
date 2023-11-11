@@ -1,19 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <form th:replace="~{PostFormView.html :: head(${post.getTitle()})}"></form>
-<head th:fragment="head(title)">
-    <meta charset="utf-8"/>
-    <title th:text="'Pet Lounge | ' + ${title}">Post</title>
-
-    <!-- Favicon-->
-    <!-- <link rel="icon" type="image/x-icon" href="../static/assets/favicon.ico"/> -->
-    <!-- Font Awesome icons (free version)-->
-    <!-- <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script> -->
-    <!-- Google fonts-->
-    <!--  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css"/>-->
-    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
-
-</head>
 <body>
 <form th:replace="~{PostFormView.html :: header}"></form>
 
@@ -22,7 +9,6 @@
     th:text="~{${post.getUser().name} + #{post.label.post}}">User's Post</label> -->
     <div class="post-container">
         <div class="head">
-            <div class="author" th:text="${post.getUser().getUsername()}">Author:</div>
             <div class="content" th:text="${'Topic: ' + post.getTitle()}">Topic: post's title</div>
         </div>
         <div class="body">
@@ -37,7 +23,7 @@
                 Just some test content.
             </div>
             <div class="comment">
-                <button onclick="showComment()">Comment</button>
+                <button class="btn btn-primary btn-xl text-uppercase" onclick="showComment()">Comment</button>
             </div>
         </div>
     </div>
@@ -46,18 +32,18 @@
     <!-- Comment input-->
     <div class="hidden-comment-area" id="comment-area" style="display: none;">
         <textarea name="comment" placeholder="comment here..."></textarea>
-        <input type="submit" name="" value="submit">
+        <input class="btn btn-primary btn-xl text-uppercase" type="submit" name="" value="submit">
     </div>
+    <br/>
     <!-- Show Comments -->
     <div class="comments-container">
         <div class="head">
-            <div class="author" th:text="${post.getUser().getUsername()}">Author's post comments:</div>
-            <div class="content">Comments</div>
+            <div class="author" th:text="'Comment section:'">Comment section:</div>
         </div>
 
         <div class="body" th:each="comment : ${comments}">
             <div class="authors">
-                <div class="username"><a th:href="${'/users/' + comment.getUser().getUsername()}"
+                <div class="username"><a th:href="${'/users/' + comment.getUser().getId()}"
                                          th:text="${ comment.getUser().getUsername()}">Username</a></div>
                 <!--                    <div th:text="${'Role: ' + String.join(' ', comment.getUser().getRoles())}">Role</div> -->
                 <img src="https://mystickermania.com/cdn/stickers/adventure-time/adventure-time-jake-with-sandwich-512x512.png"
@@ -67,6 +53,13 @@
             <div class="content" th:utext="${comment.getContent()}">
                 Test Comment Content aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
             </div>
+
+            <div th:if="${session.currentUser.id == comment.user.id}" >
+                <button class="btn btn-primary btn-xl text-uppercase"
+                        th:href="@{'/posts/' + ${postId} + '/comments/' + ${comment.id} + '/update'}">Edit
+                </button>
+            </div>
+
 
             <!-- <div class="comment">
                  <button onclick="showComment()">Reply?</button>
