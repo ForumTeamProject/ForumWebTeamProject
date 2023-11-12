@@ -39,15 +39,24 @@
             <div class="comment">
                 <button onclick="showComment()">Comment</button>
             </div>
+           <!-- <div class="like-section">
+                <form th:action="@{/posts/{postId}/like(postId=${post.id})}" method="get">
+                    <button type="submit" class="like-button">Like</button>
+                </form>
+                <span class="like-count" th:text="${likesCount} + ' ♥'">0 likes</span>
+            </div> -->
+
         </div>
     </div>
 
 
     <!-- Comment input-->
+    <form th:action="@{/posts/{postId}/comments/create(postId=${post.id})}" method="post">
     <div class="hidden-comment-area" id="comment-area" style="display: none;">
-        <textarea name="comment" placeholder="comment here..."></textarea>
+        <textarea name="content" placeholder="comment here..."></textarea>
         <input type="submit" name="" value="submit">
     </div>
+    </form>
     <!-- Show Comments -->
     <div class="comments-container">
         <div class="head">

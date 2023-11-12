@@ -139,23 +139,23 @@ public class CommentMvcController {
         return "CommentView";
     }
 
-    @GetMapping("/create")
-    public String showCreateCommentPage(@PathVariable int postId, HttpSession session, Model model) {
-        User user;
-
-        try {
-            authenticationHelper.tryGetUser(session);
-        } catch (AuthenticationFailureException e) {
-            return "redirect:/auth/login";
-        }
-
-        model.addAttribute("comment", new CommentDto());
-        model.addAttribute("id", postId);
-        return "CommentFormView";
-    }
+//    @GetMapping("/create")
+//    public String showCreateCommentPage(@PathVariable int postId, HttpSession session, Model model) {
+//        User user;
+//
+//        try {
+//            authenticationHelper.tryGetUser(session);
+//        } catch (AuthenticationFailureException e) {
+//            return "redirect:/auth/login";
+//        }
+//
+//        model.addAttribute("comment", new CommentDto());
+//        model.addAttribute("id", postId);
+//        return "CommentFormView";
+//    }
 
     @PostMapping("/create")
-    public String handleCreateComment(@PathVariable int postId,HttpSession session, Model model, @Valid @ModelAttribute("comment") CommentDto dto, BindingResult bindingResult) {
+    public String handleCreateComment(@PathVariable int postId, @Valid @ModelAttribute("comment") CommentDto dto, BindingResult bindingResult, HttpSession session, Model model) {
         User user;
 
         try {
@@ -165,14 +165,15 @@ public class CommentMvcController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "CommentFormView";
+            return "redirect:/posts/" + String.valueOf(postId);
+           // return "CommentFormView";
         }
 
         try {
             Comment comment = mapper.fromDto(dto);
             commentService.create(comment, postId, user);
             model.addAttribute("comment", comment);
-            return "redirect:/posts/" + postId + "/comments";
+            return "redirect:/posts/" + postId;// + "/comments";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());

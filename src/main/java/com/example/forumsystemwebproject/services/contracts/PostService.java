@@ -1,6 +1,7 @@
 package com.example.forumsystemwebproject.services.contracts;
 
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
+import com.example.forumsystemwebproject.models.Like;
 import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.Tag;
 import com.example.forumsystemwebproject.models.User;
@@ -14,6 +15,7 @@ public interface PostService {
     List<Post> getByUserId(PostFilterOptions filterOptions, int id);
 
     List<Post> getMostCommented();
+    List<Like> getLikes(int postId);
 
     List<Post> getMostRecentlyCreatedPosts();
 

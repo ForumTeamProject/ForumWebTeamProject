@@ -2,9 +2,7 @@ package com.example.forumsystemwebproject.services;
 
 import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
-import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
-import com.example.forumsystemwebproject.helpers.AuthorizationHelperImpl;
 import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;

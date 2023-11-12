@@ -283,6 +283,8 @@ public class PostMvcController {
             postService.likePost(id, user);
             Post updatedPost = postService.getById(id);
             model.addAttribute("post", updatedPost);
+            model.addAttribute("likesCount", postService.getLikes(id).size());
+            //model.addAttribute("likes", postService.getLikes(id));
             return "PostView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());

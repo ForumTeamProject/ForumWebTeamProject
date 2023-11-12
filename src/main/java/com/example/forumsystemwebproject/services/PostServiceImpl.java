@@ -3,9 +3,11 @@ package com.example.forumsystemwebproject.services;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
-import com.example.forumsystemwebproject.helpers.AuthorizationHelperImpl;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
-import com.example.forumsystemwebproject.models.*;
+import com.example.forumsystemwebproject.models.Like;
+import com.example.forumsystemwebproject.models.Post;
+import com.example.forumsystemwebproject.models.Tag;
+import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
 import com.example.forumsystemwebproject.services.contracts.LikeService;
 import com.example.forumsystemwebproject.services.contracts.PostService;
@@ -13,7 +15,8 @@ import com.example.forumsystemwebproject.services.contracts.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -103,9 +106,8 @@ public class PostServiceImpl implements PostService {
     }
 
     public void addTagsToPost(User userWhoAdds, Post post, List<Tag> tags) {
-        if (authorizationHelper.isBlockedUser(userWhoAdds) || !authorizationHelper.isCreator(userWhoAdds, post)) {
-            throw new UnauthorizedOperationException(String.format(AuthorizationHelperImpl.UNAUTHORIZED_MSG, "User", "username", userWhoAdds.getUsername()));
-        }
+        authorizationHelper.blockedCheck(userWhoAdds);
+        authorizationHelper.creatorCheck(userWhoAdds, post);
         List<Tag> tagsToAdd = new ArrayList<>();
         for (Tag tag :
                 tags) {
@@ -119,6 +121,10 @@ public class PostServiceImpl implements PostService {
         }
         post.getTags().addAll(tagsToAdd);
         postRepository.update(post);
+    }
+    @Override
+    public List<Like> getLikes(int postId){
+        return postRepository.getLikes(postId);
     }
 
 

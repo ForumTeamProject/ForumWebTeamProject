@@ -2,7 +2,6 @@ package com.example.forumsystemwebproject.services;
 
 import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
-import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.models.Tag;
 import com.example.forumsystemwebproject.models.User;
@@ -34,7 +33,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag getById(int id) {
-            return tagRepository.getById(id);
+        return tagRepository.getById(id);
     }
 
     @Override
