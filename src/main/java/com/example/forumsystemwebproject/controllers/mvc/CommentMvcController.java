@@ -165,15 +165,14 @@ public class CommentMvcController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "redirect:/posts/" + String.valueOf(postId);
-           // return "CommentFormView";
+            return "redirect:/posts/" + (postId);
         }
 
         try {
             Comment comment = mapper.fromDto(dto);
             commentService.create(comment, postId, user);
             model.addAttribute("comment", comment);
-            return "redirect:/posts/" + postId;// + "/comments";
+            return "redirect:/posts/" + postId;
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());

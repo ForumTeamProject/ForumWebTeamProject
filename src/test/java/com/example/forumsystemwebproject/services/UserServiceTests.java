@@ -267,4 +267,23 @@ public class UserServiceTests {
         //Assert
         Mockito.verify(mockRepository, Mockito.times(1)).delete(mockUser, mockUserToDelete);
     }
+
+    @Test
+    public void blockOrUnblockUser_Should_CallRepository_WhenUserIsNotBlocked() {
+        //Arrange
+
+        User mockAuthenticatedUser = Helpers.createMockUser();
+        User mockUserToUpdate = Helpers.createMockUser();
+        Mockito.doNothing().when(authorizationHelper).blockedCheck(Mockito.any(User.class));
+
+        Mockito.when(roleRepository.getByName(Mockito.anyString())).thenReturn(Mockito.any(Role.class));
+
+        //Act
+        service.blockOrUnblockUser(mockAuthenticatedUser, mockUserToUpdate);
+
+        //Assert
+        Mockito.verify(mockRepository, Mockito.times(1)).update(mockUserToUpdate);
+
+    }
+
 }

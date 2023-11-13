@@ -13557,3 +13557,286 @@ a:nth-child(7) {
         text-align: center;
         margin-left: 200px;
 }
+
+/******************************/
+/* PostView.html */
+.head {
+    display: flex;
+    background-color: #ffe480;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 15px;
+    border-radius: 5%;
+
+}
+
+.head .authors {
+    flex: 10%;
+}
+
+.head .content {
+    flex: 50%;
+}
+
+/*Edit*/
+.options-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.options-dropdown {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    right: 0;
+    z-index: 100;
+}
+
+.options-dropdown a {
+    display: block;
+    padding: 5px;
+    text-decoration: none;
+    color: black;
+}
+
+.options-dropdown a:hover {
+    background-color: #f0f0f0;
+}
+
+/* Style for the hidden edit tags area */
+.hidden-edit-tags-area {
+    margin-top: 10px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+/*tags*/
+.post-tag-icon {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 10px; /* Adjust as needed */
+}
+
+.hashtag {
+    background-color: #ffcc00; /* Your theme color */
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.tag-tooltip {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    white-space: nowrap; /* Prevents the tooltip from breaking into multiple lines */
+}
+
+.post-tag-icon:hover .tag-tooltip {
+    display: block;
+}
+
+.tag {
+    display: block;
+    margin: 2px 0;
+}
+
+.body {
+    display: flex;
+    background-color: #fff4cc;
+    padding: 10px;
+    margin-top: 5px;
+    border-bottom-right-radius: 5px 5px;
+    border-top-left-radius: 5px 5px;
+    border-bottom-left-radius: 32px 32px;
+    border-top-right-radius: 32px 32px;
+}
+
+.body-content .body .authors {
+    flex: 10%;
+}
+
+.body-content .body .content {
+    flex: 80%;
+}
+
+.body-content .body .content {
+    text-align: center;
+}
+
+.body .authors .username {
+    font-size: 20px;
+}
+
+.body-content .post-container .body .authors .created-at {
+    font-style: italic;
+    font-size: small;
+    color: rgba(0, 0, 0, 0.24);
+}
+
+.body .authors img {
+    max-width: 50px;
+    max-height: 80px;
+}
+
+.body-content .comment button {
+    border: none;
+    padding: 10px;
+    font-weight: bolder;
+    box-shadow: 4px 6px #fff4cc;
+    cursor: pointer;
+
+}
+
+.body .body-content .hidden-comment-area {
+    display: none;
+}
+
+/*buttons*/
+.button {
+    background-color: #ffc107;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+
+    background-color: #e0a800;
+    color: #fff;
+}
+
+.button:active {
+    background-color: #d58512;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.icon-left {
+    margin-right: 8px;
+}
+
+.like-icon:before {
+    content: "\f164";
+}
+
+.comment-icon:before {
+    content: "\f075";
+}
+
+.post-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+.comment-button, .like-button {
+    flex: 1;
+}
+
+.like-section {
+    display: flex;
+    align-items: center;
+}
+
+.likes-count {
+    margin-left: 5px;
+}
+
+/*like*/
+.like-section {
+    flex: 5%;
+    margin-top: 15px;
+}
+
+.like-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.like-button.liked {
+    color: blue;
+}
+
+.like-count {
+    margin-left: 10px;
+    font-size: 16px;
+}
+
+/*comment*/
+
+
+.hidden-comment-area {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.hidden-comment-area input {
+    margin-bottom: 5px;
+}
+
+.hidden-comment-area textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    margin-block: 10px;
+}
+
+.hidden-comment-area input {
+    float: right;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.hidden-comment-area input:hover {
+    border: solid 1px black;
+}
+
+.comments-container {
+    margin-top: 40px;
+}
+
+/*Editing buton*/
+.edit-button {
+    background-color: #ffc107;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.edit-button:hover {
+    background-color: #e0a800;
+}
+
+
+.hidden-edit-comment-area {
+    margin-top: 10px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.hidden-edit-comment-area textarea {
+    width: 100%;
+    margin-bottom: 10px;
+}

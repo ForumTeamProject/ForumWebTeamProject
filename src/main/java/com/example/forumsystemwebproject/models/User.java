@@ -1,12 +1,11 @@
 package com.example.forumsystemwebproject.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Objects;
 import java.util.Set;
+
 
 @Entity
 @Table(name = "users")
@@ -38,8 +37,14 @@ public class User {
     )
     private Set<Role> roles;
 
-
     public User() {
+    }
+
+    public User(int id, String username, String password, String email) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
     }
 
     public int getId() {
@@ -99,7 +104,6 @@ public class User {
     }
 
 
-
     public String getPhotoUrl() {
         return photoUrl;
     }
@@ -127,5 +131,6 @@ public class User {
     @Override
     public String toString() {
         return this.username;
+
     }
 }

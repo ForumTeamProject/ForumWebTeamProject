@@ -13,6 +13,7 @@ import com.example.forumsystemwebproject.models.Tag;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.services.contracts.PostService;
 import com.example.forumsystemwebproject.services.contracts.TagService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +26,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@SecurityRequirement(name = "basicAuth")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Post")
 public class PostController {
 
     private final PostService postService;

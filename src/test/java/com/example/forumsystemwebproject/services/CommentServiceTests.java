@@ -5,13 +5,11 @@ import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.helpers.filters.CommentFilterOptions;
-import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
 import com.example.forumsystemwebproject.models.Comment;
 import com.example.forumsystemwebproject.models.Post;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.CommentRepository;
 import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
-import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -250,6 +248,7 @@ public class CommentServiceTests {
         Comment mockComment = Helpers.createMockComment();
         Mockito.doNothing().when(authorizationHelper).creatorCheck(Mockito.any(User.class), Mockito.any(Comment.class));
         Mockito.doNothing().when(authorizationHelper).blockedCheck(Mockito.any(User.class));
+
         //Act
         service.update(mockComment, mockUser);
 

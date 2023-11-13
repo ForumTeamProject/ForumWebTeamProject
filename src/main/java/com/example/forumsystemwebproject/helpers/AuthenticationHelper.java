@@ -1,35 +1,3 @@
-//package com.example.forumsystemwebproject.helpers;
-//
-//import com.example.forumsystemwebproject.models.RegisteredUser;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.stereotype.Component;
-//
-//@Component
-//public class AuthenticationHelper {
-//
-//    private UserService userService;
-//
-//    @Autowired
-//    public AuthenticationHelper(UserService userService) {
-//        this.userService = userService;
-//    }
-//
-//    public static RegisteredUser tryGetUser() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-//            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//            String username = userDetails.getUsername();
-//            return userService.getByUsername(username);
-//        } else {
-//            throw new UnsupportedOperationException("You must be logged into your account in order to proceed!");
-//        }
-//    }
-//}
-
 package com.example.forumsystemwebproject.helpers;
 
 import com.example.forumsystemwebproject.exceptions.AuthenticationFailureException;
@@ -42,9 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
-
 @Component
-public class AuthenticationHelper {
+public class  AuthenticationHelper {
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     public static final String INVALID_AUTHENTICATION_ERROR = "Wrong username or password !";
     private final UserService userService;

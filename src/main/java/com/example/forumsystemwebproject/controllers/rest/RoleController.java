@@ -9,6 +9,8 @@ import com.example.forumsystemwebproject.models.DTOs.RoleDto;
 import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.services.contracts.RoleService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +22,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/roles")
+@Tag(name = "Roles")
+@SecurityRequirement(name = "basicAuth")
 public class RoleController {
     private final RoleService roleService;
     private final RoleMapper roleMapper;

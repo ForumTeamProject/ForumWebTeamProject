@@ -13,10 +13,41 @@
 <form th:replace="~{PostFormView.html :: header}"></form>
 
 <div class="body-content">
-  <div class="post-container">
+    <div class="post-container">
         <div class="head">
             <div class="author" th:text="${post.getUser().getUsername()}">Author:</div>
             <div class="content" th:text="${'Topic: ' + post.getTitle()}">Topic: post's title</div>
+            <div><!-- Options Button for Post/Comment -->
+                <form th:action="@{/posts/{postId}/update(postId=${post.id})}"
+                      method="post">
+                    <div class="options-menu">
+                        <button type="button" class="button options-button" onclick="toggleOptionsMenu(this)">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                        <div class="options-dropdown" style="display: none;">
+                            <a href="#" onclick="toggleEditPost()">Edit Post</a>
+                            <a href="#" onclick="toggleEditTags()">Edit Tags</a>
+                            <a href="#" th:href="@{/posts/{id}/delete(id=${post.id})}">Remove</a>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Tag Editing Area (hidden by default) -->
+                <div id="edit-tags-area" class="hidden-edit-tags-area" style="display: none;">
+                    <form th:action="@{/posts/{id}/tags/update(id=${post.id})}" method="post">
+                        <!-- Assume tags are comma-separated -->
+                        <input type="text" name="tags" th:value="${joinedTags}">
+                        <input type="submit" value="Save">
+                        <button type="button" onclick="toggleEditTags()">Cancel</button>
+                    </form>
+                </div>
+            </div>
+            <div class="post-tag-icon">
+                <span class="hashtag">#tags</span>
+                <div class="tag-tooltip" th:if="${not #lists.isEmpty(post.tags)}">
+                    <span class="tag" th:each="tag : ${post.tags}" th:text="'#' + ${tag.getContent()}">#Tag</span>
+                </div>
+            </div>
         </div>
         <div class="body">
             <div class="authors">
@@ -58,6 +89,7 @@
             <input type="submit" name="" value="submit">
         </div>
     </form>
+    <br/>
     <!-- Show Comments -->
     <div class="comments-container">
         <div class="head">
@@ -73,16 +105,26 @@
                      alt="Default"/>
             </div>
 
-            <div class="content" th:utext="${comment.getContent()}">
+            <div class="content" th:text="${comment.getContent()}">
                 Test Comment Content aa
             </div>
 
-            <div th:if="${session.currentUser.id == comment.user.id}">
-                <button class="btn btn-primary btn-xl text-uppercase"
-                        th:href="@{'/posts/' + ${postId} + '/comments/' + ${comment.id} + '/update'}">Edit
+            <!-- Edit Comment Button -->
+            <div th:if="${session.currentUser.id == comment.user.id}" class="edit-comment-section">
+                <button type="button" class="button edit-button" onclick="toggleEditComment(${comment.id})">
+                    <i class="fa fa-edit icon-left edit-icon" aria-hidden="true"></i>Edit
                 </button>
             </div>
 
+            <!-- Edit Comment Form (hidden by default) -->
+            <div id="edit-comment-form-${comment.id}" class="hidden-edit-comment-area" style="display: none;">
+                <form th:action="@{/posts/{postId}/comments/{commentId}/update(postId=${post.id}, commentId=${comment.id})}"
+                      method="post">
+                    <textarea name="content" th:text="${comment.content}">Comment Text</textarea>
+                    <input type="submit" value="Save">
+                    <button type="button" onclick="toggleEditComment(${comment.id})">Cancel</button>
+                </form>
+            </div>
 
         </div>
 

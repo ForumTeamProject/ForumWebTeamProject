@@ -16,6 +16,7 @@ import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import com.example.forumsystemwebproject.services.contracts.CommentService;
+import com.example.forumsystemwebproject.services.contracts.LikeService;
 import com.example.forumsystemwebproject.services.contracts.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -48,18 +49,20 @@ public class PostMvcController {
 
     private final CommentService commentService;
 
+    private final LikeService likeService;
+
     @Autowired
     public PostMvcController(PostService postService,
                              AuthenticationHelper authenticationHelper,
                              PostMapper mapper,
                              RoleRepository roleRepository,
-                             AuthorizationHelper authorizationHelper,
+                             LikeService likeService,
                              CommentService commentService) {
         this.postService = postService;
         this.authenticationHelper = authenticationHelper;
         this.mapper = mapper;
         this.roleRepository = roleRepository;
-
+        this.likeService = likeService;
         this.commentService = commentService;
     }
 
@@ -148,9 +151,20 @@ public class PostMvcController {
         try {
             Post post = postService.getById(id);
             List<Comment> comments = commentService.getByPostId(post.getId());
+
             model.addAttribute("postId", id);
             model.addAttribute("post", post);
             model.addAttribute("comments", comments);
+            model.addAttribute("tags", post.getTags());
+            int likesCount = likeService.getByPostId(id).size();
+            model.addAttribute("likesCount", likesCount);
+
+            List<String> tagContents = post.getTags().stream()
+                    .map(com.example.forumsystemwebproject.models.Tag::getContent) // Assuming Tag has a getContent method
+                    .collect(Collectors.toList());
+            String joinedTags = String.join(",", tagContents);
+            model.addAttribute("joinedTags", joinedTags);
+
             return "PostView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -282,9 +296,10 @@ public class PostMvcController {
             postService.likePost(id, user);
             Post updatedPost = postService.getById(id);
             model.addAttribute("post", updatedPost);
-            model.addAttribute("likesCount", postService.getLikes(id).size());
+            int likesCount = likeService.getByPostId(id).size();
+            model.addAttribute("likesCount", likesCount);
             //model.addAttribute("likes", postService.getLikes(id));
-            return "PostView";
+            return "redirect:/posts/" + id;
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("notFound", e.getMessage());

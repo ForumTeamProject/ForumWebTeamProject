@@ -9,6 +9,8 @@ import com.example.forumsystemwebproject.models.DTOs.PhoneNumberDto;
 import com.example.forumsystemwebproject.models.PhoneNumber;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.services.contracts.PhoneNumberService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +22,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Phone Numbers")
+@SecurityRequirement(name = "basicAuth")
 public class PhoneNumberController {
 
     private final PhoneNumberService service;

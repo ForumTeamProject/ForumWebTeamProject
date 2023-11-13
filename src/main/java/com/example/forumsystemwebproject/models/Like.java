@@ -1,6 +1,7 @@
 package com.example.forumsystemwebproject.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity

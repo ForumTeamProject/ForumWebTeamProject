@@ -121,8 +121,9 @@ public class PostServiceImpl implements PostService {
         post.getTags().addAll(tagsToAdd);
         postRepository.update(post);
     }
+
     @Override
-    public List<Like> getLikes(int postId){
+    public List<Like> getLikes(int postId) {
         return postRepository.getLikes(postId);
     }
 

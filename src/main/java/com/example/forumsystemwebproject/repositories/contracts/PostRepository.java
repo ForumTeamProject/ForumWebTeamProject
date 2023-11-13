@@ -20,12 +20,6 @@ public interface PostRepository {
 
     Post getById(int id);
 
-    void addTagToPost(Post post, Tag tag);
-
-    void addTagsToPost(Post post, List<Tag> tags);
-
-    void deleteTagFromPost(Post post, Tag tag);
-
     long getCount();
 
     void create(Post post);

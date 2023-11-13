@@ -4,7 +4,6 @@ import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
 import com.example.forumsystemwebproject.models.Like;
 import com.example.forumsystemwebproject.models.Post;
-import com.example.forumsystemwebproject.models.Tag;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
 import com.example.forumsystemwebproject.repositories.contracts.UserRepository;
@@ -13,7 +12,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import java.util.*;
 
 @Repository
@@ -86,6 +84,17 @@ public class PostRepositoryImpl implements PostRepository {
 
     }
 
+    public List<Like> getLikes(int postId) {
+
+        try (Session session = sessionFactory.openSession()) {
+            Post post = getById(postId);
+            String queryString = "Select l  from Like l where l.post = :post";
+            Query<Like> query = session.createQuery(queryString, Like.class)
+                    .setParameter("post", post);
+            return query.list();
+        }
+    }
+
     @Override
     public Post getById(int id) {
         try (Session session = sessionFactory.openSession()) {
@@ -101,12 +110,12 @@ public class PostRepositoryImpl implements PostRepository {
     public List<Post> getMostCommented() {
         try (Session session = sessionFactory.openSession()) {
             Query<Post> query = session.createQuery("""
-                            SELECT p
-                            FROM Post p
-                            LEFT JOIN Comment c ON p.id = c.post.id
-                            GROUP BY p
-                            ORDER BY COUNT(c.id) DESC
-                            """, Post.class)
+                SELECT p
+                FROM Post p
+                LEFT JOIN Comment c ON p.id = c.post.id
+                GROUP BY p
+                ORDER BY COUNT(c.id) DESC
+                """, Post.class)
                     .setMaxResults(10); // Limit the result to 10
 
             return query.list();
@@ -134,16 +143,6 @@ public class PostRepositoryImpl implements PostRepository {
         }
     }
 
-    public List<Like> getLikes(int postId) {
-
-        try (Session session = sessionFactory.openSession()) {
-            String queryString = "Select l  from Like l where l.post = :post";
-            Query<Like> query = session.createQuery(queryString, Like.class)
-                    .setParameter("postId", postId);
-            return query.list();
-        }
-    }
-
     @Override
     public void create(Post post) {
         try (Session session = sessionFactory.openSession()) {
@@ -165,29 +164,29 @@ public class PostRepositoryImpl implements PostRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             processCommentRemoval(session, post);
-            processLikesRemoval(session, post);
+            processLikesRemoval(session,post);
             session.remove(post);
             session.getTransaction().commit();
         }
     }
 
-    @Override
-    public void addTagToPost(Post post, Tag tag) {
-        Set<Tag> refTags = post.getTags();
-        refTags.add(tag);
-    }
-
-    @Override
-    public void addTagsToPost(Post post, List<Tag> tags) {
-        Set<Tag> refTags = post.getTags();
-        refTags.addAll(tags);
-    }
-
-    @Override
-    public void deleteTagFromPost(Post post, Tag tag) {
-        Set<Tag> refTags = post.getTags();
-        refTags.remove(tag);
-    }
+//    @Override
+//    public void addTagToPost(Post post, Tag tag) {
+//        Set<Tag> refTags = post.getTags();
+//        refTags.add(tag);
+//    }
+//
+//    @Override
+//    public void addTagsToPost(Post post, List<Tag> tags) {
+//        Set<Tag> refTags = post.getTags();
+//        refTags.addAll(tags);
+//    }
+//
+//    @Override
+//    public void deleteTagFromPost(Post post, Tag tag) {
+//        Set<Tag> refTags = post.getTags();
+//        refTags.remove(tag);
+//    }
 
     private String generateOrderBy(PostFilterOptions postFilterOptions) {
         if (postFilterOptions.getSortBy().isEmpty()) {
@@ -214,7 +213,6 @@ public class PostRepositoryImpl implements PostRepository {
         }
 
         return orderBy;
-
     }
 
     private void processLikesRemoval(Session session, Post post) {

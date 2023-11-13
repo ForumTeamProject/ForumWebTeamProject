@@ -5,14 +5,12 @@ import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
-import com.example.forumsystemwebproject.models.Like;
-import com.example.forumsystemwebproject.models.Post;
-import com.example.forumsystemwebproject.models.Role;
-import com.example.forumsystemwebproject.models.User;
+import com.example.forumsystemwebproject.models.*;
 import com.example.forumsystemwebproject.repositories.contracts.LikeRepository;
 import com.example.forumsystemwebproject.repositories.contracts.PostRepository;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import com.example.forumsystemwebproject.services.contracts.LikeService;
+import com.example.forumsystemwebproject.services.contracts.TagService;
 import org.hibernate.id.uuid.Helper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -33,8 +31,9 @@ public class PostServiceTests {
     @Mock
     AuthorizationHelper authorizationHelper;
 
+
     @Mock
-    RoleRepository mockRoleRepository;
+    TagService tagService;
 
     @Mock
     LikeService mockLikeService;
@@ -343,5 +342,71 @@ public class PostServiceTests {
 
         //Assert
         Mockito.verify(mockRepository,Mockito.times(1)).getMostRecentlyCreatedPosts();
+    }
+
+    @Test
+    public void addTagToPost_Should_Throw_WhenUserIsBlocked() {
+        //Arrange
+        User mockAuthenticatedUser = Helpers.createMockUser();
+        Post mockPost = Helpers.createMockPost();
+        Tag mockTag = Helpers.createMockTag();
+
+        Mockito.doThrow(UnauthorizedOperationException.class).when(authorizationHelper).blockedCheck(Mockito.any(User.class));
+
+        //Act & Assert
+        Assertions.assertThrows(UnauthorizedOperationException.class, () -> service.addTagToPost(mockAuthenticatedUser, mockPost, mockTag));
+    }
+
+    @Test
+    public void addTagToPost_Should_Throw_WhenUserIsNotCreator() {
+        //Arrange
+        User mockUser = Helpers.createMockUser();
+        Post mockPost = Helpers.createMockPost();
+        Tag mockTag = Helpers.createMockTag();
+        Mockito.doThrow(UnauthorizedOperationException.class).when(authorizationHelper).creatorCheck(Mockito.any(User.class), Mockito.any(Post.class));
+
+        //Act & Assert
+        Assertions.assertThrows(UnauthorizedOperationException.class, () -> service.addTagToPost(mockUser, mockPost, mockTag));
+    }
+
+    @Test
+    public void addTagToPost_Should_CallRepository() {
+        //Arrange
+        User mockUser = Helpers.createMockUser();
+        Post mockPost = Helpers.createMockPost();
+        Tag mockTag = Helpers.createMockTag();
+        Mockito.when(tagService.create(Mockito.any(Tag.class), Mockito.any(User.class))).thenReturn(mockTag);
+
+        //Act
+        service.addTagToPost(mockUser, mockPost, mockTag);
+
+        //Assert
+        Mockito.verify(mockRepository, Mockito.times(1)).update(mockPost);
+    }
+
+    @Test
+    public void deleteTagFromPost_Should_Throw_WhenUserIsBlocked() {
+        //Arrange
+        User mockUser = Helpers.createMockUser();
+        Post mockPost = Helpers.createMockPost();
+        Tag mockTag = Helpers.createMockTag();
+        Mockito.doThrow(UnauthorizedOperationException.class).when(authorizationHelper).blockedCheck(Mockito.any(User.class));
+
+
+        //Act & Assert
+        Assertions.assertThrows(UnauthorizedOperationException.class, () -> service.deleteTagFromPost(mockUser, mockPost, mockTag));
+    }
+
+    @Test
+    public void deleteTagFromPost_Should_CallRepository() {
+        //Arrange
+        User mockUser = Helpers.createMockUser();
+        Post mockPost = Helpers.createMockPost();
+        Tag mockTag = Helpers.createMockTag();
+        //Act
+        service.deleteTagFromPost(mockUser, mockPost, mockTag);
+
+        //Assert
+        Mockito.verify(mockRepository, Mockito.times(1)).update(mockPost);
     }
 }

@@ -9,6 +9,9 @@ import com.example.forumsystemwebproject.helpers.mappers.UserMapper;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.models.DTOs.UserDto;
 import com.example.forumsystemwebproject.services.contracts.UserService;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
+@Tag(name = "Users")
 public class UserController {
 
     private final UserService userService;
@@ -36,6 +40,7 @@ public class UserController {
     }
 
     @GetMapping
+    @SecurityRequirement(name = "basicAuth")
     public List<User> get(
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String email,
@@ -53,7 +58,9 @@ public class UserController {
         }
     }
 
+
     @GetMapping("/{id}")
+    @SecurityRequirement(name = "basicAuth")
     public User getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             authenticationHelper.tryGetUser(headers);
@@ -77,6 +84,7 @@ public class UserController {
 
 
     @PutMapping("/{id}")
+    @SecurityRequirement(name = "basicAuth")
     public void update(@RequestHeader HttpHeaders headers, @Valid @RequestBody UserDto dto, @PathVariable int id) {
         try {
             User authenticatedUser = authenticationHelper.tryGetUser(headers);
@@ -89,10 +97,8 @@ public class UserController {
         }
     }
 
-
-    //TODO probably add something like users/{id}/block and on this endpoint an admin can block a user
-
     @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "basicAuth")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id)  {
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -105,6 +111,7 @@ public class UserController {
     }
 
         @PatchMapping("/api/users/{id}/blockOrUnblock")
+        @SecurityRequirement(name = "basicAuth")
         public void blockOrUnblockUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try{
             User authenticated = authenticationHelper.tryGetUser(headers);
