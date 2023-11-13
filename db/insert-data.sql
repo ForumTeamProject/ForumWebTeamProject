@@ -11,16 +11,16 @@ INSERT INTO tags (content) VALUES
                                ('Tag Sample 10');
 
 INSERT INTO users (first_name, last_name, email, username, password, photo_url) VALUES
-                                                                                    ('John', 'Doe', 'john@example.com', 'johndoe', 'password', 'default-icon.png'),
-                                                                                    ('Alice', 'Smith', 'alice@example.com', 'alicesmith', 'password', 'default-icon.png'),
-                                                                                    ('Bob', 'Johnson', 'bob@example.com', 'bobjohnson', 'password', 'default-icon.png'),
-                                                                                    ('Emily', 'Brown', 'emily@example.com', 'emilybrown', 'password', 'default-icon.png'),
-                                                                                    ('David', 'Lee', 'david@example.com', 'davidlee', 'password', 'default-icon.png'),
-                                                                                    ('Sophia', 'Garcia', 'sophia@example.com', 'sophiagarcia', 'password', 'default-icon.png'),
-                                                                                    ('Oliver', 'Martinez', 'oliver@example.com', 'olivermartinez', 'password', 'default-icon.png'),
-                                                                                    ('Emma', 'Lopez', 'emma@example.com', 'emmalopez', 'password', 'default-icon.png'),
-                                                                                    ('Mia', 'Perez', 'mia@example.com', 'miaperez', 'password', 'default-icon.png'),
-                                                                                    ('Ethan', 'Gonzalez', 'ethan@example.com', 'ethangonzalez', 'password', 'default-icon.png');
+                                                                                    ('John', 'Doe', 'john@example.com', 'johndoe', 'password', null),
+                                                                                    ('Alice', 'Smith', 'alice@example.com', 'alicesmith', 'password', null),
+                                                                                    ('Bob', 'Johnson', 'bob@example.com', 'bobjohnson', 'password', null),
+                                                                                    ('Emily', 'Brown', 'emily@example.com', 'emilybrown', 'password', null),
+                                                                                    ('David', 'Lee', 'david@example.com', 'davidlee', 'password', null),
+                                                                                    ('Sophia', 'Garcia', 'sophia@example.com', 'sophiagarcia', 'password', null),
+                                                                                    ('Oliver', 'Martinez', 'oliver@example.com', 'olivermartinez', 'password', null),
+                                                                                    ('Emma', 'Lopez', 'emma@example.com', 'emmalopez', 'password', null),
+                                                                                    ('Mia', 'Perez', 'mia@example.com', 'miaperez', 'password', null),
+                                                                                    ('Ethan', 'Gonzalez', 'ethan@example.com', 'ethangonzalez', 'password',null);
 
 -- Assuming each user has a phone number
 INSERT INTO phone_numbers (user_id, number) VALUES
@@ -37,16 +37,16 @@ INSERT INTO phone_numbers (user_id, number) VALUES
 
 -- Assuming each user has a post
 INSERT INTO posts (user_id, title, content, creation_date, photo_url) VALUES
-                                                                          (1, 'First Post', 'This is the content of the first post.', NOW(), 'default-icon.jpg'),
-                                                                          (2, 'Second Post', 'This is the content of the second post.', NOW(), 'default-icon.jpg'),
-                                                                          (3, 'Third Post', 'This is the content of the third post.', NOW(), 'default-icon.jpg'),
-                                                                          (4, 'Fourth Post', 'This is the content of the fourth post.', NOW(), 'default-icon.jpg'),
-                                                                          (5, 'Fifth Post', 'This is the content of the fifth post.', NOW(), 'default-icon.jpg'),
-                                                                          (6, 'Sixth Post', 'This is the content of the sixth post.', NOW(), 'default-icon.jpg'),
-                                                                          (7, 'Seventh Post', 'This is the content of the seventh post.', NOW(), 'default-icon.jpg'),
-                                                                          (8, 'Eighth Post', 'This is the content of the eighth post.', NOW(), 'default-icon.jpg'),
-                                                                          (9, 'Ninth Post', 'This is the content of the ninth post.', NOW(), 'default-icon.jpg'),
-                                                                          (10, 'Tenth Post', 'This is the content of the tenth post.', NOW(), 'default-icon.jpg');
+                                                                          (1, 'Cat Shedding', 'Hi guys, do you know which are the best products for persian cat shedding? I have persian cat and I would like to buy her relevant products.', NOW(), null),
+                                                                          (2, 'Golden Retrievers - eating habits', 'Hello, is there anyone who can suggest a proper eating routine for golden retrievers. I got a new one just now and I am wondering how often I should feed him.', NOW(), null),
+                                                                          (3, 'Parrots - which is the best vet in Sofia?', 'Hello again, my parrot has some issues with the right leg. Can you please give me contact to the best vet in Sofia? Thank you in advance!', NOW(), null),
+                                                                          (4, 'Domestic Rabbit', 'Hi everybody, I am searching for a rabbit to buy. I think they are really cute and calm. They do not cause any mess when you keep them at home. Do you know where I can buy?', NOW(),null ),
+                                                                          (5, 'Dog missing!', 'Hi, I lost my dog yesterday. He is responding to the name Lucas. We lost him in the South Park in Sofia. If you happen to find him, please contact us on: 0954546344', NOW(), null),
+                                                                          (6, 'Best shampoo for dogs', 'I know a lot of you asked recently about the best shampoo I have used for my puppy. That is why I am going to post the name here: Dog Cleaner 3000 :). This shampoo is only 10 pounds and you can find it in H&M xD', NOW(), null),
+                                                                          (7, 'What do you think about dog tattoos? ', 'Hi, I am considering tattooing my dog. Has anyone does this before? Does it hurt the dog?', NOW(), null),
+                                                                          (8, 'Dog and cat as roomates?', 'Hi, I am currently living with my dog Emma. I would like to buy a British Shorthair cat, because I love how they look and they are so cute. I am wondering if anybody can tell me whether they have a dog and a cat at home. Do they beat each other. Is it worth ?', NOW(), null),
+                                                                          (9, 'Searching for 100x100 aquarium', 'Hi, I am searching for an aquarium with dimensions 100x100. I need it as part of my new office. If anybody can help please DM me.', NOW(), null),
+                                                                          (10, 'Dogs for sale', 'My dog Gale has 5 puppies. I am selling 4 of them. If you are interested DM me and I will send you some photos and we can negotiate for a price.', NOW(), null);
 
 -- Assuming users like posts
 INSERT INTO likes (post_id, user_id) VALUES
@@ -76,16 +76,16 @@ INSERT INTO posts_tags (post_id, tag_id) VALUES
 
 -- Assuming users reply to posts
 INSERT INTO replies (post_id, user_id, content) VALUES
-                                                    (1, 3, 'Reply content for Post 1 by User 3'),
-                                                    (2, 4, 'Reply content for Post 2 by User 4'),
-                                                    (3, 5, 'Reply content for Post 3 by User 5'),
-                                                    (4, 6, 'Reply content for Post 4 by User 6'),
-                                                    (5, 7, 'Reply content for Post 5 by User 7'),
-                                                    (6, 8, 'Reply content for Post 6 by User 8'),
-                                                    (7, 9, 'Reply content for Post 7 by User 9'),
-                                                    (8, 10, 'Reply content for Post 8 by User 10'),
-                                                    (9, 1, 'Reply content for Post 9 by User 1'),
-                                                    (10, 2, 'Reply content for Post 10 by User 2');
+                                                    (1, 3, 'Yes, you can take the clean cat 500. It is a very powerful and the fur is extremely squishy.'),
+                                                    (2, 4, 'You can feed them 3 times per day with large quantity as they need more energy.'),
+                                                    (3, 5, 'Mr.Winston is working every day from Monday to Friday. He is located at ParrotStreet 31'),
+                                                    (4, 6, 'You can DM me. I have 3 rabbits for sale.'),
+                                                    (5, 7, 'I think I found him. I send you a DM with my number.'),
+                                                    (6, 8, 'Thank you for sharing. Just bought it from the store <3.'),
+                                                    (7, 9, 'It is not recommended. The skin can infect and the dog will be in life danger.'),
+                                                    (8, 10, 'I think it depends whether they will match. I have two in my house and they are understanding great. They sleep and play together.'),
+                                                    (9, 1, 'DM me. I can offer something.'),
+                                                    (10, 2, 'I am interested!');
 
 INSERT INTO roles (role_id, name) VALUES
                              (1, 'admin'),
