@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="head(title)">
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <title th:text="'Pet Lounge | ' + ${title}">Title</title>
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="../static/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="../static/assets/favicon.ico"/>
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css"/>
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
 </head>
@@ -18,7 +18,8 @@
 <header th:fragment="header" class="masthead">
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu
                 <i class="fas fa-bars ms-1"></i>
             </button>
@@ -27,21 +28,28 @@
                     <a class="nav-link" th:unless="${isAuthenticated}" th:text="Welcome">Welcome</a>
                 </h3>
                 <h3 class="nav-item" th:if="${isAuthenticated}">
-                    <a class="nav-link" th:text="${session.currentUser.username}" th:href="@{'/users/' + ${session.currentUser.id}}">Username</a>
+                    <a class="nav-link" th:text="${session.currentUser.username}"
+                       th:href="@{'/users/' + ${session.currentUser.id}}">Username</a>
                 </h3>
 
-<!--                <form class="nav-item" th:if="${isAuthenticated}"  th:action="@{/posts/search}" method="get" th:object="${filterOptions}">-->
-<!--                    <input class="search-bar" type="text" th:field="*{tags}" placeholder="Search posts by tag.." name="search">-->
-<!--                    <button style="padding: 5px;" class="btn btn-primary btn-xl text-uppercase" type="submit"><i class="fa fa-search"></i></button>-->
-<!--                </form>-->
+                <!--                <form class="nav-item" th:if="${isAuthenticated}"  th:action="@{/posts/search}" method="get" th:object="${filterOptions}">-->
+                <!--                    <input class="search-bar" type="text" th:field="*{tags}" placeholder="Search posts by tag.." name="search">-->
+                <!--                    <button style="padding: 5px;" class="btn btn-primary btn-xl text-uppercase" type="submit"><i class="fa fa-search"></i></button>-->
+                <!--                </form>-->
 
                 <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/auth/login}" th:unless="${isAuthenticated}">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/auth/register}" th:unless="${isAuthenticated}">Register</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/}" th:if="${isAuthenticated}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/users}" th:if="${isAdmin}">Users</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/posts}" th:if="${isAuthenticated}">Posts</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/auth/logout}" th:if="${isAuthenticated}">Logout</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/auth/login}"
+                                            th:unless="${isAuthenticated}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/auth/register}"
+                                            th:unless="${isAuthenticated}">Register</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/}" th:if="${isAuthenticated}">Home</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/users}" th:if="${isAdmin}">Users</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/posts}" th:if="${isAuthenticated}">Posts</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/auth/logout}"
+                                            th:if="${isAuthenticated}">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -61,12 +69,12 @@
     <div class="rounded-container" id="profilePictureContainer">
         <img class="users-image"
              th:src="${post.photoUrl != null ? post.photoUrl : '/assets/img/posts/default-icon.jpg'}"
-             alt="Profile Picture" id="profilePicture" />
+             alt="Profile Picture" id="profilePicture"/>
     </div>
 
     <form action="#" th:action="@{/posts/create}" th:object="${post}" method="post">
 
-        <input type="hidden" id="hiddenPhotoInput" name="photoUrl" th:value="${post.photoUrl}" />
+        <input type="hidden" id="hiddenPhotoInput" name="photoUrl" th:value="${post.photoUrl}"/>
 
         <label th:text="#{post.label.title}">Title</label>
         <br/>
@@ -78,7 +86,8 @@
 
         <label th:text="#{post.label.content}">Content</label>
         <br/>
-        <textarea th:maxlength="8192" class="textarea-content" id="symbolTextArea" oninput="countSymbols()" th:field="*{content}">Content</textarea>
+        <textarea th:maxlength="8192" class="textarea-content" id="symbolTextArea" oninput="countSymbols()"
+                  th:field="*{content}">Content</textarea>
         <p>Number of symbols: <span id="symbolCount">0</span></p>
         <br/>
         <label class="error" th:errors="*{content}">Content error placeholder</label>
@@ -89,32 +98,17 @@
 </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <footer th:fragment="footer" class="footer py-4">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-4 text-lg-start">Copyright &copy; Your Website 2023</div>
             <div class="col-lg-4 my-3 my-lg-0">
-                <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Twitter"><i
+                        class="fab fa-twitter"></i></a>
+                <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Facebook"><i
+                        class="fab fa-facebook-f"></i></a>
+                <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="LinkedIn"><i
+                        class="fab fa-linkedin-in"></i></a>
             </div>
             <div class="col-lg-4 text-lg-end">
                 <a class="link-dark text-decoration-none me-3" href="#!">Privacy Policy</a>
@@ -140,18 +134,18 @@
         const profilePictureContainer = document.getElementById('profilePictureContainer');
 
         if (profilePictureContainer) {
-            profilePictureContainer.addEventListener('click', function() {
+            profilePictureContainer.addEventListener('click', function () {
                 const fileInput = document.createElement('input');
                 fileInput.type = 'file';
                 fileInput.accept = 'image/*';
                 fileInput.style.display = 'none';
 
-                fileInput.addEventListener('change', function(event) {
+                fileInput.addEventListener('change', function (event) {
                     const file = event.target.files[0];
                     if (file) {
                         const reader = new FileReader();
 
-                        reader.onload = function(event) {
+                        reader.onload = function (event) {
                             profilePicture.src = event.target.result;
                             // Update hidden input value to include the file as a base64 data URL
                             const hiddenInput = document.getElementById('hiddenPhotoInput');

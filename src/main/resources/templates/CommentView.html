@@ -7,7 +7,7 @@
 <div class="rounded-container-user" id="profilePictureContainer">
     <a th:href="@{'/users/' + ${comment.user.id}}"> <img class="users-image"
                                                          th:src="${comment.user.photoUrl != null ? comment.user.photoUrl : '/assets/img/users/default-icon.png'}"
-                                                         alt="Profile Picture" id="profilePicture" /> </a>
+                                                         alt="Profile Picture" id="profilePicture"/> </a>
 </div>
 
 <h3 class="users-name" th:text="${comment.user.firstName} + ' ' + ${comment.user.lastName}">Full Name</h3>
@@ -23,24 +23,11 @@
 <br/>
 <br/>
 <div class="textarea-container">
-    <textarea class="textarea-content2" id="commentText" th:text="${comment.content}" readonly>Comment content</textarea>
-</div><br/>
+    <textarea class="textarea-content2" id="commentText" th:text="${comment.content}"
+              readonly>Comment content</textarea>
+</div>
 <br/>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<br/>
 
 
 <form th:replace="~{PostFormView.html :: footer}"></form>

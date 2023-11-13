@@ -1,9 +1,5 @@
 package com.example.forumsystemwebproject.models.DTOs;
 
-import com.example.forumsystemwebproject.models.Post;
-
-import java.util.List;
-
 public class PostFilterDto {
 
     private String user;

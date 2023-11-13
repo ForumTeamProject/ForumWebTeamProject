@@ -1,6 +1,6 @@
 package com.example.forumsystemwebproject.models.DTOs;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotEmpty;
 
 public class LoginDto {
 

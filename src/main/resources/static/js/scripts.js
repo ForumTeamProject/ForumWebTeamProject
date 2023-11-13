@@ -65,46 +65,32 @@ function showComment() {
     }
 }
 
-document.getElementById('commentForm').addEventListener('submit', function (event) {
-    event.preventDefault();
+function toggleOptionsMenu(button) {
+    var dropdown = button.nextElementSibling;
+    var isDisplayed = dropdown.style.display === 'block';
+    // Hide all other dropdowns
+    document.querySelectorAll('.options-dropdown').forEach(function (dropdown) {
+        dropdown.style.display = 'none';
+    });
+    dropdown.style.display = isDisplayed ? 'none' : 'block';
+}
 
-    // Get the comment text
-    var commentText = document.getElementById('commentText').value;
+// Function to toggle the edit post form
+function toggleEditPost(postId) {
+    var formId = 'edit-post-form-' + postId;
+    var form = document.getElementById(formId);
+    form.style.display = form.style.display === 'block' ? 'none' : 'block';
+}
 
-    // TODO: Perform client-side validation if needed
+function toggleEditTags() {
+    var editTagsForm = document.getElementById('edit-tags-area');
+    var isDisplayed = editTagsForm.style.display === 'block';
+    editTagsForm.style.display = isDisplayed ? 'none' : 'block';
+}
 
-    // Send the comment to the server using AJAX
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', this.action, true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Optionally, handle the server response
-            console.log('Comment submitted successfully!');
-        }
-    };
-    xhr.send('comment=' + encodeURIComponent(commentText));
-});
-
-// function likePost(postId) {
-// //ajax to be impl
-//     fetch(`/posts/${postId}/like`, {
-//         method: 'GET',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         }
-//     })
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error('Network response was not ok');
-//             }
-//             return response.json(); // Assuming the server responds with JSON
-//         })
-//         .then(data => {
-//             // Update the likes count on the page
-//             document.getElementById('likesCount').innerText = data.likesCount;
-//         })
-//         .catch(error => {
-//             console.error('There has been a problem with your fetch operation:', error);
-//         });
-// }
+// Function to toggle the edit comment form
+function toggleEditComment(commentId) {
+    var formId = 'edit-comment-form-' + commentId;
+    var form = document.getElementById(formId);
+    form.style.display = form.style.display === 'block' ? 'none' : 'block';
+}

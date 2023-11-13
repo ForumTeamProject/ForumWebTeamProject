@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AuthorizationHelperImpl implements AuthorizationHelper{
+public class AuthorizationHelperImpl implements AuthorizationHelper {
     public static final String UNAUTHORIZED_MSG = "%s with %s %s is unauthorized to do this operation!";
     public static final String BLOCKED_USER_ROLE = "blockedUser";
     public static final String ADMIN_ROLE = "admin";
@@ -35,13 +35,13 @@ public class AuthorizationHelperImpl implements AuthorizationHelper{
 
     @Override
     public void creatorCheck(User user, PhoneNumber number) {
-        if(user.getId() != number.getUser().getId()) {
+        if (user.getId() != number.getUser().getId()) {
             throw new UnauthorizedOperationException(String.format("%s with %s %s is unauthorized to do this operation!", "User", "username", user.getUsername()));
         }
     }
 
     @Override
-    public void creatorCheck(User authenticatedUser,User userToCheck) {
+    public void creatorCheck(User authenticatedUser, User userToCheck) {
         if (userToCheck.getId() != authenticatedUser.getId()) {
             throw new UnauthorizedOperationException(String.format("%s with %s %s is unauthorized to do this operation!", "User", "username", authenticatedUser.getUsername()));
         }
@@ -49,7 +49,7 @@ public class AuthorizationHelperImpl implements AuthorizationHelper{
 
     @Override
     public void adminCheck(User user) {
-        for (Role role: user.getRoles()) {
+        for (Role role : user.getRoles()) {
             if (role.getName().equals(roleRepository.getByName(ADMIN_ROLE).getName())) {
                 return;
             }

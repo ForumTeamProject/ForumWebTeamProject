@@ -6,11 +6,13 @@
 <form th:replace="~{PostFormView.html :: header}"></form>
 
 <div class="body-content">
-    <form action="#" th:action="@{'/posts/' + ${postId} + '/comments/' + ${commentId} + '/update'}" th:object="${comment}" method="post">
+    <form action="#" th:action="@{'/posts/' + ${postId} + '/comments/' + ${commentId} + '/update'}"
+          th:object="${comment}" method="post">
 
         <label th:text="#{comment.label.content}">Content</label>
         <br/>
-        <textarea th:maxlength="8192" class="textarea-content" id="symbolTextArea" oninput="countSymbols()" th:field="*{content}">Content</textarea>
+        <textarea th:maxlength="8192" class="textarea-content" id="symbolTextArea" oninput="countSymbols()"
+                  th:field="*{content}">Content</textarea>
         <p>Number of symbols: <span id="symbolCount">0</span></p>
         <br/>
         <label class="error" th:errors="*{content}">Content error placeholder</label>

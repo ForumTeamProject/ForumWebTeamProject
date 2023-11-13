@@ -9,6 +9,7 @@ import java.util.List;
 public interface CommentService {
 
     List<Comment> get(CommentFilterOptions filterOptions);
+
     List<Comment> getByUserId(int id);
 
     List<Comment> getByPostId(int id);

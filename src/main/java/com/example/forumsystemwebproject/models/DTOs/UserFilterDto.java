@@ -1,7 +1,5 @@
 package com.example.forumsystemwebproject.models.DTOs;
 
-import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
-
 public class UserFilterDto {
 
     private String username;

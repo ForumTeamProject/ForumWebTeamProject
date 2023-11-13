@@ -1,20 +1,15 @@
 package com.example.forumsystemwebproject.helpers.filters;
 
-import com.example.forumsystemwebproject.models.DTOs.PostFilterDto;
-
-import javax.swing.text.html.Option;
-import java.util.List;
 import java.util.Optional;
 
 public class PostFilterOptions {
 
-    private Optional<String> username;
+    private final Optional<String> username;
 
-    private Optional<String> title;
+    private final Optional<String> title;
 
-    private Optional<String> sortBy;
-    private Optional<String> sortOrder;
-
+    private final Optional<String> sortBy;
+    private final Optional<String> sortOrder;
 
 
     public PostFilterOptions(

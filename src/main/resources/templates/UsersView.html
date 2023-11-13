@@ -8,7 +8,8 @@
 
 <div class="body-content">
     <form action="#" th:action="@{/users}" method="get" th:object="${filterOptions}">
-        <label style="margin-top: 50px; margin-bottom: 50px;  font-weight: 700;  line-height: 1.2;" th:text="#{users.filter.label}">Browse Users</label>
+        <label style="margin-top: 50px; margin-bottom: 50px;  font-weight: 700;  line-height: 1.2;"
+               th:text="#{users.filter.label}">Browse Users</label>
         <br/><br/>
         <input type="text" placeholder="Username" th:field="*{username}"/>
         <input type="text" placeholder="Email" th:field="*{email}"/>
@@ -59,7 +60,7 @@
 </div>
 
 <div class="pagination_section" style="text-align: center">
-<!--    <a th:if="${userPage.hasPrevious()}" th:href="@{'/users?page=' + ${userPage.previousPageable().pageNumber}}" th:text="Previous"></a>-->
+    <!--    <a th:if="${userPage.hasPrevious()}" th:href="@{'/users?page=' + ${userPage.previousPageable().pageNumber}}" th:text="Previous"></a>-->
     <span th:if="${userPage.totalPages > 0}" th:each="pageNumber : ${#numbers.sequence(1, userPage.totalPages)}">
     <a th:href="@{'/users?page=' + ${pageNumber} +
         '&size=' + ${userPage.getSize()} +
@@ -71,7 +72,7 @@
         '&sortOrder=' + ${filterOptions.sortOrder}}"
        th:text="${pageNumber}" th:class="${pageNumber == userPage.number + 1} ? 'active'"></a>
 </span>
-<!--    <a th:if="${userPage.hasNext()}" th:href="@{'/users?page=' + ${userPage.nextPageable().pageNumber}}" th:text="Next"></a>-->
+    <!--    <a th:if="${userPage.hasNext()}" th:href="@{'/users?page=' + ${userPage.nextPageable().pageNumber}}" th:text="Next"></a>-->
 </div>
 
 <form th:replace="PostFormView.html :: footer"></form>

@@ -1,9 +1,9 @@
 package com.example.forumsystemwebproject.helpers;
 
-import com.example.forumsystemwebproject.models.*;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
+import com.example.forumsystemwebproject.models.Comment;
+import com.example.forumsystemwebproject.models.PhoneNumber;
+import com.example.forumsystemwebproject.models.Post;
+import com.example.forumsystemwebproject.models.User;
 
 public interface AuthorizationHelper {
 

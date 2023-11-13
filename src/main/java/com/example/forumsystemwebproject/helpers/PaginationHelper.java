@@ -1,6 +1,5 @@
 package com.example.forumsystemwebproject.helpers;
 
-import com.example.forumsystemwebproject.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;

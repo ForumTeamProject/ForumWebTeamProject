@@ -2,7 +2,6 @@ package com.example.forumsystemwebproject.services.contracts;
 
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
 import com.example.forumsystemwebproject.models.User;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

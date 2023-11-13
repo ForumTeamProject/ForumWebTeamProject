@@ -58,7 +58,6 @@ public class UserController {
         }
     }
 
-
     @GetMapping("/{id}")
     @SecurityRequirement(name = "basicAuth")
     public User getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {

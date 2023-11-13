@@ -14,7 +14,7 @@
 <div class="rounded-container-user" id="profilePictureContainer">
     <img class="users-image"
          th:src="${user.photoUrl != null ? user.photoUrl : '/assets/img/users/default-icon.png'}"
-         alt="Profile Picture" id="profilePicture" />
+         alt="Profile Picture" id="profilePicture"/>
 </div>
 
 <h3 class="users-name" th:text="${user.firstName} + ' ' + ${user.lastName}">Full Name</h3>
@@ -22,28 +22,41 @@
 <h5 class="users-name" th:text="'(' + ${user.username} + ')'"></h5>
 <br/>
 <br/>
-<h6 class="users-name" th:if="${!isBlocked}" th:attr="title='This status indicates that you are fully-fledged user of the website.'">Status: <span style="color: green">Active</span></h6>
-<h6 class="users-name" th:if="${isBlocked}" th:attr="title='This status indicates that you are blocked user and therefore not authorized to create post nor comments.'">Status: <span style="color: red">Blocked</span></h6>
+<h6 class="users-name" th:if="${!isBlocked}"
+    th:attr="title='This status indicates that you are fully-fledged user of the website.'">Status: <span
+        style="color: green">Active</span></h6>
+<h6 class="users-name" th:if="${isBlocked}"
+    th:attr="title='This status indicates that you are blocked user and therefore not authorized to create post nor comments.'">
+    Status: <span style="color: red">Blocked</span></h6>
 
 <br/>
 <br/>
 <br/>
 <br/>
-<form th:if="${session.currentUser.getId() == user.getId()}" th:method="get" th:action="@{'/users/' + ${user.id} + '/update'}">
+<form th:if="${session.currentUser.getId() == user.getId()}" th:method="get"
+      th:action="@{'/users/' + ${user.id} + '/update'}">
     <button style="display: block; margin: 0 auto;"
             class="btn btn-primary btn-xl text-uppercase" th:text="Update"
-            type="submit">Update</button>
+            type="submit">Update
+    </button>
 </form>
 
-<form th:if="${isAdmin && session.currentUser.id != user.id}" th:action="@{'/users/' + ${user.id} + '/blockOrUnblock'}" method="post">
-    <button style="display: block; margin: 0 auto;" th:unless="${isBlocked}" th:text="Block" class="btn btn-primary btn-xl text-uppercase" type="submit">Block</button>
-    <button style="display: block; margin: 0 auto;" th:if="${isBlocked}" th:text="Unblock" class="btn btn-primary btn-xl text-uppercase" type="submit">Unblock</button>
+<form th:if="${isAdmin && session.currentUser.id != user.id}" th:action="@{'/users/' + ${user.id} + '/blockOrUnblock'}"
+      method="post">
+    <button style="display: block; margin: 0 auto;" th:unless="${isBlocked}" th:text="Block"
+            class="btn btn-primary btn-xl text-uppercase" type="submit">Block
+    </button>
+    <button style="display: block; margin: 0 auto;" th:if="${isBlocked}" th:text="Unblock"
+            class="btn btn-primary btn-xl text-uppercase" type="submit">Unblock
+    </button>
 </form>
 
-<form th:if="${session.currentUser.getId() == user.getId()}" th:method="post" th:action="@{'/users/' + ${user.id} + '/delete'}">
+<form th:if="${session.currentUser.getId() == user.getId()}" th:method="post"
+      th:action="@{'/users/' + ${user.id} + '/delete'}">
     <button style="display: block; background-color: red; margin: 50px auto 0;"
             class="btn btn-primary btn-xl text-uppercase" th:text="Delete"
-            type="submit">Delete</button>
+            type="submit">Delete
+    </button>
 </form>
 
 

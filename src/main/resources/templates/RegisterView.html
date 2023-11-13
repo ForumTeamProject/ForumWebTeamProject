@@ -68,18 +68,18 @@
         const profilePictureContainer = document.getElementById('profilePictureContainer');
 
         if (profilePictureContainer) {
-            profilePictureContainer.addEventListener('click', function() {
+            profilePictureContainer.addEventListener('click', function () {
                 const fileInput = document.createElement('input');
                 fileInput.type = 'file';
                 fileInput.accept = 'image/*';
                 fileInput.style.display = 'none';
 
-                fileInput.addEventListener('change', function(event) {
+                fileInput.addEventListener('change', function (event) {
                     const file = event.target.files[0];
                     if (file) {
                         const reader = new FileReader();
 
-                        reader.onload = function(event) {
+                        reader.onload = function (event) {
                             profilePicture.src = event.target.result;
                             // Additional logic to send the file to the server using AJAX to save the new profile picture
                             // Adjust the AJAX logic based on your server implementation

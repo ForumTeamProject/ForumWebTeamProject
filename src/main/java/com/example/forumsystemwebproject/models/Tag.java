@@ -1,10 +1,7 @@
 package com.example.forumsystemwebproject.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -18,6 +15,7 @@ public class Tag {
 
     @Column(name = "content")
     private String content;
+
     public Tag() {
     }
 

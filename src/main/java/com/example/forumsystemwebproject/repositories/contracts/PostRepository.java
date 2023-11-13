@@ -12,6 +12,7 @@ public interface PostRepository {
     List<Post> get(PostFilterOptions filterOptions);
 
     List<Post> getByUserId(PostFilterOptions filterOptions, int id);
+
     List<Like> getLikes(int postId);
 
     List<Post> getMostCommented();

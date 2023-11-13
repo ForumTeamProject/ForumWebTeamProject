@@ -1,7 +1,6 @@
 package com.example.forumsystemwebproject.models;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -48,7 +47,7 @@ public class Post {
     @JoinColumn(name = "post_id")
     private Set<Like> likes;
 
-    @Column(name="photo_url")
+    @Column(name = "photo_url")
     private String photoUrl;
 
     public Post() {

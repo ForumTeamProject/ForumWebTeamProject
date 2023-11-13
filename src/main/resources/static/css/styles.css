@@ -13209,6 +13209,42 @@ a:nth-child(7) {
     flex: 50%;
 }
 
+/*Edit*/
+.options-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.options-dropdown {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    right: 0;
+    z-index: 100;
+}
+
+.options-dropdown a {
+    display: block;
+    padding: 5px;
+    text-decoration: none;
+    color: black;
+}
+
+.options-dropdown a:hover {
+    background-color: #f0f0f0;
+}
+
+/* Style for the hidden edit tags area */
+.hidden-edit-tags-area {
+    margin-top: 10px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+}
+
 /*tags*/
 .post-tag-icon {
     position: relative;
@@ -13233,7 +13269,7 @@ a:nth-child(7) {
     border: 1px solid #ccc;
     padding: 5px;
     border-radius: 5px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     white-space: nowrap; /* Prevents the tooltip from breaking into multiple lines */
 }
@@ -13408,6 +13444,33 @@ a:nth-child(7) {
     margin-top: 40px;
 }
 
+/*Editing buton*/
+.edit-button {
+    background-color: #ffc107;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.edit-button:hover {
+    background-color: #e0a800;
+}
+
+
+.hidden-edit-comment-area {
+    margin-top: 10px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.hidden-edit-comment-area textarea {
+    width: 100%;
+    margin-bottom: 10px;
+}
 
 /*======================
     404 page
@@ -13548,14 +13611,14 @@ a:nth-child(7) {
     margin: 0 auto; /* Optional: To center the box within its parent container */
 }
 
-.search-bar{
-        width: 500px; /* Adjust the width as needed */
-        padding: 10px;
-        border: 2px solid #ffc800;
-        border-radius: 20px; /* Make it rounder */
-        outline: none;
-        text-align: center;
-        margin-left: 200px;
+.search-bar {
+    width: 500px; /* Adjust the width as needed */
+    padding: 10px;
+    border: 2px solid #ffc800;
+    border-radius: 20px; /* Make it rounder */
+    outline: none;
+    text-align: center;
+    margin-left: 200px;
 }
 
 /******************************/

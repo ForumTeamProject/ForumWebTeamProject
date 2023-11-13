@@ -2,7 +2,6 @@ package com.example.forumsystemwebproject.models.DTOs;
 
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class CommentDto {

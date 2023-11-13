@@ -69,9 +69,7 @@ public class CommentRepositoryImpl implements CommentRepository {
             User user = userRepository.getById(id);
             Map<String, Object> params = new HashMap<>();
 
-            StringBuilder queryString = new StringBuilder("from Comment where user = :user");
-
-            Query<Comment> query = session.createQuery(queryString.toString(), Comment.class);
+            Query<Comment> query = session.createQuery("from Comment where user = :user", Comment.class);
             query.setParameter("user", user);
             query.setProperties(params);
             return query.list();

@@ -89,7 +89,9 @@
             <input type="submit" name="" value="submit">
         </div>
     </form>
-    <br/>
+
+    <br>
+
     <!-- Show Comments -->
     <div class="comments-container">
         <div class="head">
@@ -105,7 +107,7 @@
                      alt="Default"/>
             </div>
 
-            <div class="content" th:text="${comment.getContent()}">
+            <div class="content" th:utext="${comment.getContent()}">
                 Test Comment Content aa
             </div>
 

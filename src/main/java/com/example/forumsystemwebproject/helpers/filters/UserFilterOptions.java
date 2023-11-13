@@ -4,12 +4,12 @@ import java.util.Optional;
 
 public class UserFilterOptions {
 
-    private Optional<String> username;
-    private Optional<String> email;
-    private Optional<String> firstName;
-    private Optional<String> lastName;
-    private Optional<String> sortBy;
-    private Optional<String> sortOrder;
+    private final Optional<String> username;
+    private final Optional<String> email;
+    private final Optional<String> firstName;
+    private final Optional<String> lastName;
+    private final Optional<String> sortBy;
+    private final Optional<String> sortOrder;
 
     public UserFilterOptions(
             String username,

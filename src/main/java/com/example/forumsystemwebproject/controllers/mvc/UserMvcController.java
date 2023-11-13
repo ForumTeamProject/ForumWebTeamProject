@@ -1,6 +1,9 @@
 package com.example.forumsystemwebproject.controllers.mvc;
 
-import com.example.forumsystemwebproject.exceptions.*;
+import com.example.forumsystemwebproject.exceptions.AuthenticationFailureException;
+import com.example.forumsystemwebproject.exceptions.DuplicateEntityException;
+import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
+import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
 import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.helpers.PaginationHelper;
@@ -61,7 +64,7 @@ public class UserMvcController {
     public boolean isAdmin(HttpSession session) {
         if (populateIsAuthenticated(session)) {
             User user = (User) session.getAttribute("currentUser");
-            for (Role role: user.getRoles()) {
+            for (Role role : user.getRoles()) {
                 if (role.getId() == roleRepository.getByName("admin").getId()) {
                     return true;
                 }
@@ -80,7 +83,7 @@ public class UserMvcController {
     public boolean isBlocked(HttpSession session) {
         if (populateIsAuthenticated(session)) {
             User user = (User) session.getAttribute("currentUser");
-            for (Role role: user.getRoles()) {
+            for (Role role : user.getRoles()) {
                 if (role.getName().equals(roleRepository.getByName("blockedUser").getName())) {
                     return true;
                 }
@@ -96,7 +99,7 @@ public class UserMvcController {
                             @RequestParam("size") Optional<Integer> size) {
         User user;
         try {
-          user = authenticationHelper.tryGetUser(session);
+            user = authenticationHelper.tryGetUser(session);
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
@@ -125,7 +128,8 @@ public class UserMvcController {
                         .boxed()
                         .collect(Collectors.toList());
                 model.addAttribute("pageNumbers", pageNumbers);
-            }   model.addAttribute("users", users);
+            }
+            model.addAttribute("users", users);
             model.addAttribute("filterOptions", filterDto);
             return "UsersView";
         } catch (UnauthorizedOperationException e) {
@@ -200,7 +204,7 @@ public class UserMvcController {
     public String showEditUserPage(@PathVariable int id, Model model, HttpSession session) {
         User user;
         try {
-          user = authenticationHelper.tryGetUser(session);
+            user = authenticationHelper.tryGetUser(session);
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
@@ -241,7 +245,7 @@ public class UserMvcController {
             return "UserUpdateView";
         }
 
-            if (!user.getPassword().equals(user.getPasswordConfirm())) {
+        if (!user.getPassword().equals(user.getPasswordConfirm())) {
             bindingResult.rejectValue("passwordConfirm", "password_error", "Passwords must match!");
             return "UserUpdateView";
         }
@@ -266,7 +270,7 @@ public class UserMvcController {
                 bindingResult.rejectValue("username", "username_error", e.getMessage());
             }
             return "UserUpdateView";
-        }  catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";

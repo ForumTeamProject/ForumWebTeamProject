@@ -15,6 +15,7 @@ public interface PostService {
     List<Post> getByUserId(PostFilterOptions filterOptions, int id);
 
     List<Post> getMostCommented();
+
     List<Like> getLikes(int postId);
 
     List<Post> getMostRecentlyCreatedPosts();

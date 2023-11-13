@@ -159,20 +159,21 @@ public class CommentMvcController {
         User user;
 
         try {
-           user = authenticationHelper.tryGetUser(session);
+            user = authenticationHelper.tryGetUser(session);
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
 
         if (bindingResult.hasErrors()) {
-            return "redirect:/posts/" + (postId);
+            return "redirect:/posts/" + postId;
+            // return "CommentFormView";
         }
 
         try {
             Comment comment = mapper.fromDto(dto);
             commentService.create(comment, postId, user);
             model.addAttribute("comment", comment);
-            return "redirect:/posts/" + postId;
+            return "redirect:/posts/" + postId;// + "/comments";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());

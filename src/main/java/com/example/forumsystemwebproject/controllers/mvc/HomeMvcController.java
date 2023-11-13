@@ -1,7 +1,5 @@
 package com.example.forumsystemwebproject.controllers.mvc;
 
-import com.example.forumsystemwebproject.exceptions.AuthenticationFailureException;
-import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
 import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.models.Post;
@@ -73,7 +71,7 @@ public class HomeMvcController {
     public boolean isAdmin(HttpSession session) {
         if (populateIsAuthenticated(session)) {
             User user = (User) session.getAttribute("currentUser");
-            for (Role role: user.getRoles()) {
+            for (Role role : user.getRoles()) {
                 if (role.getId() == roleRepository.getByName("admin").getId()) {
                     return true;
                 }

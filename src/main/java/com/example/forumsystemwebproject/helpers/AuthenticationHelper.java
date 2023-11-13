@@ -10,10 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
+
 @Component
-public class  AuthenticationHelper {
-    private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
+public class AuthenticationHelper {
     public static final String INVALID_AUTHENTICATION_ERROR = "Wrong username or password !";
+    private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private final UserService userService;
 
     @Autowired
@@ -75,7 +76,7 @@ public class  AuthenticationHelper {
     public User tryGetUser(HttpSession session) {
         User currentUser = (User) session.getAttribute("currentUser");
 
-        if (currentUser == null){
+        if (currentUser == null) {
             throw new AuthenticationFailureException("No user logged in.");
         }
 

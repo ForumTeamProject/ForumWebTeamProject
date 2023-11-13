@@ -22,7 +22,8 @@
                         <div class="portfolio-hover">
                             <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                         </div>
-                        <img class="img-fluid" style="width: 336px; height: 200px; object-fit: cover; object-position: center;"
+                        <img class="img-fluid"
+                             style="width: 336px; height: 200px; object-fit: cover; object-position: center;"
                              th:src="${comment.user.photoUrl != null ? comment.user.photoUrl : '/assets/img/posts/default-icon.jpg'}"
                              alt="..."/>
                     </a>
@@ -53,25 +54,30 @@
                             <!-- Project details-->
                             <h3 class="text-uppercase" th:text="${post.title}">Post Title</h3>
                             <br/>
-<!--                            <img class="img-fluid" style="width: 336px; height: 200px; object-fit: cover; object-position: center;"-->
-<!--                                 th:src="${comment.user.photoUrl != null ? comment.user.photoUrl : '/assets/img/posts/default-icon.jpg'}"-->
-<!--                                 alt="..."/>-->
+                            <!--                            <img class="img-fluid" style="width: 336px; height: 200px; object-fit: cover; object-position: center;"-->
+                            <!--                                 th:src="${comment.user.photoUrl != null ? comment.user.photoUrl : '/assets/img/posts/default-icon.jpg'}"-->
+                            <!--                                 alt="..."/>-->
 
                             <div class="rounded-container-user" id="profilePictureContainer">
-                               <a th:href="@{'/users/' + ${comment.user.id}}"> <img class="users-image"
-                                     th:src="${comment.user.photoUrl != null ? comment.user.photoUrl : '/assets/img/users/default-icon.png'}"
-                                     alt="Profile Picture" id="profilePicture" /> </a>
+                                <a th:href="@{'/users/' + ${comment.user.id}}"> <img class="users-image"
+                                                                                     th:src="${comment.user.photoUrl != null ? comment.user.photoUrl : '/assets/img/users/default-icon.png'}"
+                                                                                     alt="Profile Picture"
+                                                                                     id="profilePicture"/> </a>
                             </div>
-                            <textarea class="textarea-content" style="resize: none" id="commentText" th:text="${comment.content}" readonly>Comment content</textarea>
+                            <textarea class="textarea-content" style="resize: none" id="commentText"
+                                      th:text="${comment.content}" readonly>Comment content</textarea>
 
                             <br/>
                             <br/>
 
-                            <form style="display: inline; margin: 0; padding: 0" th:if="${comment.user.id == session.currentUser.id}"
-                                  th:method="get" th:action="@{'/posts/' + ${post.id} + '/comments/' + ${comment.id} + '/update'}">
-                            <button style="margin-right: 50px"  class="btn btn-primary btn-xl text-uppercase"  type="submit">
-                                Edit
-                            </button>
+                            <form style="display: inline; margin: 0; padding: 0"
+                                  th:if="${comment.user.id == session.currentUser.id}"
+                                  th:method="get"
+                                  th:action="@{'/posts/' + ${post.id} + '/comments/' + ${comment.id} + '/update'}">
+                                <button style="margin-right: 50px" class="btn btn-primary btn-xl text-uppercase"
+                                        type="submit">
+                                    Edit
+                                </button>
                             </form>
 
                             <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button">
@@ -79,10 +85,13 @@
                                 Close Comment
                             </button>
 
-                            <form style="display: inline; margin: 0; padding: 0" th:action="@{/posts/__${post.id}__/comments/__${comment.id}__/delete}" th:method="post" th:if="${comment.user.id == session.currentUser.id}">
-                            <button class="btn btn-primary btn-xl text-uppercase" style="background-color: red; margin-left: 50px;" type="submit">
-                                Delete
-                            </button>
+                            <form style="display: inline; margin: 0; padding: 0"
+                                  th:action="@{/posts/__${post.id}__/comments/__${comment.id}__/delete}"
+                                  th:method="post" th:if="${comment.user.id == session.currentUser.id}">
+                                <button class="btn btn-primary btn-xl text-uppercase"
+                                        style="background-color: red; margin-left: 50px;" type="submit">
+                                    Delete
+                                </button>
                             </form>
                         </div>
                     </div>

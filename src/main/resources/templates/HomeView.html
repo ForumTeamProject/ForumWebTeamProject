@@ -1,213 +1,254 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <form th:replace="~{PostFormView.html :: head('Home')}"></form>
-    <body id="page-top">
-        <!-- Navigation-->
-        <form th:replace="~{PostFormView.html :: header}"></form>
-        <!-- Masthead-->
-        <!-- Services-->
-        <section class="page-section" id="services">
-            <div class="container">
-                <div class="text-center">
-                    <h2 class="section-heading text-uppercase">IN THIS FORUM YOU CAN:</h2>
-                </div>
-                <div class="row text-center">
-                    <div class="col-md-4">
-                        <img class="services-images" src="../static/assets/img/post-icon.png" th:src="@{/assets/img/post-icon.png}" alt="Post icon">
-                        <h4 class="my-3">Create/Browse Posts</h4>
-                        <p class="text-muted">By creating or browsing posts you are able to share and receive any kind of information about the topics that you are interested in. </p>
-                    </div>
-                    <div class="col-md-4">
-                        <img class="services-images" src="../static/assets/img/comment-icon.png" th:src="@{/assets/img/comment-icon.png}" alt="Comment Icon">
-                        <h4 class="my-3">Comment other posts</h4>
-                        <p class="text-muted">You have the ability to create comments on other users' posts, thereby, you can communicate and share useful information about the different topics.</p>
-                    </div>
-                    <div class="col-md-4">
-                        <img class="services-images" src="../static/assets/img/like-icon.png" th:src="@{/assets/img/like-icon.png}" alt="Like Icon">
-                        <h4 class="my-3">Like posts</h4>
-                        <p class="text-muted">Consistently active users has the chance to accumulate a larger community by creating interesting and frequent posts, which are liked by the others. This lets you expand your audience.</p>
-                    </div>
-                </div>
+<body id="page-top">
+<!-- Navigation-->
+<form th:replace="~{PostFormView.html :: header}"></form>
+<!-- Masthead-->
+<!-- Services-->
+<section class="page-section" id="services">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-heading text-uppercase">IN THIS FORUM YOU CAN:</h2>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-4">
+                <img class="services-images" src="../static/assets/img/post-icon.png"
+                     th:src="@{/assets/img/post-icon.png}" alt="Post icon">
+                <h4 class="my-3">Create/Browse Posts</h4>
+                <p class="text-muted">By creating or browsing posts you are able to share and receive any kind of
+                    information about the topics that you are interested in. </p>
             </div>
-        </section>
-        <!-- Portfolio Grid-->
-        <section class="page-section bg-light" id="portfolio">
-            <div class="container">
-                <div class="text-center">
-                    <h2 class="section-heading text-uppercase">Dashboard</h2>
-                    <h3 class="section-subheading text-muted">Here you are able to see the most discussed and recent topics.</h3>
-                </div>
-                <br/>
-                <h3 class="most-class">Most Commented Posts</h3>
-                <div class="row">
-                    <div class="col-lg-4 col-sm-6 mb-4" th:each="post : ${mostCommentedPosts}">
-                        <!-- Portfolio item 1-->
-                        <div class="portfolio-item">
-                            <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
-                                <div class="portfolio-hover">
-                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
-                                </div>
-                                <a  th:href="@{'/posts/' + ${post.id}}">
-                                <img class="img-fluid"
-                                     th:src="${post.photoUrl != null ? post.photoUrl : '/assets/img/posts/default-icon.jpg'}"
-                                     alt="..." /></a>
-                            </a>
-                            <div class="portfolio-caption">
-                                <div class="portfolio-caption-heading" th:text="${post.getUser().firstName}">Creator's first name</div>
-                                <div class="portfolio-caption-subheading text-muted" th:text="${post.getTitle()}">Post's title</div>
-                            </div>
+            <div class="col-md-4">
+                <img class="services-images" src="../static/assets/img/comment-icon.png"
+                     th:src="@{/assets/img/comment-icon.png}" alt="Comment Icon">
+                <h4 class="my-3">Comment other posts</h4>
+                <p class="text-muted">You have the ability to create comments on other users' posts, thereby, you can
+                    communicate and share useful information about the different topics.</p>
+            </div>
+            <div class="col-md-4">
+                <img class="services-images" src="../static/assets/img/like-icon.png"
+                     th:src="@{/assets/img/like-icon.png}" alt="Like Icon">
+                <h4 class="my-3">Like posts</h4>
+                <p class="text-muted">Consistently active users has the chance to accumulate a larger community by
+                    creating interesting and frequent posts, which are liked by the others. This lets you expand your
+                    audience.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Portfolio Grid-->
+<section class="page-section bg-light" id="portfolio">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-heading text-uppercase">Dashboard</h2>
+            <h3 class="section-subheading text-muted">Here you are able to see the most discussed and recent
+                topics.</h3>
+        </div>
+        <br/>
+        <h3 class="most-class">Most Commented Posts</h3>
+        <div class="row">
+            <div class="col-lg-4 col-sm-6 mb-4" th:each="post : ${mostCommentedPosts}">
+                <!-- Portfolio item 1-->
+                <div class="portfolio-item">
+                    <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                         </div>
-                    </div>
-                    <br/>
-                    <h3 class="most-class">Most Recently Posted</h3>
-                    <div class="col-lg-4 col-sm-6 mb-4" th:each="post : ${recentlyCreatedPosts}">
-                        <!-- Portfolio item 1-->
-                        <div class="portfolio-item">
-                            <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
-                                <div class="portfolio-hover">
-                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
-                                </div>
-                                <img class="img-fluid"
-                                     th:src="${post.photoUrl != null ? post.photoUrl : '/assets/img/posts/default-icon.jpg'}"
-                                     alt="..." />
-                            </a>
-                            <div class="portfolio-caption">
-                                <div class="portfolio-caption-heading" th:text="${post.getUser().firstName}">Creator's first name</div>
-                                <div class="portfolio-caption-subheading text-muted" th:text="${post.getTitle()}">Post's title</div>
-                            </div>
+                        <a th:href="@{'/posts/' + ${post.id}}">
+                            <img class="img-fluid"
+                                 th:src="${post.photoUrl != null ? post.photoUrl : '/assets/img/posts/default-icon.jpg'}"
+                                 alt="..."/></a>
+                    </a>
+                    <div class="portfolio-caption">
+                        <div class="portfolio-caption-heading" th:text="${post.getUser().firstName}">Creator's first
+                            name
+                        </div>
+                        <div class="portfolio-caption-subheading text-muted" th:text="${post.getTitle()}">Post's title
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-        <!-- Activity-->
-        <section class="page-section" id="about">
-            <div class="container">
-                <div class="text-center">
-                    <h2 class="section-heading text-uppercase">Activity</h2>
-                    <h3 class="section-subheading text-muted">Here you can check some statistics about our community</h3>
-                    <h4 class="subheading" th:text="'Currently, our forum has ' + ${usersCount} + ' registered users and ' + ${posts} + ' posts created'">
-                        Currently, our forum has X registered users and X posts created.</h4>
-                </div>
-                <img class="cat-image" th:src="@{/assets/img/about/activity-photo.PNG}" alt="..."/>
-            </div>
-        </section>
-        <!-- Team-->
-        <section class="page-section bg-light" id="team">
-            <div class="container">
-                <div class="text-center">
-                    <h2 class="section-heading text-uppercase">Our Amazing Team</h2>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="team-member">
-                            <img class="mx-auto rounded-circle" th:src="@{/assets/img/team/kris.jpg}" alt="..." />
-                            <h4>Kristiyan Mitrofanov</h4>
-                            <p class="text-muted">Software Engineer</p>
-                            <a class="btn btn-dark btn-social mx-2" href="https://twitter.com/KrisMitrofanov" aria-label="Diana Petersen Twitter Profile"><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-dark btn-social mx-2" href="https://www.facebook.com/profile.php?id=100000236100735" aria-label="Diana Petersen Facebook Profile"><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-dark btn-social mx-2" href="https://www.linkedin.com/in/kristiyan-mitrofanov-b77a6424b/" aria-label="Diana Petersen LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
+            <br/>
+            <h3 class="most-class">Most Recently Posted</h3>
+            <div class="col-lg-4 col-sm-6 mb-4" th:each="post : ${recentlyCreatedPosts}">
+                <!-- Portfolio item 1-->
+                <div class="portfolio-item">
+                    <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                         </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="team-member">
-                            <img class="mx-auto rounded-circle" src="assets/img/team/3.jpg" alt="..." />
-                            <h4>Larry Parker</h4>
-                            <p class="text-muted">Lead Developer</p>
-                            <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Larry Parker Twitter Profile"><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Larry Parker Facebook Profile"><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Larry Parker LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
+                        <img class="img-fluid"
+                             th:src="${post.photoUrl != null ? post.photoUrl : '/assets/img/posts/default-icon.jpg'}"
+                             alt="..."/>
+                    </a>
+                    <div class="portfolio-caption">
+                        <div class="portfolio-caption-heading" th:text="${post.getUser().firstName}">Creator's first
+                            name
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Clients-->
-        <div class="py-5">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-md-3 col-sm-6 my-3">
-                        <a href="https://www.microsoft.com/bg-bg"><img class="img-fluid img-brand d-block mx-auto" src="assets/img/logos/microsoft.svg" alt="..." aria-label="Microsoft Logo" /></a>
-                    </div>
-                    <div class="col-md-3 col-sm-6 my-3">
-                        <a href="https://www.google.com"><img class="img-fluid img-brand d-block mx-auto" src="assets/img/logos/google.svg" alt="..." aria-label="Google Logo" /></a>
-                    </div>
-                    <div class="col-md-3 col-sm-6 my-3">
-                        <a href="https://www.facebook.com"><img class="img-fluid img-brand d-block mx-auto" src="assets/img/logos/facebook.svg" alt="..." aria-label="Facebook Logo" /></a>
-                    </div>
-                    <div class="col-md-3 col-sm-6 my-3">
-                        <a href="https://www.ibm.com/us-en"><img class="img-fluid img-brand d-block mx-auto" src="assets/img/logos/ibm.svg" alt="..." aria-label="IBM Logo" /></a>
+                        <div class="portfolio-caption-subheading text-muted" th:text="${post.getTitle()}">Post's title
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Contact-->
-        <section class="page-section" id="contact">
-            <div class="container">
-                <div class="text-center">
-                    <h2 class="section-heading text-uppercase">Contact Us</h2>
-                    <h3 class="section-subheading text-muted">If you happen to experience some kind of inconvenience or issues, do not bother to contact our services</h3>
+    </div>
+</section>
+<!-- Activity-->
+<section class="page-section" id="about">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-heading text-uppercase">Activity</h2>
+            <h3 class="section-subheading text-muted">Here you can check some statistics about our community</h3>
+            <h4 class="subheading"
+                th:text="'Currently, our forum has ' + ${usersCount} + ' registered users and ' + ${posts} + ' posts created'">
+                Currently, our forum has X registered users and X posts created.</h4>
+        </div>
+        <img class="cat-image" th:src="@{/assets/img/about/activity-photo.PNG}" alt="..."/>
+    </div>
+</section>
+<!-- Team-->
+<section class="page-section bg-light" id="team">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-heading text-uppercase">Our Amazing Team</h2>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="team-member">
+                    <img class="mx-auto rounded-circle" th:src="@{/assets/img/team/kris.jpg}" alt="..."/>
+                    <h4>Kristiyan Mitrofanov</h4>
+                    <p class="text-muted">Software Engineer</p>
+                    <a class="btn btn-dark btn-social mx-2" href="https://twitter.com/KrisMitrofanov"
+                       aria-label="Diana Petersen Twitter Profile"><i class="fab fa-twitter"></i></a>
+                    <a class="btn btn-dark btn-social mx-2"
+                       href="https://www.facebook.com/profile.php?id=100000236100735"
+                       aria-label="Diana Petersen Facebook Profile"><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-dark btn-social mx-2"
+                       href="https://www.linkedin.com/in/kristiyan-mitrofanov-b77a6424b/"
+                       aria-label="Diana Petersen LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
                 </div>
-                <!-- * * * * * * * * * * * * * * *-->
-                <!-- * * SB Forms Contact Form * *-->
-                <!-- * * * * * * * * * * * * * * *-->
-                <!-- This form is pre-integrated with SB Forms.-->
-                <!-- To make this form functional, sign up at-->
-                <!-- https://startbootstrap.com/solution/contact-forms-->
-                <!-- to get an API token!-->
-                <form id="contactForm" data-sb-form-api-token="API_TOKEN">
-                    <div class="row align-items-stretch mb-5">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <!-- Name input-->
-                                <input class="form-control" id="name" type="text" placeholder="Your Name *" data-sb-validations="required" />
-                                <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
-                            </div>
-                            <div class="form-group">
-                                <!-- Email address input-->
-                                <input class="form-control" id="email" type="email" placeholder="Your Email *" data-sb-validations="required,email" />
-                                <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
-                                <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group form-group-textarea mb-md-0">
-                                <!-- Message input-->
-                                <textarea class="form-control" id="message" placeholder="Your Message *" data-sb-validations="required"></textarea>
-                                <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Submit success message-->
-                    <!---->
-                    <!-- This is what your users will see when the form-->
-                    <!-- has successfully submitted-->
-                    <div class="d-none" id="submitSuccessMessage">
-                        <div class="text-center text-white mb-3">
-                            <div class="fw-bolder">Form submission successful!</div>
-                        </div>
-                    </div>
-                    <!-- Submit error message-->
-                    <!---->
-                    <!-- This is what your users will see when there is-->
-                    <!-- an error submitting the form-->
-                    <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
-                    <!-- Submit Button-->
-                    <div class="text-center"><button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">Send Message</button></div>
-                </form>
             </div>
-        </section>
-        <!-- Footer-->
-            <form th:replace="~{PostFormView.html :: footer}"></form>
+            <div class="col-lg-4">
+                <div class="team-member">
+                    <img class="mx-auto rounded-circle" src="assets/img/team/3.jpg" alt="..."/>
+                    <h4>Larry Parker</h4>
+                    <p class="text-muted">Lead Developer</p>
+                    <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Larry Parker Twitter Profile"><i
+                            class="fab fa-twitter"></i></a>
+                    <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Larry Parker Facebook Profile"><i
+                            class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Larry Parker LinkedIn Profile"><i
+                            class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Clients-->
+<div class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-3 col-sm-6 my-3">
+                <a href="https://www.microsoft.com/bg-bg"><img class="img-fluid img-brand d-block mx-auto"
+                                                               src="assets/img/logos/microsoft.svg" alt="..."
+                                                               aria-label="Microsoft Logo"/></a>
+            </div>
+            <div class="col-md-3 col-sm-6 my-3">
+                <a href="https://www.google.com"><img class="img-fluid img-brand d-block mx-auto"
+                                                      src="assets/img/logos/google.svg" alt="..."
+                                                      aria-label="Google Logo"/></a>
+            </div>
+            <div class="col-md-3 col-sm-6 my-3">
+                <a href="https://www.facebook.com"><img class="img-fluid img-brand d-block mx-auto"
+                                                        src="assets/img/logos/facebook.svg" alt="..."
+                                                        aria-label="Facebook Logo"/></a>
+            </div>
+            <div class="col-md-3 col-sm-6 my-3">
+                <a href="https://www.ibm.com/us-en"><img class="img-fluid img-brand d-block mx-auto"
+                                                         src="assets/img/logos/ibm.svg" alt="..."
+                                                         aria-label="IBM Logo"/></a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Contact-->
+<section class="page-section" id="contact">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-heading text-uppercase">Contact Us</h2>
+            <h3 class="section-subheading text-muted">If you happen to experience some kind of inconvenience or issues,
+                do not bother to contact our services</h3>
+        </div>
+        <!-- * * * * * * * * * * * * * * *-->
+        <!-- * * SB Forms Contact Form * *-->
+        <!-- * * * * * * * * * * * * * * *-->
+        <!-- This form is pre-integrated with SB Forms.-->
+        <!-- To make this form functional, sign up at-->
+        <!-- https://startbootstrap.com/solution/contact-forms-->
+        <!-- to get an API token!-->
+        <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+            <div class="row align-items-stretch mb-5">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <!-- Name input-->
+                        <input class="form-control" id="name" type="text" placeholder="Your Name *"
+                               data-sb-validations="required"/>
+                        <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
+                    </div>
+                    <div class="form-group">
+                        <!-- Email address input-->
+                        <input class="form-control" id="email" type="email" placeholder="Your Email *"
+                               data-sb-validations="required,email"/>
+                        <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
+                        <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-textarea mb-md-0">
+                        <!-- Message input-->
+                        <textarea class="form-control" id="message" placeholder="Your Message *"
+                                  data-sb-validations="required"></textarea>
+                        <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Submit success message-->
+            <!---->
+            <!-- This is what your users will see when the form-->
+            <!-- has successfully submitted-->
+            <div class="d-none" id="submitSuccessMessage">
+                <div class="text-center text-white mb-3">
+                    <div class="fw-bolder">Form submission successful!</div>
+                </div>
+            </div>
+            <!-- Submit error message-->
+            <!---->
+            <!-- This is what your users will see when there is-->
+            <!-- an error submitting the form-->
+            <div class="d-none" id="submitErrorMessage">
+                <div class="text-center text-danger mb-3">Error sending message!</div>
+            </div>
+            <!-- Submit Button-->
+            <div class="text-center">
+                <button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">Send
+                    Message
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+<!-- Footer-->
+<form th:replace="~{PostFormView.html :: footer}"></form>
 
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="js/scripts.js"></script>
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <!-- * *                               SB Forms JS                               * *-->
-        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
-    </body>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<!-- * *                               SB Forms JS                               * *-->
+<!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+</body>
 </html>

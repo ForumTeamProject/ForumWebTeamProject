@@ -16,7 +16,6 @@ import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import com.example.forumsystemwebproject.services.contracts.CommentService;
-import com.example.forumsystemwebproject.services.contracts.LikeService;
 import com.example.forumsystemwebproject.services.contracts.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -49,20 +48,18 @@ public class PostMvcController {
 
     private final CommentService commentService;
 
-    private final LikeService likeService;
-
     @Autowired
     public PostMvcController(PostService postService,
                              AuthenticationHelper authenticationHelper,
                              PostMapper mapper,
                              RoleRepository roleRepository,
-                             LikeService likeService,
+                             AuthorizationHelper authorizationHelper,
                              CommentService commentService) {
         this.postService = postService;
         this.authenticationHelper = authenticationHelper;
         this.mapper = mapper;
         this.roleRepository = roleRepository;
-        this.likeService = likeService;
+
         this.commentService = commentService;
     }
 
@@ -113,31 +110,32 @@ public class PostMvcController {
             return "redirect:/auth/login";
         }
 
-            PostFilterOptions filterOptions = new PostFilterOptions(
-                    filterDto.getUser(),
-                    filterDto.getTitle(),
-                    filterDto.getSortBy(),
-                    filterDto.getSortOrder()
-            );
-            List<Post> posts = postService.get(filterOptions);
-            int currentPage = page.orElse(1);
-            int pageSize = size.orElse(10);
+        PostFilterOptions filterOptions = new PostFilterOptions(
+                filterDto.getUser(),
+                filterDto.getTitle(),
+                filterDto.getSortBy(),
+                filterDto.getSortOrder()
 
-            Page<Post> postPage = PaginationHelper.findPaginated(PageRequest.of(currentPage - 1, pageSize), posts);
+        );
+        List<Post> posts = postService.get(filterOptions);
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(10);
 
-            model.addAttribute("postPage", postPage);
+        Page<Post> postPage = PaginationHelper.findPaginated(PageRequest.of(currentPage - 1, pageSize), posts);
 
-            int totalPages = postPage.getTotalPages();
-            if (totalPages > 0) {
-                List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                        .boxed()
-                        .collect(Collectors.toList());
-                model.addAttribute("pageNumbers", pageNumbers);
-            }
-            model.addAttribute("posts", posts);
-            model.addAttribute("filterOptions", filterDto);
-            return "PostsView";
+        model.addAttribute("postPage", postPage);
+
+        int totalPages = postPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
         }
+        model.addAttribute("posts", posts);
+        model.addAttribute("filterOptions", filterDto);
+        return "PostsView";
+    }
 
     @GetMapping("/{id}")
     public String showSinglePost(@PathVariable int id, Model model, HttpSession session) {
@@ -186,7 +184,7 @@ public class PostMvcController {
     }
 
     @PostMapping("/create")
-    public String createPost(@Valid @ModelAttribute("post") PostDto dto, BindingResult bindingResult,HttpSession session, Model model,
+    public String createPost(@Valid @ModelAttribute("post") PostDto dto, BindingResult bindingResult, HttpSession session, Model model,
                              @RequestParam(value = "photoUrl", required = false) String photoUrl) {
         User user;
         try {
