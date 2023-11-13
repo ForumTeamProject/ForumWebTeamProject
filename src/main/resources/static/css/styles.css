@@ -13472,6 +13472,23 @@ a:nth-child(7) {
     margin-bottom: 10px;
 }
 
+/*Image*/
+.input-tags {
+    width: 100%; /* Full width */
+    padding: 8px 10px; /* Some padding */
+    margin: 8px 0; /* Some space around */
+    display: inline-block; /* Make it inline-block */
+    border: 1px solid #ccc; /* Grey border */
+    border-radius: 4px; /* Rounded borders */
+    box-sizing: border-box; /* Include padding in the box model */
+    transition: border 0.3s; /* Smooth transition for hover effect */
+}
+
+.input-tags:focus {
+    border-color: #666; /* Darker border on focus */
+    outline: none;
+}
+
 /*======================
     404 page
 =======================*/
@@ -13877,6 +13894,7 @@ a:nth-child(7) {
 }
 
 /*Editing buton*/
+
 .edit-button {
     background-color: #ffc107;
     color: white;
@@ -13903,3 +13921,89 @@ a:nth-child(7) {
     width: 100%;
     margin-bottom: 10px;
 }
+
+/*PostEditView*/
+body .post-edit-view {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.post-edit-view .body-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 40px auto;
+}
+
+.post-edit-view h2 {
+    color: #333;
+}
+
+.post-edit-view .form-group {
+    margin-bottom: 15px;
+}
+
+.post-edit-view .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+}
+
+.post-edit-view .form-group input[type="text"],
+.post-edit-view .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    color: #333;
+}
+
+.post-edit-view .form-group textarea {
+    min-height: 150px;
+}
+
+.post-edit-view .form-group .help-block {
+    font-size: 12px;
+    color: #999;
+}
+
+.post-edit-view .form-actions {
+    margin-top: 20px;
+}
+
+.post-edit-view .button {
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.post-edit-view .button:hover {
+    background-color: #4cae4c;
+}
+
+.post-edit-view .button:active {
+    background-color: #4a4a4a;
+}
+
+.post-edit-view a.button {
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 10px;
+    background-color: #f0ad4e;
+    transition: background-color 0.3s;
+}
+
+.post-edit-view a.button:hover {
+    background-color: #ec971f;
+}
+

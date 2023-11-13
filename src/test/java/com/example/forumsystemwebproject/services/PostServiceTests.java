@@ -31,15 +31,18 @@ public class PostServiceTests {
     @Mock
     AuthorizationHelper authorizationHelper;
 
-
     @Mock
-    TagService tagService;
+    RoleRepository mockRoleRepository;
 
     @Mock
     LikeService mockLikeService;
 
+    @Mock
+    TagService tagService;
+
     @InjectMocks
     PostServiceImpl service;
+
 
     @Test
     public void get_Should_CallRepository() {

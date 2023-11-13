@@ -13,8 +13,12 @@
 <form th:replace="~{PostFormView.html :: header}"></form>
 
 <div class="body-content">
+
     <div class="post-container">
-        <div class="head">
+        <div class="post-image-container">
+            <img th:src="${post.getPhotoUrl()}" alt="No alt text" class="post-image"/>
+        </div>        <div class="head">
+
             <div class="author" th:text="${post.getUser().getUsername()}">Author:</div>
             <div class="content" th:text="${'Topic: ' + post.getTitle()}">Topic: post's title</div>
             <div><!-- Options Button for Post/Comment -->
@@ -25,7 +29,7 @@
                             <i class="fas fa-ellipsis-h"></i>
                         </button>
                         <div class="options-dropdown" style="display: none;">
-                            <a href="#" onclick="toggleEditPost()">Edit Post</a>
+                            <a href="#" th:href="@{/posts/{id}/update(id=${post.id})}">Edit Post</a>
                             <a href="#" onclick="toggleEditTags()">Edit Tags</a>
                             <a href="#" th:href="@{/posts/{id}/delete(id=${post.id})}">Remove</a>
                         </div>
@@ -38,7 +42,7 @@
                         <!-- Assume tags are comma-separated -->
                         <input type="text" name="tags" th:value="${joinedTags}">
                         <input type="submit" value="Save">
-                        <button type="button" onclick="toggleEditTags()">Cancel</button>
+                        <button class="button" type="button" onclick="toggleEditTags()">Cancel</button>
                     </form>
                 </div>
             </div>

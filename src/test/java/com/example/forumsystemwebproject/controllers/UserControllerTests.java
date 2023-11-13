@@ -127,8 +127,8 @@ public class UserControllerTests {
 
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -143,8 +143,8 @@ public class UserControllerTests {
 
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
@@ -161,8 +161,8 @@ public class UserControllerTests {
         String body = Helpers.toJson(Helpers.createMockUserDto());
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isConflict());
     }
 
@@ -191,8 +191,8 @@ public class UserControllerTests {
         String body = Helpers.toJson(dto);
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.put("/api/users/{id}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
@@ -203,13 +203,13 @@ public class UserControllerTests {
         User mockUser = Helpers.createMockUser();
         Mockito.when(mockAuthenticationHelper.tryGetUser(Mockito.any(HttpHeaders.class))).thenReturn(mockUser);
 
-        Mockito.when(mockUserMapper.fromDto(Mockito.anyInt() ,Mockito.any(UserDto.class))).thenThrow(EntityNotFoundException.class);
+        Mockito.when(mockUserMapper.fromDto(Mockito.anyInt(), Mockito.any(UserDto.class))).thenThrow(EntityNotFoundException.class);
 
         String body = Helpers.toJson(Helpers.createMockUserDto());
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.put("/api/users/{id}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
@@ -226,8 +226,8 @@ public class UserControllerTests {
         String body = Helpers.toJson(Helpers.createMockUserDto());
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.put("/api/users/{id}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 

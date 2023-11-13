@@ -41,7 +41,7 @@ public class LikeServiceTests {
     }
 
     @Test
-    public void  get_Should_ReturnLike_WhenExists() {
+    public void get_Should_ReturnLike_WhenExists() {
         //Arrange
         Post mockPost = Helpers.createMockPost();
         User mockUser = Helpers.createMockUser();
@@ -52,7 +52,7 @@ public class LikeServiceTests {
         Like result = service.get(mockPost, mockUser);
 
         //Assert
-        Assertions.assertEquals(mockLike,result);
+        Assertions.assertEquals(mockLike, result);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class LikeServiceTests {
         Post mockPost = Helpers.createMockPost();
         User mockUser = Helpers.createMockUser();
 
-        Mockito.when(mockRepository.get(mockPost,mockUser)).thenThrow(EntityNotFoundException.class);
+        Mockito.when(mockRepository.get(mockPost, mockUser)).thenThrow(EntityNotFoundException.class);
 
         //Act & Assert
         Assertions.assertThrows(EntityNotFoundException.class, () -> service.get(mockPost, mockUser));

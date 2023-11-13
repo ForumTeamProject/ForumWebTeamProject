@@ -6,25 +6,27 @@ import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.models.Tag;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.TagRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TagServiceTests {
-
     @Mock
     TagRepository mockTagRepository;
+
     @Mock
     AuthorizationHelper authorizationHelper;
     @Mock
@@ -33,10 +35,31 @@ public class TagServiceTests {
     @InjectMocks
     TagServiceImpl tagService;
 
+//    @BeforeEach
+//    void setUp() {
+//        MockitoAnnotations.openMocks(this);
+//        tag = new Tag(1, "testTag");
+//        adminUser = new User();
+//        adminUser.setRoles(Arrays.asList(new Role(1, "ADMIN")));
+//    }
+
+    @Test
+    void getAll_ShouldReturnListOfTags() {
+        List<Tag> mockTags = List.of(Helpers.createMockTag());
+        when(tagService.getAll()).thenReturn(mockTags);
+
+        List<Tag> result = tagService.getAll();
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        assertEquals(mockTags.size(), result.size());
+        verify(mockTagRepository).getAll();
+    }
+
     @Test
     public void getAll_Should_CallRepository() {
         // Arrange
-        Mockito.when(mockTagRepository.getAll()).thenReturn(new ArrayList<>(4));
+        when(mockTagRepository.getAll()).thenReturn(new ArrayList<>(4));
 
         // Act
         tagService.getAll();
@@ -50,7 +73,7 @@ public class TagServiceTests {
         // Arrange
         int tagId = 1;
         Tag mockTag = new Tag();
-        Mockito.when(mockTagRepository.getById(tagId)).thenReturn(mockTag);
+        when(mockTagRepository.getById(tagId)).thenReturn(mockTag);
 
         // Act
         Tag result = tagService.getById(tagId);
@@ -65,7 +88,7 @@ public class TagServiceTests {
         // Arrange
         String content = "Tag Content";
         Tag mockTag = new Tag();
-        Mockito.when(mockTagRepository.getByContent(content)).thenReturn(mockTag);
+        when(mockTagRepository.getByContent(content)).thenReturn(mockTag);
 
         // Act
         Tag result = tagService.getByContent(content);
@@ -80,7 +103,7 @@ public class TagServiceTests {
         // Arrange
         Tag mockTag = Helpers.createMockTag();
         String content = mockTag.getContent();
-        Mockito.when(mockTagRepository.getByContent(content)).thenReturn(mockTag);
+        when(mockTagRepository.getByContent(content)).thenReturn(mockTag);
 
         // Act
         Tag result = tagService.create(Helpers.createMockTag(), Helpers.createMockUser());
@@ -98,7 +121,7 @@ public class TagServiceTests {
         User mockUser = Helpers.createMockUser();
 
         //EntityNotFoundException (simulating tag not existing)
-        Mockito.when(mockTagRepository.getByContent(Mockito.any()))
+        when(mockTagRepository.getByContent(Mockito.any()))
                 .thenThrow(EntityNotFoundException.class).thenReturn(mockTag);
 
         // Act
@@ -107,7 +130,6 @@ public class TagServiceTests {
         // Assert
         Mockito.verify(mockTagRepository, times(1)).create(any(Tag.class));
     }
-
     @Test
     public void delete_Should_CallRepository_WhenUserIsAdmin() {
         // Arrange
@@ -128,9 +150,16 @@ public class TagServiceTests {
 
 
 //    @Test
-//    public void get_Shoudl_ReturnTag_WhenExists(){
-//     //Arange
-//        Tag tag = Helpers.createMockTag();
-//        mockTagRepository.create();
+//    void getById_ShouldReturnTag() {
+//        when(tagRepository.getById(1)).thenReturn(tag);
+//        Tag foundTag = tagService.getById(1);
+//        assertNotNull(foundTag);
+//        assertEquals(tag, foundTag);
+//    }
+//
+//    @Test
+//    void getById_ShouldThrowEntityNotFoundException() {
+//        when(tagRepository.getById(anyInt())).thenThrow(new EntityNotFoundException("Tag", 999));
+//        assertThrows(EntityNotFoundException.class, () -> tagService.getById(999));
 //    }
 }

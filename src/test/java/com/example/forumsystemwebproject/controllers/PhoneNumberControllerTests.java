@@ -70,7 +70,7 @@ public class PhoneNumberControllerTests {
 
 
     @Test
-    public void getById_Should_ReturnStatusUnauthorized_WhenUserNotAuthenticated() throws Exception{
+    public void getById_Should_ReturnStatusUnauthorized_WhenUserNotAuthenticated() throws Exception {
 
         //Arrange
         Mockito.when(mockAuthenticationHelper.tryGetUser(Mockito.any(HttpHeaders.class))).thenThrow(UnauthorizedOperationException.class);
@@ -92,8 +92,9 @@ public class PhoneNumberControllerTests {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/phone-numbers/{id}", 1))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
+
     @Test
-    public void getById_Should_ReturnStatusOk_WhenCorrectRequest() throws Exception{
+    public void getById_Should_ReturnStatusOk_WhenCorrectRequest() throws Exception {
         //Arrange
         User mockUser = Helpers.createMockUser();
         PhoneNumber mockNumber = Helpers.createMockPhoneNumber();
@@ -133,8 +134,8 @@ public class PhoneNumberControllerTests {
 
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.post("/api/phone-numbers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
@@ -152,8 +153,8 @@ public class PhoneNumberControllerTests {
 
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.post("/api/phone-numbers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isConflict());
     }
 
@@ -170,8 +171,8 @@ public class PhoneNumberControllerTests {
         String body = Helpers.toJson(Helpers.createMockPhoneNumberDto());
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.post("/api/phone-numbers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -183,8 +184,8 @@ public class PhoneNumberControllerTests {
         String body = Helpers.toJson(Helpers.createMockPhoneNumberDto());
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.put("/api/phone-numbers/{id}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 
@@ -198,8 +199,8 @@ public class PhoneNumberControllerTests {
 
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.put("/api/phone-numbers/{id}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
@@ -214,8 +215,8 @@ public class PhoneNumberControllerTests {
         String body = Helpers.toJson(Helpers.createMockPhoneNumberDto());
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.put("/api/phone-numbers/{id}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -227,8 +228,8 @@ public class PhoneNumberControllerTests {
         String body = Helpers.toJson(Helpers.createMockPhoneNumberDto());
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/phone-numbers/{id}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 
@@ -244,8 +245,8 @@ public class PhoneNumberControllerTests {
 
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/phone-numbers/{id}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
@@ -259,8 +260,8 @@ public class PhoneNumberControllerTests {
 
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/phone-numbers/{id}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

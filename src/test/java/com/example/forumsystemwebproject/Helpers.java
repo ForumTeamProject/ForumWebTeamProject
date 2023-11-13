@@ -3,7 +3,6 @@ package com.example.forumsystemwebproject;
 import com.example.forumsystemwebproject.helpers.filters.CommentFilterOptions;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
 import com.example.forumsystemwebproject.helpers.filters.UserFilterOptions;
-import com.example.forumsystemwebproject.helpers.mappers.CommentMapper;
 import com.example.forumsystemwebproject.models.*;
 import com.example.forumsystemwebproject.models.DTOs.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,7 +41,7 @@ public class Helpers {
         return mockPhoneNumber;
     }
 
-    public static Post createMockPost()  {
+    public static Post createMockPost() {
         var mockPost = new Post();
         Set<Like> likes = new HashSet<>();
         Set<Tag> tags = new HashSet<>();
@@ -105,6 +104,7 @@ public class Helpers {
         mockUser.setUsername("mockUsername");
         mockUser.setFirstName("MockFirstName");
         mockUser.setLastName("MockLastName");
+
         return mockUser;
     }
 
@@ -128,13 +128,13 @@ public class Helpers {
         mockCommentDto.setContent("This is a content for mock comment dto");
         return mockCommentDto;
     }
-    
+
     public static PhoneNumberDto createMockPhoneNumberDto() {
         var mockPhoneNumberDto = new PhoneNumberDto();
         mockPhoneNumberDto.setNumber("0899878786");
         return mockPhoneNumberDto;
     }
-    
+
     public static PostDto createMockPostDto() {
         PostDto mockPostDto = new PostDto();
         mockPostDto.setContent("This is a mock content for mock Post Dto.");
@@ -167,7 +167,7 @@ public class Helpers {
 
     public static PostFilterOptions createMockPostFilterOptions() {
         return new PostFilterOptions(
-            "user",
+                "user",
                 "mockTitle",
                 "sort",
                 "order"

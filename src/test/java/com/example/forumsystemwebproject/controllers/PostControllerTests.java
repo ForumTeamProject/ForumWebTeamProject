@@ -314,4 +314,4 @@ public class PostControllerTests {
         mockMvc.perform(MockMvcRequestBuilders.patch("/api/posts/{id}", 1))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
- }
+}

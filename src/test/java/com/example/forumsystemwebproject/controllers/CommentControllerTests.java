@@ -10,9 +10,7 @@ import com.example.forumsystemwebproject.models.Comment;
 import com.example.forumsystemwebproject.models.DTOs.CommentDto;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.services.contracts.CommentService;
-import org.apache.tomcat.util.security.Escape;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -176,7 +174,7 @@ public class CommentControllerTests {
     public void getById_Should_ReturnStatusOk_WhenCorrectRequest() throws Exception {
         //Arrange
         User mockUser = Helpers.createMockUser();
-        Comment mockComment =Helpers.createMockComment();
+        Comment mockComment = Helpers.createMockComment();
         Mockito.when(mockAuthenticationHelper.tryGetUser(Mockito.any(HttpHeaders.class))).thenReturn(mockUser);
         Mockito.when(mockService.getById(Mockito.anyInt())).thenReturn(mockComment);
         //Act & Assert
@@ -207,8 +205,8 @@ public class CommentControllerTests {
 
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.post("/api/posts/{id}/comments", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
@@ -224,8 +222,8 @@ public class CommentControllerTests {
 
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.post("/api/posts/{id}/comments", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
@@ -240,8 +238,8 @@ public class CommentControllerTests {
         String body = Helpers.toJson(Helpers.createMockCommentDto());
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.post("/api/posts/{id}/comments", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -253,8 +251,8 @@ public class CommentControllerTests {
         String body = Helpers.toJson(Helpers.createMockCommentDto());
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.put("/api/comments/{id}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 
@@ -267,8 +265,8 @@ public class CommentControllerTests {
         String body = Helpers.toJson(dto);
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.put("/api/comments/{id}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
@@ -283,8 +281,8 @@ public class CommentControllerTests {
         String body = Helpers.toJson(Helpers.createMockCommentDto());
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.put("/api/comments/{id}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
@@ -300,8 +298,8 @@ public class CommentControllerTests {
         String body = Helpers.toJson(Helpers.createMockCommentDto());
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.put("/api/comments/{id}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
