@@ -36,7 +36,8 @@ window.addEventListener('DOMContentLoaded', event => {
             target: '#mainNav',
             rootMargin: '0px 0px -40%',
         });
-    };
+    }
+
 
     // Collapse responsive navbar when toggler is visible
     const navbarToggler = document.body.querySelector('.navbar-toggler');
@@ -50,6 +51,8 @@ window.addEventListener('DOMContentLoaded', event => {
             }
         });
     });
+
+
 });
 
 //comment
@@ -61,3 +64,47 @@ function showComment() {
         block.style.display = "none";
     }
 }
+
+document.getElementById('commentForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    // Get the comment text
+    var commentText = document.getElementById('commentText').value;
+
+    // TODO: Perform client-side validation if needed
+
+    // Send the comment to the server using AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', this.action, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Optionally, handle the server response
+            console.log('Comment submitted successfully!');
+        }
+    };
+    xhr.send('comment=' + encodeURIComponent(commentText));
+});
+
+// function likePost(postId) {
+// //ajax to be impl
+//     fetch(`/posts/${postId}/like`, {
+//         method: 'GET',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         }
+//     })
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error('Network response was not ok');
+//             }
+//             return response.json(); // Assuming the server responds with JSON
+//         })
+//         .then(data => {
+//             // Update the likes count on the page
+//             document.getElementById('likesCount').innerText = data.likesCount;
+//         })
+//         .catch(error => {
+//             console.error('There has been a problem with your fetch operation:', error);
+//         });
+// }
