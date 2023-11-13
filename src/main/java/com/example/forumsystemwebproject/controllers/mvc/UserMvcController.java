@@ -79,19 +79,19 @@ public class UserMvcController {
         return session.getAttribute("currentUser") != null;
     }
 
-    @ModelAttribute("isBlocked")
-    public boolean isBlocked(HttpSession session) {
-        if (populateIsAuthenticated(session)) {
-            User user = (User) session.getAttribute("currentUser");
-            for (Role role : user.getRoles()) {
-                if (role.getName().equals(roleRepository.getByName("blockedUser").getName())) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        return false;
-    }
+//    @ModelAttribute("isBlocked")
+//    public boolean isBlocked(HttpSession session) {
+//        if (populateIsAuthenticated(session)) {
+//            User user = (User) session.getAttribute("currentUser");
+//            for (Role role : user.getRoles()) {
+//                if (role.getName().equals(roleRepository.getByName("blockedUser").getName())) {
+//                    return true;
+//                }
+//            }
+//            return false;
+//        }
+//        return false;
+//    }
 
     @GetMapping
     public String showUsers(HttpSession session, @ModelAttribute("filterOptions") UserFilterDto filterDto, Model model,
@@ -151,6 +151,7 @@ public class UserMvcController {
         try {
             User userToShow = userService.getById(id);
             model.addAttribute("user", userToShow);
+            model.addAttribute("isBlocked", isBlocked(userToShow));
             return "UserView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
