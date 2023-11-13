@@ -69,6 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(User userToUpdate, User authenticatedUser) {
+        authorizationHelper.creatorCheck(userToUpdate, authenticatedUser);
         checkEmailUniqueness(userToUpdate);
         repository.update(userToUpdate);
     }
@@ -131,32 +132,4 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateEntityException("User", "email", user.getEmail());
         }
     }
-
-    public String saveUploadedFileAndGetUrl(MultipartFile file) {
-        if (!file.isEmpty()) {
-            try {
-                // Define the directory where you want to save the uploaded file
-                String uploadDir = "classpath:static/assets/img/users/";
-                String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-
-                // Create the directory if it doesn't exist
-                File uploadPath = new File(uploadDir);
-                if (!uploadPath.exists()) {
-                    uploadPath.mkdirs();
-                }
-
-                // Save the file to the specified directory
-                Path filePath = Paths.get(uploadDir + fileName);
-                Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-                // Return the URL where the file is saved (this URL can be used to retrieve the image)
-                return "/assets/img/users/" + fileName;  // This can be the relative path to the image
-            } catch (IOException e) {
-                throw new FileOperationException("An error with uploading the image occurred");
-            }
-        } else {
-            return null;
-        }
-    }
-
 }

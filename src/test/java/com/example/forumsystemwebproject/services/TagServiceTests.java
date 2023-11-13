@@ -99,13 +99,13 @@ public class TagServiceTests {
 
         //EntityNotFoundException (simulating tag not existing)
         Mockito.when(mockTagRepository.getByContent(Mockito.any()))
-                .thenThrow(EntityNotFoundException.class);
+                .thenThrow(EntityNotFoundException.class).thenReturn(mockTag);
 
         // Act
         tagService.create(mockTag, mockUser);
 
         // Assert
-        verify(mockTagRepository, times(1)).create(any(Tag.class));
+        Mockito.verify(mockTagRepository, times(1)).create(any(Tag.class));
     }
 
     @Test
@@ -115,7 +115,8 @@ public class TagServiceTests {
         Tag mockTag = Helpers.createMockTag();
         int tagId = mockTag.getId();
         mockTag.setId(tagId);
-        Mockito.when(mockAuthorizationHelper.isAdmin(any(User.class))).thenReturn(true);
+        mockUser.getRoles().add(Helpers.createMockAdminRole());
+
         // Mockito.when(mockTagRepository.delete(tagId));
 
         // Act

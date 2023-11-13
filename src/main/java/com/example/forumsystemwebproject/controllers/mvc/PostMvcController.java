@@ -76,7 +76,6 @@ public class PostMvcController {
         }
         return false;
     }
-
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;
@@ -111,32 +110,31 @@ public class PostMvcController {
             return "redirect:/auth/login";
         }
 
-        PostFilterOptions filterOptions = new PostFilterOptions(
-                filterDto.getUser(),
-                filterDto.getTitle(),
-                filterDto.getSortBy(),
-                filterDto.getSortOrder()
+            PostFilterOptions filterOptions = new PostFilterOptions(
+                    filterDto.getUser(),
+                    filterDto.getTitle(),
+                    filterDto.getSortBy(),
+                    filterDto.getSortOrder()
+            );
+            List<Post> posts = postService.get(filterOptions);
+            int currentPage = page.orElse(1);
+            int pageSize = size.orElse(10);
 
-        );
-        List<Post> posts = postService.get(filterOptions);
-        int currentPage = page.orElse(1);
-        int pageSize = size.orElse(10);
+            Page<Post> postPage = PaginationHelper.findPaginated(PageRequest.of(currentPage - 1, pageSize), posts);
 
-        Page<Post> postPage = PaginationHelper.findPaginated(PageRequest.of(currentPage - 1, pageSize), posts);
+            model.addAttribute("postPage", postPage);
 
-        model.addAttribute("postPage", postPage);
-
-        int totalPages = postPage.getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
+            int totalPages = postPage.getTotalPages();
+            if (totalPages > 0) {
+                List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                        .boxed()
+                        .collect(Collectors.toList());
+                model.addAttribute("pageNumbers", pageNumbers);
+            }
+            model.addAttribute("posts", posts);
+            model.addAttribute("filterOptions", filterDto);
+            return "PostsView";
         }
-        model.addAttribute("posts", posts);
-        model.addAttribute("filterOptions", filterDto);
-        return "PostsView";
-    }
 
     @GetMapping("/{id}")
     public String showSinglePost(@PathVariable int id, Model model, HttpSession session) {
@@ -150,6 +148,7 @@ public class PostMvcController {
         try {
             Post post = postService.getById(id);
             List<Comment> comments = commentService.getByPostId(post.getId());
+            model.addAttribute("postId", id);
             model.addAttribute("post", post);
             model.addAttribute("comments", comments);
             return "PostView";
@@ -173,7 +172,7 @@ public class PostMvcController {
     }
 
     @PostMapping("/create")
-    public String createPost(@Valid @ModelAttribute("post") PostDto dto, BindingResult bindingResult, HttpSession session, Model model,
+    public String createPost(@Valid @ModelAttribute("post") PostDto dto, BindingResult bindingResult,HttpSession session, Model model,
                              @RequestParam(value = "photoUrl", required = false) String photoUrl) {
         User user;
         try {

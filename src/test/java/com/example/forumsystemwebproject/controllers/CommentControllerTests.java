@@ -87,7 +87,7 @@ public class CommentControllerTests {
         User mockUser = Helpers.createMockUser();
         Mockito.when(mockAuthenticationHelper.tryGetUser(Mockito.any(HttpHeaders.class))).thenReturn(mockUser);
 
-        Mockito.doThrow(EntityNotFoundException.class).when(mockService).getByUserId(Mockito.any(CommentFilterOptions.class), Mockito.anyInt());
+        Mockito.doThrow(EntityNotFoundException.class).when(mockService).getByUserId(Mockito.anyInt());
 
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/{id}/comments", 1))
@@ -102,7 +102,7 @@ public class CommentControllerTests {
         comments.add(mockComment);
         User mockUser = Helpers.createMockUser();
         Mockito.when(mockAuthenticationHelper.tryGetUser(Mockito.any(HttpHeaders.class))).thenReturn(mockUser);
-        Mockito.when(mockService.getByUserId(Mockito.any(CommentFilterOptions.class), Mockito.anyInt())).thenReturn(comments);
+        Mockito.when(mockService.getByUserId(Mockito.anyInt())).thenReturn(comments);
         //Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/{id}/comments", 1))
                 .andExpect(MockMvcResultMatchers.status().isOk())

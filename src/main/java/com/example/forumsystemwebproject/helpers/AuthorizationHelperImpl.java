@@ -30,7 +30,6 @@ public class AuthorizationHelperImpl implements AuthorizationHelper{
     public void creatorCheck(User user, Comment comment) {
         if (user.getId() != comment.getUser().getId()) {
             throw new UnauthorizedOperationException(String.format("%s with %s %s is unauthorized to do this operation!", "User", "username", user.getUsername()));
-
         }
     }
 
@@ -61,7 +60,7 @@ public class AuthorizationHelperImpl implements AuthorizationHelper{
     @Override
     public void blockedCheck(User user) {
         for (Role role : user.getRoles()) {
-            if (role.getName().equals(roleRepository.getByName("blockedUser").getName())) {
+            if (role.getName().equals(roleRepository.getByName(BLOCKED_USER_ROLE).getName())) {
                 throw new UnauthorizedOperationException(String.format("%s with %s %s is blocked and therefore unauthorized to do this operation!", "User", "username", user.getUsername()));
             }
         }

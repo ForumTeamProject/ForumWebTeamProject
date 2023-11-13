@@ -23,6 +23,4 @@ public interface UserService {
     void delete(User user, int id);
 
     void blockOrUnblockUser(User user, User userToUpdate);
-
-    String saveUploadedFileAndGetUrl(MultipartFile file);
 }

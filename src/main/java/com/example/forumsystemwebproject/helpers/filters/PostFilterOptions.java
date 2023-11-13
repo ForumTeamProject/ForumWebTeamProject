@@ -2,6 +2,8 @@ package com.example.forumsystemwebproject.helpers.filters;
 
 import com.example.forumsystemwebproject.models.DTOs.PostFilterDto;
 
+import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 
 public class PostFilterOptions {
@@ -12,6 +14,8 @@ public class PostFilterOptions {
 
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
+
+
 
     public PostFilterOptions(
             String user,

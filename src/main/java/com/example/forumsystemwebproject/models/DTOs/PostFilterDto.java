@@ -2,6 +2,8 @@ package com.example.forumsystemwebproject.models.DTOs;
 
 import com.example.forumsystemwebproject.models.Post;
 
+import java.util.List;
+
 public class PostFilterDto {
 
     private String user;
@@ -15,6 +17,7 @@ public class PostFilterDto {
     public PostFilterDto() {
 
     }
+
 
     public String getUser() {
         return user;

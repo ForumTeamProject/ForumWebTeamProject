@@ -54,30 +54,62 @@ public class CommentServiceTests {
     }
 
     @Test
+    public void getById_Should_CallRepository() {
+
+        //Act
+        service.getById(Mockito.anyInt());
+
+        //Assert
+        Mockito.verify(mockRepository, Mockito.times(1)).getById(Mockito.anyInt());
+
+    }
+
+    @Test
+    public void getById_Should_ReturnComment_WhenValid() {
+        //Arrange
+        Comment mockComment = Helpers.createMockComment();
+
+        Mockito.when(mockRepository.getById(Mockito.anyInt())).thenReturn(mockComment);
+        //Act
+        Comment result = service.getById(Mockito.anyInt());
+
+        //Assert
+        Assertions.assertEquals(mockComment, result);
+    }
+
+    @Test
+    public void getById_Should_Throw_WhenCommentDoesNotExist() {
+        //Arrange
+        Mockito.doThrow(EntityNotFoundException.class).when(mockRepository).getById(Mockito.anyInt());
+
+        //Act & Assert
+        Assertions.assertThrows(EntityNotFoundException.class, () -> service.getById(2));
+    }
+
+
+    @Test
     public void getByUserId_Should_CallRepository() {
 
         //Arrange
-        CommentFilterOptions filterOptions = Helpers.createMockCommentFilterOptions();
-        Mockito.when(mockRepository.getByUserId(Mockito.eq(filterOptions), Mockito.anyInt()))
+        Mockito.when(mockRepository.getByUserId(Mockito.anyInt()))
                 .thenReturn(null);
 
         //Act
-        service.getByUserId(filterOptions, 2);
+        service.getByUserId(2);
 
         //Assert
-        Mockito.verify(mockRepository, Mockito.times(1)).getByUserId(Mockito.eq(filterOptions), Mockito.anyInt());
+        Mockito.verify(mockRepository, Mockito.times(1)).getByUserId(Mockito.anyInt());
     }
 
     @Test
     public void getByUserId_Should_ReturnCommentList_WhenUserExists() {
         //Arrange
         List<Comment> mockCommentList = Helpers.createMockCommentList();
-        CommentFilterOptions filterOptions = Helpers.createMockCommentFilterOptions();
-        Mockito.when(mockRepository.getByUserId(Mockito.eq(filterOptions), Mockito.anyInt()))
+        Mockito.when(mockRepository.getByUserId(Mockito.anyInt()))
                 .thenReturn(mockCommentList);
 
         //Act
-        List<Comment> result = service.getByUserId(filterOptions, 2);
+        List<Comment> result = service.getByUserId(2);
 
         //Assert
         Assertions.assertEquals(mockCommentList, result);
@@ -86,12 +118,9 @@ public class CommentServiceTests {
     @Test
     public void getByUserId_Should_Throw_WhenUserDoesNotExist() {
         //Arrange
-        CommentFilterOptions filterOptions = Helpers.createMockCommentFilterOptions();
-        Mockito.when(mockRepository.getByUserId(Mockito.eq(filterOptions), Mockito.anyInt()))
-                .thenThrow(new EntityNotFoundException("User", Mockito.anyInt()));
-
+        Mockito.doThrow(EntityNotFoundException.class).when(mockRepository).getByUserId(Mockito.anyInt());
         //Act & Assert
-        Assertions.assertThrows(EntityNotFoundException.class, () -> service.getByUserId(filterOptions, Mockito.anyInt()));
+        Assertions.assertThrows(EntityNotFoundException.class, () -> service.getByUserId(Mockito.anyInt()));
 
     }
 
@@ -143,8 +172,8 @@ public class CommentServiceTests {
         //Arrange
         Comment mockComment = Helpers.createMockComment();
         User mockUser = Helpers.createMockUser();
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
 
+        Mockito.doNothing().when(authorizationHelper).blockedCheck(Mockito.any(User.class));
         Mockito.when(mockPostRepository.getById(Mockito.anyInt())).thenThrow(EntityNotFoundException.class);
 
         //Act & Assert
@@ -158,7 +187,7 @@ public class CommentServiceTests {
         Post mockPost = Helpers.createMockPost();
         User mockUser = Helpers.createMockUser();
 
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
+        Mockito.doNothing().when(authorizationHelper).blockedCheck(Mockito.any(User.class));
         Mockito.when(mockPostRepository.getById(Mockito.anyInt())).thenReturn(mockPost);
 
         //Act
@@ -173,8 +202,8 @@ public class CommentServiceTests {
         //Arrange
         Comment mockComment = Helpers.createMockComment();
         User mockUser = Helpers.createMockUser();
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(true);
 
+        Mockito.doThrow(UnauthorizedOperationException.class).when(authorizationHelper).blockedCheck(Mockito.any(User.class));
         //Act & Assert
         Assertions.assertThrows(UnauthorizedOperationException.class, () -> service.create(mockComment, 1, mockUser));
     }
@@ -185,7 +214,7 @@ public class CommentServiceTests {
         Comment mockComment = Helpers.createMockComment();
         Post mockPost = Helpers.createMockPost();
 
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
+        Mockito.doNothing().when(authorizationHelper).blockedCheck(Mockito.any(User.class));
 
         Mockito.when(mockPostRepository.getById(Mockito.anyInt())).thenReturn(mockPost);
 
@@ -204,7 +233,8 @@ public class CommentServiceTests {
         User mockUser2 = Helpers.createMockUser();
         Comment mockComment = Helpers.createMockComment();
 
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
+        Mockito.doNothing().when(authorizationHelper).blockedCheck(Mockito.any(User.class));
+        Mockito.doThrow(UnauthorizedOperationException.class).when(authorizationHelper).creatorCheck(Mockito.any(User.class), Mockito.any(Comment.class));
 
         mockUser2.setId(2);
         mockComment.setUser(mockUser2);
@@ -218,9 +248,8 @@ public class CommentServiceTests {
         //Arrange
         User mockUser = Helpers.createMockUser();
         Comment mockComment = Helpers.createMockComment();
-
-        Mockito.when(authorizationHelper.isCreator(Mockito.any(User.class), Mockito.any(Comment.class))).thenReturn(true);
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
+        Mockito.doNothing().when(authorizationHelper).creatorCheck(Mockito.any(User.class), Mockito.any(Comment.class));
+        Mockito.doNothing().when(authorizationHelper).blockedCheck(Mockito.any(User.class));
         //Act
         service.update(mockComment, mockUser);
 
@@ -242,13 +271,14 @@ public class CommentServiceTests {
     @Test
     public void delete_Should_Throw_WhenUserIsNotCreator() {
         //Arrange
-        User mockUser = Helpers.createMockUser();
-        mockUser.setId(2);
         Comment mockComment = Helpers.createMockComment();
+        User mockUser2 = Helpers.createMockUser();
+        mockUser2.setId(5);
         Mockito.when(mockRepository.getById(Mockito.anyInt())).thenReturn(mockComment);
-
+        Mockito.doNothing().when(authorizationHelper).blockedCheck(Mockito.any(User.class));
+        Mockito.doThrow(UnauthorizedOperationException.class).when(authorizationHelper).creatorCheck(Mockito.any(User.class), Mockito.any(Comment.class));
         //Act & Assert
-        Assertions.assertThrows(UnauthorizedOperationException.class, () -> service.delete(Mockito.anyInt(), mockUser));
+        Assertions.assertThrows(UnauthorizedOperationException.class, () -> service.delete(1, mockUser2));
     }
     @Test
     public void delete_Should_CallRepository() {
@@ -256,8 +286,8 @@ public class CommentServiceTests {
         Comment mockComment = Helpers.createMockComment();
         User mockUser = Helpers.createMockUser();
 
-        Mockito.when(authorizationHelper.isBlockedUser(Mockito.any(User.class))).thenReturn(false);
-        Mockito.when(authorizationHelper.isCreator(Mockito.any(User.class), Mockito.any(Comment.class))).thenReturn(true);
+        Mockito.doNothing().when(authorizationHelper).creatorCheck(Mockito.any(User.class), Mockito.any(Comment.class));
+        Mockito.doNothing().when(authorizationHelper).blockedCheck(Mockito.any(User.class));
         Mockito.when(mockRepository.getById(Mockito.anyInt())).thenReturn(mockComment);
 
         //Act

@@ -29,6 +29,12 @@
                 <h3 class="nav-item" th:if="${isAuthenticated}">
                     <a class="nav-link" th:text="${session.currentUser.username}" th:href="@{'/users/' + ${session.currentUser.id}}">Username</a>
                 </h3>
+
+<!--                <form class="nav-item" th:if="${isAuthenticated}"  th:action="@{/posts/search}" method="get" th:object="${filterOptions}">-->
+<!--                    <input class="search-bar" type="text" th:field="*{tags}" placeholder="Search posts by tag.." name="search">-->
+<!--                    <button style="padding: 5px;" class="btn btn-primary btn-xl text-uppercase" type="submit"><i class="fa fa-search"></i></button>-->
+<!--                </form>-->
+
                 <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                     <li class="nav-item"><a class="nav-link" href="#" th:href="@{/auth/login}" th:unless="${isAuthenticated}">Login</a></li>
                     <li class="nav-item"><a class="nav-link" href="#" th:href="@{/auth/register}" th:unless="${isAuthenticated}">Register</a></li>

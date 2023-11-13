@@ -13547,3 +13547,13 @@ a:nth-child(7) {
     justify-content: center; /* Horizontally center the content */
     margin: 0 auto; /* Optional: To center the box within its parent container */
 }
+
+.search-bar{
+        width: 500px; /* Adjust the width as needed */
+        padding: 10px;
+        border: 2px solid #ffc800;
+        border-radius: 20px; /* Make it rounder */
+        outline: none;
+        text-align: center;
+        margin-left: 200px;
+}

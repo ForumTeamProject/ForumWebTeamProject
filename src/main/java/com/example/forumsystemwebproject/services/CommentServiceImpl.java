@@ -36,11 +36,6 @@ public class CommentServiceImpl implements CommentService {
     public List<Comment> get(CommentFilterOptions filterOptions) {
         return repository.get(filterOptions);
     }
-
-    @Override
-    public List<Comment> getByUserId(CommentFilterOptions filterOptions, int id) {
-        return repository.getByUserId(filterOptions, id);
-    }
     @Override
     public List<Comment> getByUserId(int id){
         return repository.getByUserId(id);
@@ -75,7 +70,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void delete(int id, User user) {
-        Comment commentToDelete = getById(id);
+        Comment commentToDelete = repository.getById(id);
         authorizationHelper.blockedCheck(user);
         authorizationHelper.creatorCheck(user, commentToDelete);
         repository.delete(commentToDelete);

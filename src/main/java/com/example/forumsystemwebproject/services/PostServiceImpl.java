@@ -79,7 +79,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void update(Post post, User user) {
-        authorizationHelper.blockedCheck(user);
         authorizationHelper.creatorCheck(user, post);
         postRepository.update(post);
     }
