@@ -8,11 +8,12 @@
 <br/>
 <br/>
 <div class="text-center">
-<a th:if="${!isBlocked}" class="btn btn-primary btn-xl text-uppercase" th:href="@{/posts/create}">New Post</a>
+    <a th:if="${!isBlocked}" class="btn btn-primary btn-xl text-uppercase" th:href="@{/posts/create}">New Post</a>
 </div>
 <div class="body-content">
     <form action="#" th:action="@{/posts}" method="get" th:object="${filterOptions}">
-        <label style="margin-top: 50px; margin-bottom: 50px;  font-weight: 700;  line-height: 1.2;" th:text="#{posts.filter.label}">Browse Posts</label>
+        <label style="margin-top: 50px; margin-bottom: 50px;  font-weight: 700;  line-height: 1.2;"
+               th:text="#{posts.filter.label}">Browse Posts</label>
         <br/><br/>
         <input type="text" placeholder="Username" th:field="*{user}"/>
         <input type="text" placeholder="Title" th:field="*{title}"/>
@@ -53,9 +54,12 @@
                     <a href="#" th:href="@{/users/{id}(id=${post.user.id})}" th:text="${post.user.username}">User</a>
                 </div>
                 <div style="width: 1%; padding: 12px; border-top: 1px solid #dee2e6; display: table-cell;">
-                   <form th:action="@{'/posts/' + ${post.id}  + '/delete'}" th:method="get">
-                       <button th:if="${post.user.id == session.currentUser.id || isAdmin}"  style="background-color: red; border: none; color: white"   th:text="#{post.label.delete}" type="submit">Delete</button>
-                   </form>
+                    <form th:action="@{'/posts/' + ${post.id}  + '/delete'}" th:method="get">
+                        <button th:if="${post.user.id == session.currentUser.id || isAdmin}"
+                                style="background-color: red; border: none; color: white" th:text="#{post.label.delete}"
+                                type="submit">Delete
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

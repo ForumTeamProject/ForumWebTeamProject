@@ -13197,10 +13197,55 @@ a:nth-child(7) {
     padding: 5px;
     font-weight: bold;
     font-size: 15px;
-    /*  border-radius: 5%;*/
+    border-radius: 5%;
 
 }
 
+.head .authors {
+    flex: 10%;
+}
+
+.head .content {
+    flex: 50%;
+}
+
+/*tags*/
+.post-tag-icon {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 10px; /* Adjust as needed */
+}
+
+.hashtag {
+    background-color: #ffcc00; /* Your theme color */
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.tag-tooltip {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    white-space: nowrap; /* Prevents the tooltip from breaking into multiple lines */
+}
+
+.post-tag-icon:hover .tag-tooltip {
+    display: block;
+}
+
+.tag {
+    display: block;
+    margin: 2px 0;
+}
 
 .body {
     display: flex;
@@ -13254,82 +13299,57 @@ a:nth-child(7) {
 }
 
 /*buttons*/
-
-/*
 .button {
-    background-color: #f0ad4e; Bootstrap's button-warning color
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 25px;
-    transition: background-color 0.3s, box-shadow 0.3s;
-}
-*/
-.button {
-    /* Default button style */
-    background-color: #ffc107; /* Light background */
-    color: #000; /* Text color */
+    background-color: #ffc107;
+    color: #000;
     border: none;
     padding: 10px 20px;
     border-radius: 20px;
     cursor: pointer;
-    transition: background-color 0.3s ease; /* Smooth transition for background color */
+    transition: background-color 0.3s ease;
 }
 
 .button:hover {
-    /* Hover button style */
-    background-color: #e0a800; /* Slightly darker background on hover */
-    color: #fff; /* White text color on hover for better contrast */
+
+    background-color: #e0a800;
+    color: #fff;
 }
 
-
-/*
-.button:hover {
-    background-color: #ec971f;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-}
-*/
 .button:active {
-    background-color: #d58512; /* Even darker for active state */
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+    background-color: #d58512;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
 .icon-left {
-    margin-right: 8px; /* Space between icon and text */
+    margin-right: 8px;
 }
 
-/* Example for FontAwesome icons */
 .like-icon:before {
-    content: "\f164"; /* FontAwesome thumbs-up icon */
+    content: "\f164";
 }
 
 .comment-icon:before {
-    content: "\f075"; /* FontAwesome comment icon */
+    content: "\f075";
 }
+
 .post-actions {
     display: flex;
-    align-items: center; /* This will vertically center your items */
-    justify-content: space-around; /* This will space your items nicely */
-    gap: 10px; /* This adds space between your items */
+    align-items: center;
+    justify-content: space-around;
+    gap: 10px;
 }
 
 .comment-button, .like-button {
-    flex: 1; /* This will make buttons take up equal space */
+    flex: 1;
 }
 
 .like-section {
     display: flex;
-    align-items: center; /* Align items vertically */
+    align-items: center;
 }
 
 .likes-count {
-    margin-left: 5px; /* Add a little space between "Likes" and the number */
+    margin-left: 5px;
 }
 
 /*like*/
@@ -13346,7 +13366,7 @@ a:nth-child(7) {
 }
 
 .like-button.liked {
-    color: blue; /* or any color to indicate liking */
+    color: blue;
 }
 
 .like-count {
