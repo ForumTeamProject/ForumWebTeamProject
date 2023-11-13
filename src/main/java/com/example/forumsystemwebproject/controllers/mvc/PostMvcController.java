@@ -4,7 +4,6 @@ import com.example.forumsystemwebproject.exceptions.AuthenticationFailureExcepti
 import com.example.forumsystemwebproject.exceptions.EntityNotFoundException;
 import com.example.forumsystemwebproject.exceptions.UnauthorizedOperationException;
 import com.example.forumsystemwebproject.helpers.AuthenticationHelper;
-import com.example.forumsystemwebproject.helpers.AuthorizationHelper;
 import com.example.forumsystemwebproject.helpers.PaginationHelper;
 import com.example.forumsystemwebproject.helpers.filters.PostFilterOptions;
 import com.example.forumsystemwebproject.helpers.mappers.PostMapper;
@@ -16,6 +15,7 @@ import com.example.forumsystemwebproject.models.Role;
 import com.example.forumsystemwebproject.models.User;
 import com.example.forumsystemwebproject.repositories.contracts.RoleRepository;
 import com.example.forumsystemwebproject.services.contracts.CommentService;
+import com.example.forumsystemwebproject.services.contracts.LikeService;
 import com.example.forumsystemwebproject.services.contracts.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -47,20 +47,21 @@ public class PostMvcController {
     private final RoleRepository roleRepository;
 
     private final CommentService commentService;
+    private final LikeService likeService;
 
     @Autowired
     public PostMvcController(PostService postService,
                              AuthenticationHelper authenticationHelper,
-                             PostMapper mapper,
+                             AuthenticationHelper authenticationHelper1, PostMapper mapper,
                              RoleRepository roleRepository,
-                             AuthorizationHelper authorizationHelper,
-                             CommentService commentService) {
+                             CommentService commentService, LikeService likeService) {
         this.postService = postService;
-        this.authenticationHelper = authenticationHelper;
+        this.authenticationHelper = authenticationHelper1;
         this.mapper = mapper;
         this.roleRepository = roleRepository;
 
         this.commentService = commentService;
+        this.likeService = likeService;
     }
 
     @ModelAttribute("isAdmin")
@@ -76,6 +77,7 @@ public class PostMvcController {
         }
         return false;
     }
+
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;
@@ -158,7 +160,7 @@ public class PostMvcController {
             model.addAttribute("likesCount", likesCount);
 
             List<String> tagContents = post.getTags().stream()
-                    .map(com.example.forumsystemwebproject.models.Tag::getContent) // Assuming Tag has a getContent method
+                    .map(com.example.forumsystemwebproject.models.Tag::getContent)
                     .collect(Collectors.toList());
             String joinedTags = String.join(",", tagContents);
             model.addAttribute("joinedTags", joinedTags);
